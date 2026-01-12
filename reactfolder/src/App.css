@@ -1,0 +1,439 @@
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
+body{
+	font-family: "Questrial", sans-serif;
+  	font-weight: 400;
+  	font-style: normal;
+  	font-size: 14px;
+  	line-height: 21px;
+  	color: #141615;
+}
+
+img{
+	max-width: 100%;
+}
+
+h2{
+	line-height: 1;
+}
+
+a{
+	color: #141615;
+	text-decoration: none;
+}
+
+.hero{
+	
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	min-height: 100vh;
+}
+
+.hero.hero-products{
+	
+}
+
+.home-2 {
+    
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    padding: 234px 0;
+}
+
+.home-2.home-2-products{
+
+}
+	
+
+.home-2.home-3-products{
+	
+}
+
+.home-2 .btn, .footer-top .btn{
+	background-color: #fff;
+	color: #141615;
+	border-radius: 80px;
+	font-size: 12px;
+	line-height: 1;
+	padding: 20px;
+}
+
+.home-4 ul li{
+	list-style-type: none;
+}
+
+.home-4 ul li h3::before {
+    content: "";
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: rgba(42, 42, 42, 0.1);
+    display: inline-block;
+    margin-left: -32px;
+    margin-right: 10px;
+}
+
+.max-466{
+	max-width: 466px;
+}
+
+.bike{
+	background-color: #EBEDEE;
+	border-radius: 8px;
+	padding: 20px 10px;
+}
+
+.bike h3{
+
+}
+
+.bike p{
+
+}
+
+.bike a{
+
+}
+
+.bike a.btn{
+
+}
+
+.explore h3{
+	margin-bottom: 16px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.slick-next, .slick-prev, .slick-next, .slick-prev {
+    position: relative;
+    display: inline-block;
+    left: initial;
+    right: initial;
+    margin-left: 15px;
+
+    width: 15px;
+    height: 27px;
+    
+    opacity:0.5;
+}
+
+.slick-next:hover, .slick-prev:hover{
+	
+	opacity: 1;
+}
+.slick-next:focus, .slick-prev:focus{
+	
+}
+
+.slick-prev{
+	transform: scaleX(-1);
+    top: 6px;
+}
+
+.slick-next::before, .slick-prev::before{
+	display: none;
+}
+
+.bike-slide{
+	background-color: #EBEDEE;
+	border-radius: 8px;
+	padding: 40px 30px;
+}
+
+.bike-slide h2{
+	font-size: 30px;
+	font-weight: 600;
+	margin-bottom: 20px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.bike-slide h2 span:nth-child(2){
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.bike-slide p{
+	font-size: 16px;
+	margin-bottom: 10px;
+}
+
+.bike-slide p:last-child{
+	margin-bottom: 0;
+	margin-top: 35px;
+}
+
+.bike-slide p a{
+	font-size: 12px;
+	text-decoration: underline;
+	padding: 12px 23px;
+}
+
+.bike-slide p a.btn{
+	text-decoration: none;
+	border-radius: 45px;
+	background-color: #FFF;
+}
+
+.about-us{
+	padding: 60px 0;
+}
+
+.about-us h2{
+	margin-bottom: 60px;
+}
+
+.about-us .col-md-4 > div {
+    border: 1px solid rgba(20, 22, 21, 0.1);
+    padding: 26px;
+    min-height: 180px;
+}
+
+.opacity-90{
+	opacity: 0.9;
+}
+
+.footer-top{
+	background-color: #404243;
+	color: #fff;
+	padding: 40px 0;
+	font-size: 16px;
+}
+
+.footer-top .btn{
+	font-size: 14px;
+}
+
+footer{
+	background-color: #141615;
+	color: #F0F0F0;
+	padding: 60px 0 100px;
+}
+
+footer ul{
+	padding: 0;
+}
+
+footer ul li{
+	list-style-type: none;
+}
+
+footer a{
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.slick-list{
+	margin: 0 -12px;
+}
+
+.slick-slide {
+    margin: 0 12px;
+}
+
+.masthead {
+  position: relative;
+  margin-bottom: 3rem;
+  padding-top: calc(8rem + 57px);
+  padding-bottom: 8rem;
+  background: no-repeat center center;
+  background-color: #6c757d;
+  background-size: cover;
+  background-attachment: scroll;
+}
+.masthead:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #212529;
+  opacity: 0.5;
+}
+.masthead .page-heading,
+.masthead .post-heading,
+.masthead .site-heading {
+  color: #fff;
+}
+.masthead .page-heading,
+.masthead .site-heading {
+  text-align: center;
+}
+.masthead .page-heading h1, .masthead .page-heading .h1,
+.masthead .site-heading h1,
+.masthead .site-heading .h1 {
+  font-size: 3rem;
+}
+.masthead .page-heading .subheading,
+.masthead .site-heading .subheading {
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1.1;
+  display: block;
+  margin-top: 0.625rem;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+.masthead .post-heading h1, .masthead .post-heading .h1 {
+  font-size: 2.25rem;
+}
+.masthead .post-heading .meta,
+.masthead .post-heading .subheading {
+  line-height: 1.1;
+  display: block;
+}
+.masthead .post-heading .subheading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0.75rem 0 2rem;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+.masthead .post-heading .meta {
+  font-size: 1.25rem;
+  font-weight: 300;
+  font-style: italic;
+  font-family: "Lora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+.masthead .post-heading .meta a {
+  color: #fff;
+}
+
+.section-heading {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-top: 3.75rem;
+}
+
+.caption {
+  font-size: 0.875rem;
+  font-style: italic;
+  display: block;
+  margin: 0;
+  padding: 0.625rem;
+  text-align: center;
+}
+
+.post-preview > a {
+  color: #212529;
+}
+.post-preview > a:focus, .post-preview > a:hover {
+  text-decoration: none;
+  color: #0085A1;
+}
+.post-preview > a > .post-title {
+  font-size: 1.875rem;
+  margin-top: 1.875rem;
+  margin-bottom: 0.625rem;
+}
+.post-preview > a > .post-subtitle {
+  font-weight: 300;
+  margin-bottom: 0.625rem;
+}
+.post-preview > .post-meta {
+  font-size: 1.125rem;
+  font-style: italic;
+  margin-top: 0;
+  color: #6c757d;
+}
+.post-preview > .post-meta > a {
+  text-decoration: none;
+}
+
+article p{
+	font-size: 16px;
+}
+
+article iframe{
+	width: 100%;
+}
+
+.page-header{
+	padding: 150px 0;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	position: relative;
+}
+
+.page-header::before {
+    content: "";
+    background: #212529;
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    opacity: 0.5;
+}
+
+.page-header .container{
+	position: relative;
+	z-index: 1;
+}
+
+.page-header h1{
+	font-weight: 800;
+	line-height: 1.2;
+	margin-bottom: 0.5rem;
+}
+
+.page-header p{
+	font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.1;
+    margin-top: 0.625rem;
+}
+
+.page-content{
+	padding-top: 80px;
+	padding-bottom: 48px;
+}
+
+.page-content p{
+	margin-bottom: 32px;
+
+	font-size: 20px;
+	line-height: 1.5;
+}
+
+.page-content iframe{
+	width: 100%;
+	height: 320px;
+}
+
+
+
+@media (min-width: 992px) {
+  .post-preview > a > .post-title {
+    font-size: 2.25rem;
+  }
+
+  .masthead {
+    padding-top: 12.5rem;
+    padding-bottom: 12.5rem;
+  }
+  .masthead .page-heading h1, .masthead .page-heading .h1,
+  .masthead .site-heading h1,
+  .masthead .site-heading .h1 {
+    font-size: 5rem;
+  }
+  .masthead .post-heading h1, .masthead .post-heading .h1 {
+    font-size: 3.5rem;
+  }
+  .masthead .post-heading .subheading {
+    font-size: 1.875rem;
+  }
+}
+
+
+@media (min-width: 1200px) {
+	.h1, h1{
+		font-size: 4rem;
+	}
+    .h2, h2 {
+        font-size: 3rem;
+    }
+
+}

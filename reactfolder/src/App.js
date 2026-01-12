@@ -1,14 +1,11 @@
-import Test from './components/Test';
 import './App.css';
-import Slika from './components/Slika';
-import './components/Slika.css';
+import Home from './pages/Home';
+
 
 function App() {
   return (
     <>
-      <Test />
-      <Slika />
-      <h2>Drugi naslov</h2>
+      <Home />
     </>
   );
 }
