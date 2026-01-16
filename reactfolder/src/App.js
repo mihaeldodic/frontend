@@ -1,15 +1,22 @@
-import Test from './components/Test';
-import './App.css';
-import Slika from './components/Slika';
-import './components/Slika.css';
+import { BrowserRouter, Routes, Route } from "react-router";
+
+import "./App.css";
+
+import Footer from "./components/Footer";
+import Nav from "./components/Nav";
+import Home from "./pages/Home";
+import Blog from "./pages/Blog";
 
 function App() {
   return (
-    <>
-      <Test />
-      <Slika />
-      <h2>Drugi naslov</h2>
-    </>
+    <BrowserRouter>
+      <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/blog" element={<Blog />} />
+        </Routes>
+      <Footer />
+    </BrowserRouter>
   );
 }
 
