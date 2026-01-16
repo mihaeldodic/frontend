@@ -1,4 +1,8 @@
- const Nav = () => {
+import { Link } from 'react-router-dom';
+
+
+
+const Nav = () => {
   return (
  <>
  <nav className="navbar navbar-expand-lg navbar-light bg-ligh">
@@ -19,8 +23,8 @@
          <li className="nav-item dropdown text-end">
               <a className="nav-link dropdown-toggle" href="#" id="ddElectric" role="button" data-bs-toggle="dropdown" aria-expanded="false">ELECTRIC</a>
               <ul className="dropdown-menu" aria-labelledby="ddElectric">
-                <li><a className="dropdown-item text-end" href="#">Electric Ace</a></li>
-                <li><a className="dropdown-item text-end" href="#">Electric Ivy</a></li>
+                <li><Link className="dropdown-item text-end" to="/">Naslovnica</Link></li>
+                <li><Link className="dropdown-item text-end" to="#">O nama</Link></li>
               </ul>
             </li>
           <li className="nav-item dropdown text-end">
@@ -38,10 +42,10 @@
               </ul>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-end" href="#">ACCESSORIES</a>
+              <a className="nav-link text-end" href="#">O nama</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-end" href="#">STORES</a>
+              <Link className="nav-link text-end" to="/blog">Blog</Link>
             </li>
            <li className="nav-item dropdown text-end">
               <a className="nav-link dropdown-toggle" href="#" id="ddElectric" role="button" data-bs-toggle="dropdown" aria-expanded="false">LEASING</a>
