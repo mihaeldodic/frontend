@@ -1,6 +1,20 @@
-import korisnici from "./data/korisnici.json";
+//import korisnici from "./data/korisnici.json";
+import {useState} from "react";
 
 const Korisnici = () => {
+
+  const [korisnici, setKorisnici] = useState([]);
+
+fetch('https://jsonplaceholder.typicode.com/users/')
+      .then(response => response.json())
+      .then(
+        (data) => {
+          setKorisnici(data);
+        }
+      )
+
+
+
   return (
     <div className="container">
       <h1>Popis korisnika</h1>
