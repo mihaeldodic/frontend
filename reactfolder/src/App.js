@@ -13,6 +13,7 @@ import Korisnici from "./components/zadaci/Korisnici";
 import Vjezbadva from "./components/Vjezbadva"; 
 import Tecaj from "./components/zadaci/Tecaj";
 import Naslovna from "./pages/Naslovna";
+import Kategorije from "./components/Kategorije";
 
 function App() {
   return (
@@ -21,12 +22,13 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/blog" element={<Blog />} />
-          <Route path="/blogsingle" element={<BlogSingle />} />
+          <Route path="/blog/:slug" element={<BlogSingle />} />
           <Route path="/profil" element={<Profil />} />
           <Route path="/korisnici" element={<Korisnici />} />
           <Route path="/vjezbadva" element={<Vjezbadva />} />
           <Route path="/tecaj" element={<Tecaj />} />
           <Route path="/naslovna" element={<Naslovna />} />
+          <Route path="/kategorije" element={<Kategorije />} />
 
         </Routes>
       <Footer />
