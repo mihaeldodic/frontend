@@ -14,6 +14,8 @@ import Vjezbadva from "./components/Vjezbadva";
 import Tecaj from "./components/zadaci/Tecaj";
 import Naslovna from "./pages/Naslovna";
 import Kategorije from "./components/Kategorije";
+import Putovanje from "./pages/Putovanje";
+import PutovanjeBlogSingle from "./pages/PutovanjeBlogSingle";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route path="/tecaj" element={<Tecaj />} />
           <Route path="/naslovna" element={<Naslovna />} />
           <Route path="/kategorije" element={<Kategorije />} />
+          <Route path="/putovanje" element={<Putovanje />} />
+          <Route path="/putovanje/:slug" element={<PutovanjeBlogSingle />} />
 
         </Routes>
       <Footer />

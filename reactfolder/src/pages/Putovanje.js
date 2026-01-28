@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./Blog.css";
 import posts from "../components/zadaci/data/blog.json";
 
-const Blog = () => {
+const Putovanje = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
@@ -17,7 +17,7 @@ const Blog = () => {
   useEffect(() => {
     setLoading(true);
 
-    fetch("https://front2.edukacija.online/backend/wp-json/wp/v2/posts?_embed")
+    fetch("https://front2.edukacija.online/backend/wp-json/wp/v2/putovanje?_embed")
       .then((response) => response.json())
       .then((data) => {
         setPosts(data);
@@ -30,16 +30,16 @@ const Blog = () => {
       {loading && <Loader />}
       <div className="blog-post">
         <div className="container">
-          <h1>Blog</h1>
+          <h1>Putovanja</h1>
           <div className="row">
             {posts.map((post) => {
               const image =
-                post._embedded?.["wp:featuredmedia"]?.[0]?.media_details?.sizes
+                post._embedded?.["wp:featuredmedia"]?.[0]?.media_details.sizes
                   ?.full?.source_url;
               return (
                 <div key={post.id} className="col-md-4 mb-4 blog-post">
-                  
-                  <Link to={'/blog/' + post.slug}>
+
+                <Link to={'/putovanje/' + post.slug}>
                   {image && (
                     <img
                       src={image}
@@ -47,11 +47,10 @@ const Blog = () => {
                       alt={post.title.rendered}
                     />
                   )}
-                  </Link>
-
-                  <Link to={'/blog/' + post.slug}>
+                    </Link>
+                    <Link to={'/putovanje/' + post.slug}>
                   <h2>{post.title.rendered}</h2>
-                  </Link>
+                    </Link>
                   <div
                     dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
                   />
@@ -72,4 +71,4 @@ const Blog = () => {
   );
 };
 
-export default Blog;
+export default Putovanje;
