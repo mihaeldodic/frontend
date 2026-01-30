@@ -3,27 +3,41 @@ import Loader from "../components/Loader";
 import { Link } from "react-router-dom";
 
 import "./Blog.css";
-import posts from "../components/zadaci/data/blog.json";
+//import posts from "../components/zadaci/data/blog.json";
 
 const Putovanje = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
 
+  const [putovanja, setPutovanja] = useState ([]);
+  const [svaPutovanja, setSvaPutovanja] = useState ("")
+
   console.log("članci", posts);
   console.log("učitavanje", loading);
   console.log("stranica", page);
 
+  useEffect(() =>{
+    fetch("https://front2.edukacija.online/backend/wp-json/wp/v2/destinacije")
+    .then((response) =>response.json())
+    .then((data) => setPutovanja(data));
+  }, [])
+
+
+
   useEffect(() => {
     setLoading(true);
 
-    fetch("https://front2.edukacija.online/backend/wp-json/wp/v2/putovanje?_embed")
+    let url = "https://front2.edukacija.online/backend/wp-json/wp/v2/putovanje?_embed";
+    if (svaPutovanja) url += "&destinacije=" + svaPutovanja;
+ 
+    fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setPosts(data);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [svaPutovanja]);
 
   return (
     <>
@@ -31,6 +45,19 @@ const Putovanje = () => {
       <div className="blog-post">
         <div className="container">
           <h1>Putovanja</h1>
+          <div className="row">
+            <div className="col-6">
+              <select value={svaPutovanja} onChange={(e) => setSvaPutovanja(e.target.value)}>
+                <option value="">Sva putovanja</option>
+                {putovanja.map((putovanje) =>(
+                  <option key={putovanje.id} value={putovanje.id}>{putovanje.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+
+
           <div className="row">
             {posts.map((post) => {
               const image =
