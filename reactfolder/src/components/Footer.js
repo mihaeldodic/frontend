@@ -1,3 +1,5 @@
+import ScrollToTop from "./ScrollToTop";
+
  const Footer = () => {
   return (  
  
@@ -48,7 +50,9 @@
               <p>Sign up for our newsletter.</p>
           </div>
         </div>
-      </div>
+        <button className="btn btn-danger" onClick={ScrollToTop}>TOP</button>
+  
+       </div>
     </footer>
     );
 }

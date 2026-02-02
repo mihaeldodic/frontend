@@ -46,8 +46,8 @@ const Nav = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-end" to="/kontakt">
-                  Kontakt
+                <Link className="nav-link text-end" to="/putovanje">
+                  Putovanja
                 </Link>
               </li>
             </ul>

@@ -16,6 +16,7 @@ import Naslovna from "./pages/Naslovna";
 import Kategorije from "./components/Kategorije";
 import Putovanje from "./pages/Putovanje";
 import PutovanjeBlogSingle from "./pages/PutovanjeBlogSingle";
+import Kontakt from "./components/Kontakt"
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/kategorije" element={<Kategorije />} />
           <Route path="/putovanje" element={<Putovanje />} />
           <Route path="/putovanje/:slug" element={<PutovanjeBlogSingle />} />
+          <Route path="/kontakt" element={<Kontakt />} />
 
         </Routes>
       <Footer />

@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
+import ReactPaginate from "react-paginate";
+import ScrollToTop from "../components/ScrollToTop";
+
 
 const Kategorije = () => {
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState([]);
+
   const [posts, setPosts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageCount , setPageCount] = useState(0);
 
   useEffect(() => {
     fetch("https://front2.edukacija.online/backend/wp-json/wp/v2/categories")
@@ -17,13 +24,18 @@ const Kategorije = () => {
   useEffect(() => {
     if (!selectedCategory) return;
     setLoading(true);
+    const per_page = 1
     fetch(
-      `https://front2.edukacija.online/backend/wp-json/wp/v2/posts?categories=${selectedCategory}&_embed`,
+      `https://front2.edukacija.online/backend/wp-json/wp/v2/posts?categories=${selectedCategory}&_embed&per_page=${per_page}&page=${currentPage +1}`,
     )
-      .then((response) => response.json())
+      .then((response) => {
+        const totalPages = response.headers.get("X-WP-TotalPages");
+        setPageCount(Number(totalPages))
+        return response.json()
+      })
       .then((data) => setPosts(data))
       .finally(() => setLoading(false));
-  }, [selectedCategory]);
+  }, [selectedCategory, currentPage]);
 
   console.log(posts);
 
@@ -35,10 +47,10 @@ const Kategorije = () => {
   return (
     <>
       {loading && <Loader />}
-      <div className="container blog-page">
-        <div className="row">
-          <div className="col-12 d-flex justify-content-center mt-5">
-            <select value={selectedCategory} onChange={handleCategoryChange}>
+    <div className=" container blog-page">
+        <div className="row mb-4 mt-5">
+          <div className="col-12 d-flex gap-1 mb-2">
+            <select className="from-select" value={selectedCategory} onChange={handleCategoryChange}>
               <option value="" disabled>
                 Odaberi kategoriju
               </option>
@@ -50,7 +62,6 @@ const Kategorije = () => {
             </select>
           </div>
         </div>
-      </div>
       <div className="row">
         {posts.map((post) => {
           const image =
@@ -76,6 +87,28 @@ const Kategorije = () => {
           );
         })}
       </div>
+      <ReactPaginate
+            previousLabel={"prev"}
+            nextLabel={"next"}
+            breakLabel={"..."}
+            pageCount={pageCount}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            onPageChange={(e) => {
+              setCurrentPage(e.selected)
+              setPosts([])
+              ScrollToTop()
+            }}
+            containerClassName={"pagination"}
+            pageClassName={"page-item"}
+            pageLinkClassName={"page-link"}
+            previousClassName={"page-item"}
+            nextClassName={"page-item"}
+            previousLinkClassName={"page-link"}
+            nextLinkClassName={"page-link"}
+            activeClassName={"active"}
+          />
+    </div>
     </>
   );
 };
