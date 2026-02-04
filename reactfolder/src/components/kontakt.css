@@ -1,73 +1,116 @@
 .contact-left {
-    background-color: black;
-    color: #000000;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 40px;
-    gap: 110px;
-    p {
-        margin-bottom: 0;
-    }
-    h2 {
-        font-size: 28px;
-    }
-    p {
-        color: #adadad;
-    }
-    a {
-        color: white;
-    }
-    .contact-info {
-        display: flex;
-        flex-direction: column;
-        gap: 50px;
-    }
-    .socials {
-        display:flex;
-        gap: 17px;
-        a {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #404243;
-            border-radius: 50%;
-            padding: 9px;
-            aspect-ratio: 1;
-            transition: all 0.3s ease-in-out;
-        }
-        a:hover {
-            background-color: #EBEDEE;
-            svg path {
-                fill: var(--primary-color);
-            }
-        }
-    }
+  background-color: rgb(225, 21, 21);
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 40px;
+  gap: 110px;
 }
+
+.contact-left p {
+  margin-bottom: 0;
+  color: #adadad;
+}
+
+.contact-left h2 {
+  font-size: 28px;
+}
+
+.contact-left a {
+  color: white;
+}
+
+.contact-left .contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.contact-left .socials {
+  display: flex;
+  gap: 17px;
+}
+
+.contact-left .socials a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #404243;
+  border-radius: 50%;
+  padding: 9px;
+  aspect-ratio: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.contact-left .socials a:hover {
+  background-color: #EBEDEE;
+}
+
+.contact-left .socials a:hover svg path {
+  fill: var(--primary-color);
+}
+
+/* -------------------- */
+
 .contact-right {
-    display: flex;
-    flex-direction: column;
-    gap: 145px;
+  display: flex;
+  flex-direction: column;
+  gap: 145px;
 }
-.contact-inputs {
-    padding: 30px 20px;
-    gap: 5px;
-    input {
-        border: 0px;
-        border-bottom: solid 1px black;
-        margin-bottom: 10px;
-    }
-    textarea {
-        border: 0px;
-        border-bottom: solid 1px black;
-        resize: none;
-    }
-    
+
+.contact-right .contact-inputs {
+  padding: 30px 20px;
+  gap: 5px;
 }
-.contact-button {
-        padding: 15px 40px;
-        border-radius: 5px;
-        background-color: var(--primary-color);
-        color: var(--white);
-        align-self: flex-end;
-    }
+
+.contact-right .contact-inputs .inputform {
+  border: 0;
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
+  padding: 8px 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.contact-right .contact-inputs textarea {
+  border: 0;
+  border-bottom: 1px solid black;
+  resize: none;
+}
+
+.contact-right .contact-button {
+  padding: 15px 40px;
+  border-radius: 5px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  align-self: flex-end;
+  position: relative;
+}
+
+.contact-right .contact-button::after {
+  content: "";
+  width: 260px;
+  height: 260px;
+  background-image: url("");
+  position: absolute;
+  bottom: -230px;
+  right: 55px;
+  z-index: -100;
+}
+
+.contact-right .contact-button:focus {
+  outline: 2px solid #404243;
+}
+
+.contact-right .contact-button:hover {
+  background-color: #404243;
+  transition: all 0.3s ease-in-out;
+}
+
+/* -------------------- */
+
+.inputform::placeholder {
+  color: #adadad;
+  opacity: 1;
+}

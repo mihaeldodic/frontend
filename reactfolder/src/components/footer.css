@@ -1,0 +1,206 @@
+/* Subscribe Section */
+
+.row-subscribe {
+    margin-bottom: -40px;
+    height: 54px;
+    height: 80px; 
+    background: white;
+    width: 100%;
+}
+
+.subscribe-form .form-group {
+    margin: 0;
+}
+
+.subscribe-form input[type="email"] {
+    border-radius: 30px;
+}
+
+.subscribe {
+    background-color: #ffffff;
+    padding: 5px;
+    border-radius: 30px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    
+}
+
+.subscribe-button .btn {
+    white-space: nowrap;
+    background-color: #bb7373;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.subscribe-button .btn:hover {
+  transform: translateY(-1px);
+}
+
+.subscribe-button .btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(187, 115, 115, 0.4);
+}
+
+.subscribe-form input:focus {
+  box-shadow: none;
+  border-color: #bb7373;
+}
+
+/* Footer Section */
+.footer-01 {
+    background-color: #1c1c1c;
+    color: #f1f1f1;
+    width: 100%;
+    padding: 60px 0;
+    margin-top: -25px;
+    margin-bottom: auto;
+    height: auto;
+    font-size: 15px;
+    line-height: 1.7;
+    bottom: 0;
+}
+
+.footer-01 a {
+  color: #f1f1f1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-01 a:hover {
+  color: #ff6b6b;
+}
+
+/* Footer Lijevi dio: Brend i opis */
+
+.footer-brand .logo {
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.footer-link {
+  font-weight: 500;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-link span {
+  font-size: 18px;
+  margin-left: 5px;
+  transition: transform 0.3s ease;
+}
+
+.footer-link:hover span {
+  transform: translateX(5px);
+}
+
+/* Footer Desni dio: Navigacijski linkovi */
+
+.footer-01 h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.footer-01 ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-01 ul li a {
+  font-size: 14px;
+  padding: 5px 0;
+  position: relative;
+  display: inline-block;
+  color: #f1f1f1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-01 ul li a:hover {
+  color: #ff6b6b;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.footer-01 ul li a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: #ff6b6b;
+  left: 0;
+  bottom: 0;
+  transition: width 0.3s ease;
+}
+
+.footer-01 ul li a:hover::after {
+  width: 100%;
+}
+
+.row-footer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.footer-01 .border-start {
+  border-left: 1px solid #333;
+}
+
+.footer-01 .ps-3 {
+  padding-left: 15px;
+}
+
+@media (max-width: 575px) {
+  .footer-01 {
+    padding: 40px 15px;
+  }
+}
+
+@media (max-width: 991px) {
+  .footer-01 .col-md-4, 
+  .footer-01 .col-md-8 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .footer-01 .border-start {
+    border-left: none;
+    border-top: 1px solid #333;
+    padding-left: 0;
+    padding-top: 15px;
+  }
+}
+
+@media (max-width: 575px) {
+  .footer-brand .logo {
+    font-size: 24px;
+  }
+
+  .footer-link {
+    font-size: 12px;
+  }
+
+  .footer-01 h2 {
+    font-size: 14px;
+  }
+
+  .footer-01 ul li a {
+    font-size: 12px;
+  }
+}

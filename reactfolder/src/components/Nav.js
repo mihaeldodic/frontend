@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Nav = () => {
   return (
-     <nav className="navbar navbar-expand-lg navbar-light bg-ligh">
+     <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container">
           <Link className="navbar-brand" to="/">
             <img src="img/header/logo.svg" alt="logo" height="12" />
@@ -13,12 +13,12 @@ const Nav = () => {
             data-bs-toggle="collapse"
             data-bs-target="#mainNavbar"
             aria-controls="mainNavbar"
-            aria-expanded="true"
+            aria-expanded="false"
             aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="navbar-collapse collapse show" id="mainNavbar">
+          <div className="navbar-collapse collapse" id="mainNavbar">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
               <li className="nav-item">
                 <Link className="nav-link text-end" to="/">
@@ -31,16 +31,6 @@ const Nav = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link text-end" to="/usluge">
-                  Usluge
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-end" to="/blog">
-                  Blog
-                </Link>
-              </li>
-              <li className="nav-item">
                 <Link className="nav-link text-end" to="/kategorije">
                   Kategorije
                 </Link>
@@ -50,16 +40,26 @@ const Nav = () => {
                   Putovanja
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link text-end" to="/blog">
+                  Blog
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link text-end" to="/kontakt">
+                  Kontakt
+                </Link>
+              </li>
             </ul>
             <ul className="navbar-nav ms-auto align-items-center">
               <li className="nav-item">
-                <a className="nav-link" href="/signin" title="Sign in">
+                <Link className="nav-link" to="/signin" title="Sign in">
                   <img
                     src="img/header/user.svg"
                     alt="Sign in"
                     className="icon-sm"
                   />
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="/cart" title="Cart">
