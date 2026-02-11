@@ -5,7 +5,6 @@ import "./App.css";
 
 import Footer from "./components/Footer";
 import Nav from "./components/Nav";
-import Home from "./pages/Home";
 import Blog from "./pages/Blog";
 import BlogSingle from "./pages/BlogSingle";
 import Profil from "./components/zadaci/Profil";
@@ -16,27 +15,28 @@ import Naslovna from "./pages/Naslovna";
 import Kategorije from "./components/Kategorije";
 import Putovanje from "./pages/Putovanje";
 import PutovanjeBlogSingle from "./pages/PutovanjeBlogSingle";
-import Kontakt from "./components/Kontakt"
-import SignIn from "./components/SignIn"
+import Kontakt from "./components/Kontakt";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SingUp";
 
 function App() {
   return (
     <BrowserRouter>
       <Nav />
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogSingle />} />
           <Route path="/profil" element={<Profil />} />
           <Route path="/korisnici" element={<Korisnici />} />
           <Route path="/vjezbadva" element={<Vjezbadva />} />
           <Route path="/tecaj" element={<Tecaj />} />
-          <Route path="/naslovna" element={<Naslovna />} />
+          <Route path="/" element={<Naslovna />} />
           <Route path="/kategorije" element={<Kategorije />} />
           <Route path="/putovanje" element={<Putovanje />} />
           <Route path="/putovanje/:slug" element={<PutovanjeBlogSingle />} />
           <Route path="/kontakt" element={<Kontakt />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
 
         </Routes>
       <Footer />

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./signin.css";
 import { useEffect, useState } from "react";
 
-const SignIn = () => {
+const SignUp = () => {
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
@@ -11,6 +11,7 @@ const SignIn = () => {
   const [form, setForm] = useState({
     username: "",
     password: "",
+    email: "",
   });
 
   // Ako je korisnik već prijavljen → redirect na home
@@ -28,14 +29,14 @@ const SignIn = () => {
     });
   };
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
       const response = await fetch(
-        "https://front2.edukacija.online/backend/wp-json/jwt-auth/v1/token",
+        "https://front2.edukacija.online/backend/wp-json/wp/v2/users/register",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -51,12 +52,8 @@ const SignIn = () => {
         return;
       }
 
-      // spremanje tokena
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", data.user_display_name);
-
       // redirect nakon uspješne prijave
-      navigate("/", { replace: true });
+      navigate("/signin", { replace: true });
 
     } catch (error) {
       setLoading(false);
@@ -77,12 +74,20 @@ const SignIn = () => {
           <h2>Welcome back</h2>
           <p>Lorem ipsum dolor sit amet.</p>
 
-          <form onSubmit={handleLogin} className="signin-form">
+          <form onSubmit={handleRegister} className="signin-form">
             <label>Username</label>
             <input
               type="text"
               name="username"
               value={form.username}
+              onChange={handleChange}
+            />
+
+            <label>E-mail address</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
               onChange={handleChange}
             />
 
@@ -94,10 +99,8 @@ const SignIn = () => {
               onChange={handleChange}
             />
 
-            <a href="#">Forgot password?</a>
-
             <button type="submit" disabled={loading}>
-              {loading ? "Logging in..." : "Log in"}
+              {loading ? "Registration..." : "Sign Up"}
             </button>
 
             {error && <p className="error">{error}</p>}
@@ -105,7 +108,7 @@ const SignIn = () => {
 
           <p className="text-center breakline">or</p>
           <p>
-            Don't have an account? <Link to="/signup">Sign Up</Link>
+            Already have an account? <Link to="/signin">Sign In</Link>
           </p>
         </div>
       </div>
@@ -113,4 +116,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
