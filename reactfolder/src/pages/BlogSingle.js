@@ -2,6 +2,7 @@ import "./Blog.css";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Loader from "../components/Loader";
+import Author from "../components/Author";
 
 //import "./Blog.css"
 //import post from "../components/zadaci/data/blogsingle.json";
@@ -40,11 +41,7 @@ const BlogSingle = () => {
               <div class="post-heading">
                 <h1>{post.title.rendered}</h1>
                 <h2 class="subheading">Naslov</h2>
-                <span class="meta">
-                  Autor:
-                  <a href="#!">{post._embedded.author[0].name}</a>,{" "}
-                  {new Date(post.date).toLocaleDateString("hr-HR")}
-                </span>
+                <Author post={post} />
               </div>
             </div>
           </div>

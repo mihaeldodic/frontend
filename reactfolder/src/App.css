@@ -446,3 +446,21 @@ article iframe{
     }
 
 }
+
+.hero-img {
+  width: 100%;
+  height: calc(300vh - 68px);
+  object-fit: cover;
+}
+
+.hero-section{
+  height: 50vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  h1 {
+    color: var(--white);
+    backdrop-filter: blur(20px);
+    border-radius: 50px;
+  }
+}
