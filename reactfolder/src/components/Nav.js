@@ -1,6 +1,23 @@
-import { Link } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 const Nav = () => {
+  const location = useLocation();
+  const [name, setName] = useState(null);
+  useEffect(() => {
+    const user = localStorage.getItem("username");
+    if (user) setName(user);
+  }, []);
+  if (location.pathname === "/signin") {
+    return;
+  }
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    //window.location.reload();
+    setName(null);
+  };
+  
+  
   return (
      <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container">
@@ -50,9 +67,23 @@ const Nav = () => {
                   Kontakt
                 </Link>
               </li>
+              {name ? (
+              <li className="nav-item">
+                <Link className="nav-link text-end" to="/admin">
+                  Admin
+                </Link>
+              </li>
+              ) : (
+                ""
+              )}
             </ul>
             <ul className="navbar-nav ms-auto align-items-center">
               <li className="nav-item">
+                {name ? (
+                <button onClick={logout} className="btn btn-primary">
+                  Dobrodošli, {name}
+                </button>
+              ) : (
                 <Link className="nav-link" to="/signin" title="Sign in">
                   <img
                     src="img/header/user.svg"
@@ -60,16 +91,17 @@ const Nav = () => {
                     className="icon-sm"
                   />
                 </Link>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/cart" title="Cart">
-                  <img src="img/header/cart.svg" alt="Cart" className="icon-lg" />
-                </a>
-              </li>
-            </ul>
-          </div>
+              )}
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" href="/cart" title="Cart">
+                <img src="img/header/cart.svg" alt="Cart" className="icon-lg" />
+              </Link>
+            </li>
+          </ul>
         </div>
-      </nav>
-  )
-}
-export default Nav
+      </div>
+    </nav>
+  );
+};
+export default Nav;

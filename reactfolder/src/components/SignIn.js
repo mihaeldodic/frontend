@@ -57,6 +57,7 @@ const SignIn = () => {
 
       // redirect nakon uspješne prijave
       navigate("/", { replace: true });
+      window.location.reload();
 
     } catch (error) {
       setLoading(false);

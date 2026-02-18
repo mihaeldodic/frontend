@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import "./signin.css";
 import { useEffect, useState } from "react";
 
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 const SignUp = () => {
   const navigate = useNavigate();
 
@@ -36,7 +38,7 @@ const SignUp = () => {
 
     try {
       const response = await fetch(
-        "https://front2.edukacija.online/backend/wp-json/wp/v2/users/register",
+        `${BASE_URL}v2/users/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

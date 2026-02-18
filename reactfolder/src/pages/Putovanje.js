@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import "./Blog.css";
 //import posts from "../components/zadaci/data/blog.json";
 
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 const Putovanje = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,7 @@ const Putovanje = () => {
   console.log("stranica", page);
 
   useEffect(() =>{
-    fetch("https://front2.edukacija.online/backend/wp-json/wp/v2/destinacije")
+    fetch(`${BASE_URL}v2/destinacije`)
     .then((response) =>response.json())
     .then((data) => setPutovanja(data));
   }, [])

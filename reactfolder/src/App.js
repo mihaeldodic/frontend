@@ -18,6 +18,7 @@ import PutovanjeBlogSingle from "./pages/PutovanjeBlogSingle";
 import Kontakt from "./components/Kontakt";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SingUp";
+import AdminLayout from "./pages/admin/AdminLayout";
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
           <Route path="/kontakt" element={<Kontakt />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+
+          <Route path="/admin" element={<AdminLayout/>}></Route>
 
         </Routes>
       <Footer />

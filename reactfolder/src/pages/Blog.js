@@ -7,6 +7,8 @@ import ScrollToTop from "../components/ScrollToTop";
 import BlogPost from "../components/BlogPost";
 //import posts from "../components/zadaci/data/blog.json";
 
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 const Blog = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -23,14 +25,14 @@ const Blog = () => {
   useEffect(() => {
 
     fetch(
-      "https://front2.edukacija.online/backend/wp-json/wp/v2/categories")
+      `${BASE_URL}v2/categories`)
       .then((response) => response.json())
       .then((data) => {
         setCategories(data);
       });
 
     fetch(
-      "https://front2.edukacija.online/backend/wp-json/wp/v2/users?per_page=20",
+      `${BASE_URL}v2/users?per_page=20`,
     )
       .then((response) => response.json())
       .then((data) => {
@@ -45,7 +47,7 @@ const Blog = () => {
     const per_page = 6
 
     let url =
-      `https://front2.edukacija.online/backend/wp-json/wp/v2/posts?_embed&per_page=${per_page}&page=${currentPage +1}`;
+      `${BASE_URL}v2/posts?_embed&per_page=${per_page}&page=${currentPage +1}`;
 
     if (selectedCategory) url += "&categories=" + selectedCategory;
 
