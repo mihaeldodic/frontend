@@ -1,101 +1,119 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import "./nav.css";
+
 const Nav = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const [name, setName] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+
   useEffect(() => {
     const user = localStorage.getItem("username");
     if (user) setName(user);
   }, []);
-  if (location.pathname === "/signin") {
-    return;
-  }
+
+  // Scroll efekt
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  if (location.pathname === "/signin") return null;
+
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    //window.location.reload();
     setName(null);
+    navigate("/");
   };
-  
-  
+
   return (
-     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container">
-          <Link className="navbar-brand" to="/">
-            <img src="img/header/logo.svg" alt="logo" height="12" />
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#mainNavbar"
-            aria-controls="mainNavbar"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="navbar-collapse collapse" id="mainNavbar">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
+    <nav
+      className={`navbar navbar-expand-lg fixed-top ${
+        scrolled ? "navbar-scrolled" : ""
+      }`}
+    >
+      <div className="container">
+
+        {/* Logo */}
+        <Link className="navbar-brand" to="/">
+          <img src="/img/logo-3.png" alt="logo" />
+        </Link>
+
+        {/* Mobile toggle */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="navbar-collapse collapse" id="mainNavbar">
+          
+          {/* Left menu */}
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">Naslovnica</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/o-nama">O nama</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/kategorije">Kategorije</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/putovanje">Putovanja</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/blog">Blog</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/kontakt">Kontakt</Link>
+            </li>
+
+            {name && (
               <li className="nav-item">
-                <Link className="nav-link text-end" to="/">
-                  Naslovnica
-                </Link>
+                <Link className="nav-link" to="/admin">Admin</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link text-end" to="/o-nama">
-                  O nama
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-end" to="/kategorije">
-                  Kategorije
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-end" to="/putovanje">
-                  Putovanja
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-end" to="/blog">
-                  Blog
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link text-end" to="/kontakt">
-                  Kontakt
-                </Link>
-              </li>
+            )}
+          </ul>
+
+          {/* Right side */}
+          <ul className="navbar-nav ms-auto align-items-center">
+            <li className="nav-item">
               {name ? (
-              <li className="nav-item">
-                <Link className="nav-link text-end" to="/admin">
-                  Admin
-                </Link>
-              </li>
-              ) : (
-                ""
-              )}
-            </ul>
-            <ul className="navbar-nav ms-auto align-items-center">
-              <li className="nav-item">
-                {name ? (
                 <button onClick={logout} className="btn btn-primary">
                   Dobrodošli, {name}
                 </button>
               ) : (
-                <Link className="nav-link" to="/signin" title="Sign in">
+                <Link className="nav-link" to="/signin">
                   <img
-                    src="img/header/user.svg"
+                    src="/img/header/user.svg"
                     alt="Sign in"
                     className="icon-sm"
                   />
                 </Link>
               )}
             </li>
+
             <li className="nav-item">
-              <Link className="nav-link" href="/cart" title="Cart">
-                <img src="img/header/cart.svg" alt="Cart" className="icon-lg" />
+              <Link className="nav-link" to="/cart">
+                <img
+                  src="/img/header/cart.svg"
+                  alt="Cart"
+                  className="icon-lg"
+                />
               </Link>
             </li>
           </ul>
@@ -104,4 +122,5 @@ const Nav = () => {
     </nav>
   );
 };
+
 export default Nav;

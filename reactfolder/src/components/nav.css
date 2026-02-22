@@ -1,0 +1,86 @@
+
+/* Transparent start */
+.navbar {
+  height: 70px;              /* ← odredi jednu visinu */
+  padding: 0;                /* makni padding */
+  background: transparent;
+  display: flex;
+  align-items: center;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1000;
+}
+
+/* Kad scrollaš */
+.navbar-scrolled {
+  background: rgba(14, 116, 144, 0.95) !important;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.navbar-brand img {
+  height: 55px;
+  width: auto;
+  transition: 0.3s;
+  border-radius: 100%;
+}
+
+.navbar-scrolled .navbar-brand img {
+  height: 45px;
+}
+
+/* Linkovi */
+.navbar .nav-link {
+  color: white !important;
+  font-weight: 500;
+  letter-spacing: 1px;
+  transition: 0.3s;
+  position: relative;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: #ff6b6b!important;
+}
+
+/* Hover underline animacija */
+.navbar .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background: #ff6b6b;
+  transition: 0.3s;
+}
+
+.navbar .nav-link:hover::after {
+  width: 100%;
+}
+
+/* Ikone */
+.icon-sm {
+  width: 22px;
+}
+
+.icon-lg {
+  width: 26px;
+}
+
+/* Mobile fix */
+.navbar-toggler {
+  border: none;
+}
+
+.navbar .container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}

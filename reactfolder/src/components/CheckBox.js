@@ -1,8 +1,10 @@
+import "./checkbox.css"
+
 function CheckBox({ accepted, onChange }) {
   return (
     <div className="form-check mb-0">
       <input
-        className="form-check-input"
+        className="checkbox-input-1 form-check-input"
         type="checkbox"
         id="privacyCheck"
         checked={accepted}

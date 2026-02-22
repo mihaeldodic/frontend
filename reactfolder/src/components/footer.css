@@ -2,10 +2,9 @@
 
 .row-subscribe {
     height: 50px; 
-    background: #1c1c1c;
+    background: none;
     width: 100%;
     position: absolute;
-   
 }
 
 .subscribe-1 {
@@ -69,7 +68,7 @@
 
 /* Footer Section */
 .footer-01 {
-    background-color: #1c1c1c;
+    background-color: rgba(14, 116, 144, 0.95);
     color: #f1f1f1;
     width: 100%;
     padding: 60px 0;
@@ -228,6 +227,20 @@
     text-align: left;
   }
 
+  .p-subscribe {
+    padding-left: 0px;
+    margin-top: 30px;
+  }
+
+  .checkbox-1 {
+    padding-right: 0px;
+    margin-top: 30px;
+  }
+
+  .checkbox-input-1 {
+    padding-right: 0px;
+    margin-top: 35px;
+  }
 }
 
 @media (max-width: 575px) {
@@ -245,6 +258,14 @@
     margin-bottom: 20px;
     text-align: center;
   }
+
+  .p-subscribe {
+  padding-left: 0px;
+}
+
+.checkbox-1 {
+  padding-right: 0px;
+}
 }
 
 .footer-sadrzaj-1 {

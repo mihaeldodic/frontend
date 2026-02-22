@@ -191,7 +191,7 @@ const Footer = () => {
             TOP
           </button>
         </div>
-        <div className="copyright">
+        <div className="container copyright">
           <div className="row justify-content-center">
             <div className="col-auto">
               <p>
