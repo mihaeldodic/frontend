@@ -6,6 +6,7 @@ import "./Blog.css";
 import ScrollToTop from "../components/ScrollToTop";
 import BlogPost from "../components/BlogPost";
 //import posts from "../components/zadaci/data/blog.json";
+import SwiperComponent from "../components/SwiperComponent";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -71,6 +72,7 @@ const Blog = () => {
       <div className="blog-post">
         <div className="container">
           <h1>Blog</h1>
+          <SwiperComponent posts={posts} />
 
           <div className="row mb-4 mt-5">
             <div className="col-12 d-flex gap-1 mb-2">

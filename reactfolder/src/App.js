@@ -20,6 +20,10 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SingUp";
 import AdminLayout from "./pages/admin/AdminLayout";
 
+import MyDetails from "./pages/admin/MyDetails";
+import MyPosts from "./pages/admin/MyPosts";
+import Settings from "./pages/admin/Settings";
+
 function App() {
   return (
     <BrowserRouter>
@@ -39,7 +43,11 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
 
-          <Route path="/admin" element={<AdminLayout/>}></Route>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="mydetails" element={<MyDetails />} />
+              <Route path="myposts" element={<MyPosts />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
 
         </Routes>
       <Footer />

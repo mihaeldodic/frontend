@@ -40,7 +40,6 @@ const Nav = () => {
       }`}
     >
       <div className="container">
-
         {/* Logo */}
         <Link className="navbar-brand" to="/">
           <img src="/img/logo-3.png" alt="logo" />
@@ -60,31 +59,44 @@ const Nav = () => {
         </button>
 
         <div className="navbar-collapse collapse" id="mainNavbar">
-          
           {/* Left menu */}
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
             <li className="nav-item">
-              <Link className="nav-link" to="/">Naslovnica</Link>
+              <Link className="nav-link" to="/">
+                Naslovnica
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/o-nama">O nama</Link>
+              <Link className="nav-link" to="/o-nama">
+                O nama
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/kategorije">Kategorije</Link>
+              <Link className="nav-link" to="/kategorije">
+                Kategorije
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/putovanje">Putovanja</Link>
+              <Link className="nav-link" to="/putovanje">
+                Putovanja
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/blog">Blog</Link>
+              <Link className="nav-link" to="/blog">
+                Blog
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/kontakt">Kontakt</Link>
+              <Link className="nav-link" to="/kontakt">
+                Kontakt
+              </Link>
             </li>
 
             {name && (
               <li className="nav-item">
-                <Link className="nav-link" to="/admin">Admin</Link>
+                <Link className="nav-link" to="/admin">
+                  Admin
+                </Link>
               </li>
             )}
           </ul>
