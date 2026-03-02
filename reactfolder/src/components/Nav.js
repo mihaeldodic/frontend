@@ -1,6 +1,8 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./nav.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 const Nav = () => {
   const location = useLocation();
@@ -121,11 +123,7 @@ const Nav = () => {
 
             <li className="nav-item">
               <Link className="nav-link" to="/cart">
-                <img
-                  src="/img/header/cart.svg"
-                  alt="Cart"
-                  className="icon-lg"
-                />
+                <FontAwesomeIcon icon={faShoppingCart} size="lg" />
               </Link>
             </li>
           </ul>

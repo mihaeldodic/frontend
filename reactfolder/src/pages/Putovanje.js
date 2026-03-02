@@ -20,7 +20,7 @@ const Putovanje = () => {
   console.log("stranica", page);
 
   useEffect(() =>{
-    fetch(`${BASE_URL}v2/destinacije`)
+    fetch(`${BASE_URL}v2/nova-destinacija`)
     .then((response) =>response.json())
     .then((data) => setPutovanja(data));
   }, [])
@@ -30,7 +30,7 @@ const Putovanje = () => {
   useEffect(() => {
     setLoading(true);
 
-    let url = "https://front2.edukacija.online/backend/wp-json/wp/v2/putovanje?_embed";
+    let url = "https://front2.edukacija.online/backend/wp-json/wp/v2/nova-destinacija?_embed";
     if (svaPutovanja) url += "&destinacije=" + svaPutovanja;
  
     fetch(url)
