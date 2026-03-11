@@ -1,79 +1,136 @@
-import { Link } from 'react-router-dom';
-
-
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import "./nav.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 const Nav = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [name, setName] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem("username");
+    if (user) setName(user);
+  }, []);
+
+  // Scroll efekt
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  if (location.pathname === "/signin") return null;
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    setName(null);
+    navigate("/");
+  };
+
   return (
- <>
- <nav className="navbar navbar-expand-lg navbar-light bg-ligh">
+    <nav
+      className={`navbar navbar-expand-lg fixed-top ${
+        scrolled ? "navbar-scrolled" : ""
+      }`}
+    >
       <div className="container">
-        
-        <a className="navbar-brand" href="/index.html">
-          <img src="img/header/logo.svg" alt="logo" height="12" /> 
-        </a>
-        
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="true" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span> 
+        {/* Logo */}
+        <Link className="navbar-brand" to="/">
+          <img src="./img/logo-4.png" alt="logo" />
+        </Link>
+
+        {/* Mobile toggle */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNavbar"
+          aria-controls="mainNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="navbar-collapse collapse show" id="mainNavbar">
-          
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            
-         <li className="nav-item dropdown text-end">
-              <a className="nav-link dropdown-toggle" href="#" id="ddElectric" role="button" data-bs-toggle="dropdown" aria-expanded="false">ELECTRIC</a>
-              <ul className="dropdown-menu" aria-labelledby="ddElectric">
-                <li><Link className="dropdown-item text-end" to="/">Naslovnica</Link></li>
-                <li><Link className="dropdown-item text-end" to="#">O nama</Link></li>
-              </ul>
-            </li>
-          <li className="nav-item dropdown text-end">
-              <a className="nav-link dropdown-toggle" href="#" id="ddElectric" role="button" data-bs-toggle="dropdown" aria-expanded="false">CITY</a>
-              <ul className="dropdown-menu" aria-labelledby="ddElectric">
-                <li><a className="dropdown-item text-end" href="#">Caféracer</a></li>
-                <li><a className="dropdown-item text-end" href="#">Robyn</a></li>
-              </ul>
-            </li>
-           <li className="nav-item dropdown text-end">
-              <a className="nav-link dropdown-toggle" href="#" id="ddElectric" role="button" data-bs-toggle="dropdown" aria-expanded="false">KIDS</a>
-              <ul className="dropdown-menu" aria-labelledby="ddElectric">
-                <li><a className="dropdown-item text-end" href="#">El Bear</a></li>
-                <li><a className="dropdown-item text-end" href="#">El Robin</a></li>
-              </ul>
+        <div className="navbar-collapse collapse" id="mainNavbar">
+          {/* Left menu */}
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0 text-uppercase">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                Naslovnica
+              </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-end" href="#">O nama</a>
+              <Link className="nav-link" to="/o-nama">
+                O nama
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link text-end" to="/blog">Blog</Link>
+              <Link className="nav-link" to="/kategorije">
+                Kategorije
+              </Link>
             </li>
-           <li className="nav-item dropdown text-end">
-              <a className="nav-link dropdown-toggle" href="#" id="ddElectric" role="button" data-bs-toggle="dropdown" aria-expanded="false">LEASING</a>
-              <ul className="dropdown-menu" aria-labelledby="ddElectric">
-                <li><a className="dropdown-item text-end" href="#">Private</a></li>
-                <li><a className="dropdown-item text-end" href="#">Business</a></li>
-              </ul>
+            <li className="nav-item">
+              <Link className="nav-link" to="/putovanje">
+                Putovanja
+              </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/blog">
+                Blog
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/kontakt">
+                Kontakt
+              </Link>
+            </li>
+
+            {name && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/admin">
+                  Admin
+                </Link>
+              </li>
+            )}
           </ul>
 
-    <ul className="navbar-nav ms-auto align-items-center">
-      <li className="nav-item">
-        <a className="nav-link" href="/signin" title="Sign in">
-            <img src="img/header/user.svg" alt="Sign in" className="icon-sm" />
-        </a>
-      </li>
-      <li className="nav-item">
-        <a className="nav-link" href="/cart" title="Cart">
-            <img src="img/header/cart.svg" alt="Cart" className="icon-lg " />
-        </a>
-      </li>
-    </ul>
-          
+          {/* Right side */}
+          <ul className="navbar-nav ms-auto align-items-center">
+            <li className="nav-item">
+              {name ? (
+                <button onClick={logout} className="btn btn-primary">
+                  Dobrodošli, {name}
+                </button>
+              ) : (
+                <Link className="nav-link" to="/signin">
+                  <img
+                    src="/img/header/user.svg"
+                    alt="Sign in"
+                    className="icon-sm"
+                  />
+                </Link>
+              )}
+            </li>
+
+            <li className="nav-item">
+              <Link className="nav-link" to="/cart">
+                <FontAwesomeIcon icon={faShoppingCart} size="lg" />
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
     </nav>
-</>
-    );
+  );
 };
 
 export default Nav;

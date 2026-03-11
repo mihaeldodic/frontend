@@ -1,0 +1,18 @@
+{
+        "ime" : "Mihael",
+        "prezime" : "Dodic",
+        "godine" : 25,
+        "vozacka" : true,
+        "vjestine" : [
+            "HTML", 
+            "CSS", 
+            "JavaScript", 
+            "React" 
+        ],
+        "adresa" : {
+            "ulica" : "Zagrebacka 12",
+            "grad" : "Zagreb",
+            "pbroj" : 10000
+        }
+
+    }

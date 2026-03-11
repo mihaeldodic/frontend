@@ -1,0 +1,305 @@
+/* Subscribe Section */
+
+.row-subscribe {
+    height: 50px; 
+    background: none;
+    width: 100%;
+    position: absolute;
+}
+
+.subscribe-1 {
+  position: relative;
+  margin-top: -150px;
+}
+
+.subscribe-2 {
+  position: relative;
+  margin-top: -80px;
+}
+
+.p-subscribe {
+  padding-left: 30px;
+}
+
+.checkbox-1 {
+  padding-right: 30px;
+}
+
+.subscribe-form .form-group {
+    margin: 0;
+}
+
+.subscribe-form input[type="email"] {
+    border-radius: 30px;
+}
+
+.subscribe {
+    background-color: #ffffff;
+    padding: 5px;
+    border-radius: 30px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    
+}
+
+.subscribe-button .btn {
+    white-space: nowrap;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.subscribe-button .btn:hover {
+  transform: translateY(-1px);
+}
+
+.subscribe-button .btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(187, 115, 115, 0.4);
+}
+
+.subscribe-form input:focus {
+  box-shadow: none;
+  border-color: #bb7373;
+}
+
+/* Footer Section */
+.footer-01 {
+    background-color: rgba(14, 116, 144, 0.95);
+    color: #f1f1f1;
+    width: 100%;
+    padding: 60px 0;
+    margin-top: 50px;
+    margin-bottom: auto;
+    height: auto;
+    font-size: 15px;
+    line-height: 1.7;
+    bottom: 0;
+    font-weight: 400;
+}
+
+.footer-01 a {
+  color: #f1f1f1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-01 a:hover {
+  color: #ff6b6b;
+}
+
+/* Footer Lijevi dio: Brend i opis */
+
+.footer-brand .logo {
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.footer-link {
+  font-weight: 500;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-link span {
+  font-size: 18px;
+  margin-left: 5px;
+  transition: transform 0.3s ease;
+}
+
+.footer-link:hover span {
+  transform: translateX(5px);
+}
+
+/* Footer Desni dio: Navigacijski linkovi */
+
+.footer-01 h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #ff6b6b;
+}
+
+.footer-01 ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-01 ul li a {
+  font-size: 14px;
+  padding: 5px 0;
+  position: relative;
+  display: inline-block;
+  color: #f1f1f1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-01 ul li a:hover {
+  color: #ff6b6b;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.footer-01 ul li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background-color: #ff6b6b;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.footer-01 ul li a:hover::after {
+  transform: scaleX(1);
+}
+
+.row-footer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.footer-01 .border-start,
+.footer-01 .footer-sadrzaj-1,
+.footer-01 .footer-sadrzaj-2,
+.footer-01 .footer-sadrzaj-3 {
+  border: none !important;
+}
+
+.footer-01 .ps-3 {
+  padding-left: 15px;
+}
+
+.social-icon {
+  font-size: 14px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+
+@media (max-width: 991px) {
+   .footer-01 .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    order: 1; 
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .footer-01 .col-md-8 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    order: 2; 
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer-01 .col-md-8 .row {
+    display: flex;
+    flex-wrap: nowrap;        
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .footer-01 .col-md-8 .footer-sadrzaj-1,
+  .footer-01 .col-md-8 .footer-sadrzaj-2,
+  .footer-01 .col-md-8 .footer-sadrzaj-3 {
+    flex: 1 1 auto;
+    min-width: 150px; 
+    text-align: left;
+  }
+
+  .p-subscribe {
+    padding-left: 0px;
+    margin-top: 30px;
+  }
+
+  .checkbox-1 {
+    padding-right: 0px;
+    margin-top: 30px;
+  }
+
+  .checkbox-input-1 {
+    padding-right: 0px;
+    margin-top: 35px;
+  }
+}
+
+@media (max-width: 575px) {
+
+   .footer-01 .col-md-8 .row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-01 .col-md-8 .footer-sadrzaj-1,
+  .footer-01 .col-md-8 .footer-sadrzaj-2,
+  .footer-01 .col-md-8 .footer-sadrzaj-3 {
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .p-subscribe {
+  padding-left: 0px;
+}
+
+.checkbox-1 {
+  padding-right: 0px;
+}
+}
+
+.footer-sadrzaj-1 {
+  padding: 0 60px;
+}
+
+.footer-sadrzaj-2 {
+  padding: 0 60px;
+}
+
+.footer-sadrzaj-3 {
+  padding: 0 60px;
+}
+
+.footer-heading-02 {
+  white-space: nowrap;
+}
+
+.footer-01 .copyright {
+  margin-top: 50px;     
+  text-align: center;
+}
+
+.footer-01 .copyright p {
+  margin: 0;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.footer-01 .copyright a {
+  color: #f1f1f1;
+  text-decoration: none;
+}
+
+.footer-01 .copyright a:hover {
+  color: #ff6b6b;
+}

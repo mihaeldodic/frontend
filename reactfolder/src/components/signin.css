@@ -1,0 +1,70 @@
+.profile-left {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  h1 {
+    color: var(--white);
+  }
+}
+
+.profile-right {
+    min-height: 100vh;
+    justify-content: center;
+    align-content: center;
+    padding: 30px;
+
+  h2 {
+    font-size: 2rem;
+    text-align: center;
+  }
+  p {
+    text-align: center;
+    color: #828282;
+  }
+  .signin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    input {
+      border: none;
+      border-bottom: 1px solid var(--primary-color);
+    }
+
+    button {
+      display: block;
+      padding: 15px 40px;
+      border-radius: 5px;
+      background-color: var(--primary-color);
+      color: var(--white);
+      margin-top: 20px;
+      position: relative;
+    }
+   
+  }
+   
+}
+
+.breakline{
+        position: relative;
+        margin-top: 2rem;
+    }
+    .breakline::after {
+        position: absolute;
+        content: "";
+        width: 48%;
+        height: 0.5px;
+        background-color: var(--primary-color);
+        right: 0;
+        top: 48%;
+    }
+    .breakline::before {
+        position: absolute;
+        content: "";
+        width: 48%;
+        height: 0.5px;
+        background-color: var(--primary-color);
+        left: 0;
+        top: 48%;
+    }
