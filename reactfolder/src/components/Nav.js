@@ -44,7 +44,7 @@ const Nav = () => {
       <div className="container">
         {/* Logo */}
         <Link className="navbar-brand" to="/">
-          <img src="/img/logo-3.png" alt="logo" />
+          <img src="./img/logo-4.png" alt="logo" />
         </Link>
 
         {/* Mobile toggle */}

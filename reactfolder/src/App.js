@@ -30,7 +30,7 @@ import Checkout from "./pages/shop/Checkout";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/mdodic">
       <Nav />
         <Routes>
           <Route path="/blog" element={<Blog />} />
