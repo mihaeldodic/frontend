@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import "./pages/Gutenberg.css";
 import "./App.css";
@@ -30,7 +30,7 @@ import Checkout from "./pages/shop/Checkout";
 
 function App() {
   return (
-    <BrowserRouter basename="/mdodic">
+    <BrowserRouter basename="">
       <Nav />
         <Routes>
           <Route path="/blog" element={<Blog />} />

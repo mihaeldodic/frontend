@@ -68,7 +68,7 @@
 
 .typed-cursor {
   display: inline-block;
-  color: #ff6b6b; /* crticu stavimo roza */
+  color: #ffffff; /* crticu stavimo roza */
   animation: blink 1.2s infinite; /* sporije treptanje */
   margin-left: 2px;
   font-weight: bold;
