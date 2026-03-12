@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
@@ -10,6 +9,7 @@ import {
   faLinkedin,
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
+
 const Kontakt = () => {
   const form = useRef();
   const [isSent, setIsSent] = useState(false);
@@ -25,68 +25,109 @@ const Kontakt = () => {
         () => {
           console.log("SUCCESS!");
           setIsSent(true);
+          setTimeout(() => setIsSent(false), 3000);
         },
         (error) => {
           console.log("FAILED...", error.text);
         },
       );
   };
+
   return (
     <>
-      <div className="container">
+      <div className="container" style={{ marginTop: "100px" }}>
         <div className="row my-4">
           <h1 className="text-center mt-3">Kontakt</h1>
-          <p className="text-center">
-            Any question or remarks? Just write us a message!
+          <p className="text-center subtitle">
+            Imajte li neko pitanje? Samo nam napišite poruku!
           </p>
+          
           <div className="col-md-4 contact-left">
             <div>
-              <h2>Contact Information</h2>
-              <p>Say something to start a live chat!</p>
+              <h2>Kontakt Informacije</h2>
+              <p>Slobodno nam se javite za sve detalje!</p>
             </div>
+            
             <div className="contact-info">
-              <a href="" className="d-flex gap-4 align-items-start">
-                <FontAwesomeIcon icon={faPhone} className="pt-1" /> +1012 3456
-                789{" "}
+              <a href="tel:+3851234567" className="contact-link d-flex gap-3 align-items-start">
+                <FontAwesomeIcon icon={faPhone} className="contact-icon" /> 
+                <span>+385 123 4567</span>
               </a>
-              <a href="" className="d-flex gap-4 align-items-start">
-                <FontAwesomeIcon icon={faEnvelope} className="pt-1" />{" "}
-                demo@gmail.com{" "}
+              <a href="mailto:exploroers-way@gmail.com" className="contact-link d-flex gap-3 align-items-start">
+                <FontAwesomeIcon icon={faEnvelope} className="contact-icon" />
+                <span>exploroers-way@gmail.com</span>
               </a>
-              <a href="" className="d-flex gap-4 align-items-start">
-                <FontAwesomeIcon icon={faLocationDot} className="pt-1" /> 132
-                Dartmouth Street Boston, Massachusetts 02156 United States{" "}
+              <a href="#" className="contact-link d-flex gap-3 align-items-start">
+                <FontAwesomeIcon icon={faLocationDot} className="contact-icon" />
+                <span>Avenija Zagreb, 10000 Zagreb Hrvatska</span>
               </a>
             </div>
+            
             <div className="socials">
-              <a href="www.x.com">
+              <a href="https://www.x.com" target="_blank" rel="noopener noreferrer" className="social-link">
                 <FontAwesomeIcon icon={faXTwitter} />
               </a>
-              <a href="www.instagram.com">
+              <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="social-link">
                 <FontAwesomeIcon icon={faInstagram} />
               </a>
-              <a href="www.linkedin.com">
+              <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="social-link">
                 <FontAwesomeIcon icon={faLinkedin} />
               </a>
             </div>
           </div>
+          
           <div className="col-md-8 contact-right">
             <div className="d-flex flex-column contact-inputs">
               <form ref={form} onSubmit={sendEmail}>
-                <label>Name</label>
-                <input type="text" name="user_name" className="inputform" />
-                <label>Email</label>
-                <input type="email" name="user_email" className="inputform" />
-                <label>Message</label>
-                <textarea rows={2} name="message" className="inputform" />
+                <div className="form-group">
+                  <label htmlFor="user_name">Ime</label>
+                  <input 
+                    type="text" 
+                    id="user_name"
+                    name="user_name" 
+                    className="inputform" 
+                    placeholder="Unesite vaše ime"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="user_email">Email</label>
+                  <input 
+                    type="email" 
+                    id="user_email"
+                    name="user_email" 
+                    className="inputform"
+                    placeholder="Unesite vaš email"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="message">Poruka</label>
+                  <textarea 
+                    rows={4} 
+                    id="message"
+                    name="message" 
+                    className="inputform"
+                    placeholder="Unesite vašu poruku"
+                    required
+                  />
+                </div>
+
                 <button
                   type="submit"
-                  value="Send"
-                  className="contact-button mt-5"
+                  className="contact-button mt-4"
                   disabled={isSent}
                 >
-                  {isSent ? "Message Sent" : "Send Message"}
+                  {isSent ? "✓ Poruka poslana" : "Pošalji poruku"}
                 </button>
+
+                {isSent && (
+                  <div className="success-message mt-3">
+                    Hvala! Vaša poruka je uspješno poslana.
+                  </div>
+                )}
               </form>
             </div>
           </div>
@@ -95,4 +136,5 @@ const Kontakt = () => {
     </>
   );
 };
+
 export default Kontakt;

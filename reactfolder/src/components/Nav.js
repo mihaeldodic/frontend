@@ -3,7 +3,11 @@ import { useState, useEffect } from "react";
 import "./nav.css";
 import SearchModal from "./SearchModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSearch,
+  faChevronDown,
+  faPhone,
+} from "@fortawesome/free-solid-svg-icons";
 import { faInstagram, faFacebook } from "@fortawesome/free-brands-svg-icons";
 
 const Nav = () => {
@@ -16,6 +20,12 @@ const Nav = () => {
   const [exploreOpen, setExploreOpen] = useState(false);
   const [hoverTimeout, setHoverTimeout] = useState(null);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+
+  // Stranice gdje navigacija TREBA biti prozirna (sa hero slikom)
+  const transparentPages = ["/"];
+
+  // Provjeri da li je trenutna stranica sa prozirnom navigacijom
+  const isTransparent = transparentPages.includes(location.pathname);
 
   useEffect(() => {
     const user = localStorage.getItem("username");
@@ -46,7 +56,7 @@ const Nav = () => {
   const handleExploreHover = (isHovering) => {
     if (window.innerWidth > 991) {
       if (hoverTimeout) clearTimeout(hoverTimeout);
-      
+
       if (isHovering) {
         setExploreOpen(true);
       } else {
@@ -71,7 +81,7 @@ const Nav = () => {
   };
 
   const continents = [
-    "Afika",
+    "Afrika",
     "Azija",
     "Australija",
     "Europa",
@@ -83,14 +93,14 @@ const Nav = () => {
     <>
       <nav
         className={`navbar navbar-expand-lg fixed-top ${
-          scrolled ? "navbar-scrolled" : ""
+          scrolled || !isTransparent ? "navbar-scrolled" : ""
         } ${menuOpen ? "navbar-menu-open" : ""}`}
       >
         <div className="container">
           {/* Logo */}
-          <Link className="navbar-brand" to="/">
-            <img src="./img/logo-4.png" alt="logo" />
-          </Link>
+         <Link className="navbar-brand" to="/">
+          <img src="./img/logo-4.png" alt="logo" />
+        </Link>
 
           {/* Mobile toggle */}
           <button
@@ -106,20 +116,20 @@ const Nav = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
 
-          <div 
-            className={`navbar-collapse collapse ${menuOpen ? "show" : ""}`} 
+          <div
+            className={`navbar-collapse collapse ${menuOpen ? "show" : ""}`}
             id="mainNavbar"
           >
             {/* Meni */}
             <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
               {/* Istraži - Dropdown */}
-              <li 
+              <li
                 className="nav-item dropdown"
                 onMouseEnter={() => handleExploreHover(true)}
                 onMouseLeave={() => handleExploreHover(false)}
               >
                 <div className="explore-wrapper">
-                  <Link 
+                  <Link
                     className={`nav-link dropdown-toggle ${exploreOpen ? "active" : ""}`}
                     to="/putovanje"
                     onClick={handleExploreClick}
@@ -133,7 +143,7 @@ const Nav = () => {
                     onClick={handleExploreToggleMobile}
                     aria-label="Toggle explore menu"
                   >
-                    <FontAwesomeIcon 
+                    <FontAwesomeIcon
                       icon={faChevronDown}
                       className={`chevron-icon ${exploreOpen ? "open" : ""}`}
                     />
@@ -158,8 +168,8 @@ const Nav = () => {
               </li>
 
               <li className="nav-item">
-                <Link 
-                  className={`nav-link ${isActive("/blog") ? "active" : ""}`} 
+                <Link
+                  className={`nav-link ${isActive("/blog") ? "active" : ""}`}
                   to="/blog"
                   onClick={handleMenuClose}
                 >
@@ -168,8 +178,8 @@ const Nav = () => {
               </li>
 
               <li className="nav-item">
-                <Link 
-                  className={`nav-link ${isActive("/o-nama") ? "active" : ""}`} 
+                <Link
+                  className={`nav-link ${isActive("/o-nama") ? "active" : ""}`}
                   to="/o-nama"
                   onClick={handleMenuClose}
                 >
@@ -178,8 +188,8 @@ const Nav = () => {
               </li>
 
               <li className="nav-item">
-                <Link 
-                  className={`nav-link ${isActive("/kontakt") ? "active" : ""}`} 
+                <Link
+                  className={`nav-link ${isActive("/kontakt") ? "active" : ""}`}
                   to="/kontakt"
                   onClick={handleMenuClose}
                 >
@@ -191,8 +201,8 @@ const Nav = () => {
             {/* Desna strana - Ikone */}
             <ul className="navbar-nav ms-auto align-items-center nav-icons">
               <li className="nav-item">
-                <button 
-                  className="nav-icon-btn" 
+                <button
+                  className="nav-icon-btn"
                   title="Pretraga"
                   onClick={() => setSearchModalOpen(true)}
                 >
@@ -200,9 +210,9 @@ const Nav = () => {
                 </button>
               </li>
               <li className="nav-item">
-                <a 
-                  href="https://instagram.com" 
-                  target="_blank" 
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="nav-icon-btn"
                   title="Instagram"
@@ -211,9 +221,9 @@ const Nav = () => {
                 </a>
               </li>
               <li className="nav-item">
-                <a 
-                  href="https://facebook.com" 
-                  target="_blank" 
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="nav-icon-btn"
                   title="Facebook"
@@ -221,15 +231,25 @@ const Nav = () => {
                   <FontAwesomeIcon icon={faFacebook} />
                 </a>
               </li>
+              <li className="nav-item">
+                <Link
+                  to="/kontakt"
+                  className="nav-phone-icon"
+                  title="Kontakt"
+                  onClick={handleMenuClose}
+                >
+                  <FontAwesomeIcon icon={faPhone} />
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
       </nav>
 
       {/* Search Modal */}
-      <SearchModal 
-        isOpen={searchModalOpen} 
-        onClose={() => setSearchModalOpen(false)} 
+      <SearchModal
+        isOpen={searchModalOpen}
+        onClose={() => setSearchModalOpen(false)}
       />
     </>
   );

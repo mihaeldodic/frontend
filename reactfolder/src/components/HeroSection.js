@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./herosection.css";
 
 const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
@@ -129,9 +130,9 @@ const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
           </div>
         </h1>
 
-        <a href="#" className="hero-btn">
-          Contact us
-        </a>
+        <Link to="/kontakt" className="hero-btn">
+          Planiraj svoje putovanje
+        </Link>
       </div>
     </div>
   );
