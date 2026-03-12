@@ -1,19 +1,137 @@
-
-
-.blog-post img {
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    width: 100%;
+/* Travel Info Cards */
+.travel-info-cards {
+  background: #f9f9f9;
+  padding: 2rem;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
 }
 
-.blog-post h2 {
-    font-size: 2rem;
+.info-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border-left: 4px solid #0e7490;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-
-@media (min-width: 440px) {
-    .blog-post img{
-        aspect-ratio: 16 / 9;
-    }
+.info-card h5 {
+  color: #0e7490;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
 }
 
+.info-card p {
+  color: #333;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.info-card p.price {
+  color: #ff6b6b;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+/* Sekcije */
+.section h2 {
+  color: #0e7490;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.section p {
+  color: #555;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+/* Dani */
+.days-section {
+  margin-top: 2rem;
+}
+
+.day-card {
+  background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+  padding: 2rem;
+  border-radius: 1rem;
+  border-left: 5px solid #ff6b6b;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.1);
+  transition: all 0.3s ease;
+}
+
+.day-card:hover {
+  transform: translateX(10px);
+  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.15);
+}
+
+.day-card h3 {
+  color: #0e7490;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.day-badge {
+  background: #ff6b6b;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.day-card p {
+  color: #555;
+  line-height: 1.8;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .travel-info-cards {
+    padding: 1.5rem;
+  }
+
+  .info-card {
+    padding: 1rem;
+  }
+
+  .day-card {
+    padding: 1.5rem;
+  }
+
+  .day-card h3 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .travel-info-cards {
+    padding: 1rem;
+  }
+
+  .info-card {
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .day-card {
+    padding: 1rem;
+  }
+
+  .day-card h3 {
+    font-size: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .day-badge {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}
