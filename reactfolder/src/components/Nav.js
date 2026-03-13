@@ -10,6 +10,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faInstagram, faFacebook } from "@fortawesome/free-brands-svg-icons";
 
+const toContinentSlug = (value) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-");
+
 const Nav = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,11 +28,19 @@ const Nav = () => {
   const [hoverTimeout, setHoverTimeout] = useState(null);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
 
-  // Stranice gdje navigacija TREBA biti prozirna (sa hero slikom)
-  const transparentPages = ["/"];
+  // Stranice koje smiju krenuti s prozirnom navigacijom.
+  // Za sekcije poput /putovanje podrzane su i podstranice, npr. /putovanje/kontinent/europa.
+  const transparentPages = ["/", "/o-nama", "/blog", "/putovanje"];
 
-  // Provjeri da li je trenutna stranica sa prozirnom navigacijom
-  const isTransparent = transparentPages.includes(location.pathname);
+  const isTransparent = transparentPages.some((path) => {
+    if (path === "/") {
+      return location.pathname === "/";
+    }
+
+    return (
+      location.pathname === path || location.pathname.startsWith(`${path}/`)
+    );
+  });
 
   useEffect(() => {
     const user = localStorage.getItem("username");
@@ -37,6 +52,7 @@ const Nav = () => {
       setScrolled(window.scrollY > 50);
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -90,7 +106,7 @@ const Nav = () => {
   const handleContinentClick = (continent) => {
     setExploreOpen(false);
     setMenuOpen(false);
-    navigate(`/putovanje/${continent.toLowerCase().replace(/\s+/g, "-")}`);
+    navigate(`/putovanje/kontinent/${toContinentSlug(continent)}`);
   };
 
   const continents = [
@@ -170,7 +186,7 @@ const Nav = () => {
                     <li key={continent}>
                       <Link
                         className="dropdown-item"
-                        to={`/putovanje/${continent.toLowerCase().replace(/\s+/g, "-")}`}
+                        to={`/putovanje/kontinent/${toContinentSlug(continent)}`}
                         onClick={() => handleContinentClick(continent)}
                       >
                         {continent}

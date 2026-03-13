@@ -185,32 +185,32 @@ const Footer = () => {
                   <nav aria-label="Footer navigacija"></nav>
                   <ul className="list-unstyled">
                     <li>
-                      <Link to="/putovanje/afrika" className="py-1 footer-link-item" onClick={handleLinkClick}>
+                      <Link to="/putovanje/kontinent/afrika" className="py-1 footer-link-item" onClick={handleLinkClick}>
                         Afrika
                       </Link>
                     </li>
                     <li>
-                      <Link to="/putovanje/australija" className="py-1 footer-link-item" onClick={handleLinkClick}>
+                      <Link to="/putovanje/kontinent/australija" className="py-1 footer-link-item" onClick={handleLinkClick}>
                         Australija
                       </Link>
                     </li>
                     <li>
-                      <Link to="/putovanje/azija" className="py-1 footer-link-item" onClick={handleLinkClick}>
+                      <Link to="/putovanje/kontinent/azija" className="py-1 footer-link-item" onClick={handleLinkClick}>
                         Azija
                       </Link>
                     </li>
                     <li>
-                      <Link to="/putovanje/europa" className="py-1 footer-link-item" onClick={handleLinkClick}>
+                      <Link to="/putovanje/kontinent/europa" className="py-1 footer-link-item" onClick={handleLinkClick}>
                         Europa
                       </Link>
                     </li>
                     <li>
-                      <Link to="/putovanje/juzna-amerika" className="py-1 footer-link-item" onClick={handleLinkClick}>
+                      <Link to="/putovanje/kontinent/juzna-amerika" className="py-1 footer-link-item" onClick={handleLinkClick}>
                         Južna Amerika
                       </Link>
                     </li>
                     <li>
-                      <Link to="/putovanje/sjeverna-amerika" className="py-1 footer-link-item" style={{ whiteSpace: 'nowrap' }} onClick={handleLinkClick}>
+                      <Link to="/putovanje/kontinent/sjeverna-amerika" className="py-1 footer-link-item" style={{ whiteSpace: 'nowrap' }} onClick={handleLinkClick}>
                         Sjeverna Amerika
                       </Link>
                     </li>

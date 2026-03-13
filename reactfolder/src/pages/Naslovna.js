@@ -1,42 +1,383 @@
 import { useState, useEffect } from "react";
-import FeaturedImg from "../components/FeaturedImg";
+import { Link } from "react-router-dom";
 import HeroSection from "../components/HeroSection";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faGlobe,
+  faUsers,
+  faMapMarkerAlt,
+  faStar,
+  faShieldAlt,
+  faHeadset,
+  faArrowRight,
+  faCalendarAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import "./naslovna.css";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
+const BLOG_AUTHOR_ID = Number(process.env.REACT_APP_BLOG_AUTHOR_ID || 9);
+const FALLBACK_AUTHOR_MATCH = "mihael";
+
+const resolveAcfImageUrl = async (acfImage) => {
+  if (!acfImage) return "";
+
+  if (typeof acfImage === "string") {
+    if (acfImage.startsWith("http")) return acfImage;
+    if (/^\d+$/.test(acfImage)) {
+      try {
+        const res = await fetch(`${BASE_URL}v2/media/${acfImage}`);
+        if (!res.ok) return "";
+        const media = await res.json();
+        return media?.source_url || "";
+      } catch {
+        return "";
+      }
+    }
+    return "";
+  }
+
+  if (typeof acfImage === "number") {
+    try {
+      const res = await fetch(`${BASE_URL}v2/media/${acfImage}`);
+      if (!res.ok) return "";
+      const media = await res.json();
+      return media?.source_url || "";
+    } catch {
+      return "";
+    }
+  }
+
+  if (typeof acfImage === "object") {
+    return (
+      acfImage?.sizes?.full?.url ||
+      acfImage?.sizes?.large?.url ||
+      acfImage?.url ||
+      acfImage?.source_url ||
+      ""
+    );
+  }
+
+  return "";
+};
+
+const resolveDestinationImage = async (dest) => {
+  const featured =
+    dest?._embedded?.["wp:featuredmedia"]?.[0]?.media_details?.sizes?.full
+      ?.source_url ||
+    dest?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
+    "";
+
+  if (featured) return featured;
+
+  const acf = dest?.acf || {};
+  return (
+    (await resolveAcfImageUrl(acf.image)) ||
+    (await resolveAcfImageUrl(acf.hero_image)) ||
+    (await resolveAcfImageUrl(acf.hero_slika)) ||
+    ""
+  );
+};
 
 const Naslovna = () => {
-    
   const [page, setPage] = useState(null);
+  const [destinacije, setDestinacije] = useState([]);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [myAuthorId, setMyAuthorId] = useState(BLOG_AUTHOR_ID || null);
+  const [authorReady, setAuthorReady] = useState(Boolean(BLOG_AUTHOR_ID));
 
   useEffect(() => {
-    const fetchPage = async () => {
-      try {
-        const response = await fetch(
-          `${BASE_URL}v2/pages/727?_embed`,
-        );
-        if (!response.ok) {
-          throw new Error("Ne mogu povući podatke");
-        }
-        const data = await response.json();
-        setPage(data);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    fetchPage();
+    if (BLOG_AUTHOR_ID) {
+      return;
+    }
+
+    fetch(`${BASE_URL}v2/users?per_page=100`)
+      .then((response) => response.json())
+      .then((users) => {
+        const matched = Array.isArray(users)
+          ? users.find((user) => {
+              const name = (user?.name || "").toLowerCase();
+              const slug = (user?.slug || "").toLowerCase();
+              return (
+                name.includes(FALLBACK_AUTHOR_MATCH) ||
+                slug.includes(FALLBACK_AUTHOR_MATCH)
+              );
+            })
+          : null;
+
+        setMyAuthorId(matched?.id || null);
+        setAuthorReady(true);
+      })
+      .catch(() => {
+        setMyAuthorId(null);
+        setAuthorReady(true);
+      });
   }, []);
 
-  if (!page) return <p>Učitavanje...</p>;
+  useEffect(() => {
+    fetch(`${BASE_URL}v2/pages/727?_embed`)
+      .then((r) => r.json())
+      .then((data) => setPage(data))
+      .catch(() => {});
+
+    fetch(`${BASE_URL}v2/nova-destinacija?_embed&per_page=3`)
+      .then((r) => r.json())
+      .then(async (data) => {
+        const list = Array.isArray(data) ? data : [];
+        const withResolvedImages = await Promise.all(
+          list.map(async (dest) => ({
+            ...dest,
+            _resolvedImage: await resolveDestinationImage(dest),
+          }))
+        );
+        setDestinacije(withResolvedImages);
+      })
+      .catch(() => {});
+
+  }, []);
+
+  useEffect(() => {
+    if (!authorReady) {
+      return;
+    }
+
+    if (!myAuthorId) {
+      setBlogPosts([]);
+      return;
+    }
+
+    fetch(`${BASE_URL}v2/posts?_embed&per_page=3&author=${myAuthorId}`)
+      .then((r) => r.json())
+      .then((data) => setBlogPosts(Array.isArray(data) ? data : []))
+      .catch(() => setBlogPosts([]));
+  }, [myAuthorId, authorReady]);
+
+  const stats = [
+    { icon: faMapMarkerAlt, broj: "50+", naziv: "Destinacija" },
+    { icon: faUsers, broj: "1000+", naziv: "Zadovoljnih putnika" },
+    { icon: faGlobe, broj: "6", naziv: "Kontinenata" },
+    { icon: faStar, broj: "5★", naziv: "Prosječna ocjena" },
+  ];
+
+  const prednosti = [
+    {
+      icon: faShieldAlt,
+      naslov: "Sigurnost na prvom mjestu",
+      opis: "Svako putovanje planiramo s maksimalnom pažnjom na sigurnost i udobnost putnika.",
+    },
+    {
+      icon: faGlobe,
+      naslov: "Lokalni vodiči",
+      opis: "Surađujemo samo s provjerenim lokalnim vodičima koji poznaju svaki kutak destinacije.",
+    },
+    {
+      icon: faHeadset,
+      naslov: "Podrška 24/7",
+      opis: "Naš tim dostupan je svakog dana, u svakom trenutku, kako bi vaš put bio savršen.",
+    },
+  ];
 
   return (
-    <>
-      <HeroSection stranica={page}
-      fallback="https://placehold.co/600x400" 
-      size="full"
+    <div className="naslovna">
+      {/* ─── HERO ─── */}
+      <HeroSection
+        stranica={page}
+        fallback="https://placehold.co/1920x1080"
+        size="full"
       />
-      {/*<FeaturedImg page={page} fallback="https://placehold.co/600x400" size="medium" />*/}
-      <div dangerouslySetInnerHTML={{ __html:page.content.rendered }}></div>
-    </>
+
+      {/* ─── FEATURED DESTINACIJE ─── */}
+      <section className="naslovna-destinacije">
+        <div className="container">
+          <div className="naslovna-section-header">
+            <span className="naslovna-section-tag">Istraži</span>
+            <h2 className="naslovna-section-title">Popularne destinacije</h2>
+            <p className="naslovna-section-sub">
+              Otkrijte najtraženija mjesta koja naši putnici obožavaju
+            </p>
+          </div>
+
+          <div className="row">
+            {destinacije.length > 0
+              ? destinacije.map((dest) => {
+                  const img = dest._resolvedImage || "";
+                  const acf = dest.acf || {};
+                  return (
+                    <div key={dest.id} className="col-md-4 mb-4">
+                      <Link to={`/putovanje/${dest.slug}`} className="dest-card">
+                        <div className="dest-card-img-wrap">
+                          {img && (
+                            <img
+                              src={img}
+                              alt={dest.title?.rendered}
+                              className="dest-card-img"
+                            />
+                          )}
+                          <div className="dest-card-overlay" />
+                          {acf.continent && (
+                            <span className="dest-card-tag">{acf.continent}</span>
+                          )}
+                        </div>
+                        <div className="dest-card-body">
+                          <h3 className="dest-card-title">
+                            {dest.title?.rendered}
+                          </h3>
+                          <div className="dest-card-meta">
+                            {acf.price && (
+                              <span className="dest-card-price">
+                                od {acf.price} €
+                              </span>
+                            )}
+                            {acf.travel_duration && (
+                              <span className="dest-card-duration">
+                                <FontAwesomeIcon icon={faCalendarAlt} />{" "}
+                                {acf.travel_duration}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  );
+                })
+              : [1, 2, 3].map((i) => (
+                  <div key={i} className="col-md-4 mb-4">
+                    <div className="dest-card dest-card--skeleton" />
+                  </div>
+                ))}
+          </div>
+
+          <div className="naslovna-section-cta">
+            <Link to="/putovanje" className="naslovna-btn-outline">
+              Pogledaj sve destinacije{" "}
+              <FontAwesomeIcon icon={faArrowRight} className="ms-2" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── STATS ─── */}
+      <section className="naslovna-stats">
+        <div className="container">
+          <div className="row">
+            {stats.map((s, i) => (
+              <div key={i} className="col-6 col-md-3">
+                <div className="stat-card">
+                  <FontAwesomeIcon icon={s.icon} className="stat-icon" />
+                  <span className="stat-broj">{s.broj}</span>
+                  <span className="stat-naziv">{s.naziv}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── BLOG POSTS ─── */}
+      {blogPosts.length > 0 && (
+        <section className="naslovna-blog">
+          <div className="container">
+            <div className="naslovna-section-header">
+              <span className="naslovna-section-tag">Iz bloga</span>
+              <h2 className="naslovna-section-title">Najnoviji članci</h2>
+              <p className="naslovna-section-sub">
+                Savjeti, priče i inspiracija za vaše sljedeće putovanje
+              </p>
+            </div>
+
+            <div className="row">
+              {blogPosts.map((post) => {
+                const img =
+                  post._embedded?.["wp:featuredmedia"]?.[0]?.media_details
+                    ?.sizes?.full?.source_url ||
+                  post._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
+                  "";
+                const datum = new Date(post.date).toLocaleDateString("hr-HR", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                });
+                return (
+                  <div key={post.id} className="col-md-4 mb-4">
+                    <Link to={`/blog/${post.slug}`} className="blog-card">
+                      <div className="blog-card-img-wrap">
+                        {img && (
+                          <img
+                            src={img}
+                            alt={post.title?.rendered}
+                            className="blog-card-img"
+                          />
+                        )}
+                      </div>
+                      <div className="blog-card-body">
+                        <span className="blog-card-datum">{datum}</span>
+                        <h3
+                          className="blog-card-title"
+                          dangerouslySetInnerHTML={{ __html: post.title?.rendered }}
+                        />
+                        <div
+                          className="blog-card-excerpt"
+                          dangerouslySetInnerHTML={{ __html: post.excerpt?.rendered }}
+                        />
+                        <span className="blog-card-link">
+                          Pročitaj više <FontAwesomeIcon icon={faArrowRight} />
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="naslovna-section-cta">
+              <Link to="/blog" className="naslovna-btn-outline">
+                Sve objave{" "}
+                <FontAwesomeIcon icon={faArrowRight} className="ms-2" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── CTA BANNER ─── */}
+      <section className="naslovna-cta">
+        <div className="container">
+          <div className="naslovna-cta-inner">
+            <h2 className="naslovna-cta-title">Spremi za avanturu?</h2>
+            <p className="naslovna-cta-sub">
+              Kontaktirajte nas i zajedno ćemo planirati savršeno putovanje po
+              vašoj mjeri.
+            </p>
+            <Link to="/kontakt" className="naslovna-btn-cta">
+              Planiraj putovanje
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── ZAŠTO MI ─── */}
+      <section className="naslovna-prednosti">
+        <div className="container">
+          <div className="naslovna-section-header">
+            <span className="naslovna-section-tag">Zašto Explorers Way</span>
+            <h2 className="naslovna-section-title">Putujte s povjerenjem</h2>
+          </div>
+
+          <div className="row">
+            {prednosti.map((p, i) => (
+              <div key={i} className="col-md-4 mb-4">
+                <div className="prednost-card">
+                  <div className="prednost-icon-wrap">
+                    <FontAwesomeIcon icon={p.icon} className="prednost-icon" />
+                  </div>
+                  <h3 className="prednost-naslov">{p.naslov}</h3>
+                  <p className="prednost-opis">{p.opis}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 

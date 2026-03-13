@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 import "./pages/Gutenberg.css";
 import "./App.css";
@@ -15,6 +16,7 @@ import Naslovna from "./pages/Naslovna";
 import Kategorije from "./components/Kategorije";
 import Putovanje from "./pages/Putovanje";
 import PutovanjeBlogSingle from "./pages/PutovanjeBlogSingle";
+import PutovanjeKontinent from "./pages/PutovanjeKontinent";
 import Kontakt from "./components/Kontakt";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SingUp";
@@ -29,9 +31,47 @@ import Shop from "./pages/shop/Shop";
 import Cart from "./pages/shop/Cart";
 import Checkout from "./pages/shop/Checkout";
 
+function ScrollToTopOnLoad() {
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    const scrollTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    };
+
+    // Initial load and mobile browser cache restore.
+    scrollTop();
+    const rafId = window.requestAnimationFrame(scrollTop);
+    window.addEventListener("load", scrollTop);
+    window.addEventListener("pageshow", scrollTop);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.removeEventListener("load", scrollTop);
+      window.removeEventListener("pageshow", scrollTop);
+    };
+  }, []);
+
+  return null;
+}
+
+function ScrollToTopOnRouteChange() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   return (
     <BrowserRouter basename="mdodic">
+      <ScrollToTopOnLoad />
+      <ScrollToTopOnRouteChange />
       <Nav />
         <Routes>
           <Route path="/blog" element={<Blog />} />
@@ -43,6 +83,7 @@ function App() {
           <Route path="/" element={<Naslovna />} />
           <Route path="/kategorije" element={<Kategorije />} />
           <Route path="/putovanje" element={<Putovanje />} />
+          <Route path="/putovanje/kontinent/:continentSlug" element={<PutovanjeKontinent />} />
           <Route path="/putovanje/:slug" element={<PutovanjeBlogSingle />} />
           <Route path="/kontakt" element={<Kontakt />} />
           <Route path="/signin" element={<SignIn />} />

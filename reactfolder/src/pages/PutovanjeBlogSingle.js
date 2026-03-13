@@ -5,6 +5,40 @@ import Loader from "../components/Loader";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
+const buildDaysFromAcf = (acf = {}) => {
+  const dayMap = {};
+
+  Object.entries(acf).forEach(([key, value]) => {
+    const normalizedKey = String(key).toLowerCase().replace(/_+$/, "");
+    const match = normalizedKey.match(/^dan_(\d+)_(naslov|opis)$/i);
+    if (!match) return;
+
+    const dayNumber = Number(match[1]);
+    const fieldType = match[2].toLowerCase();
+    const safeValue = typeof value === "string" ? value.trim() : value;
+
+    if (!dayMap[dayNumber]) {
+      dayMap[dayNumber] = {
+        number: dayNumber,
+        title: "",
+        description: "",
+      };
+    }
+
+    if (fieldType === "naslov") {
+      dayMap[dayNumber].title = safeValue || "";
+    }
+
+    if (fieldType === "opis") {
+      dayMap[dayNumber].description = safeValue || "";
+    }
+  });
+
+  return Object.values(dayMap)
+    .filter((day) => day.title || day.description)
+    .sort((a, b) => a.number - b.number);
+};
+
 const PutovanjeBlogSingle = () => {
   const { slug } = useParams();
   const [travel, setTravel] = useState(null);
@@ -51,12 +85,7 @@ const PutovanjeBlogSingle = () => {
           country: acf.drzava || "",
           includedServices: acf.ukljuceno || "",
           travelPlan: acf.plan_putovanja || "",
-          day1Title: acf.dan_1_naslov || "",
-          day1Description: acf.dan_1_opis || "",
-          day2Title: acf.dan_2_naslov || "",
-          day2Description: acf.dan_2_opis || "",
-          day3Title: acf.dan_3_naslov || "",
-          day3Description: acf.dan_3_opis || ""
+          days: buildDaysFromAcf(acf)
         });
       }
       setLoading(false);
@@ -72,10 +101,10 @@ const PutovanjeBlogSingle = () => {
 
   if (!travel) {
     return (
-      <div className="blog-single">
-        <div className="container px-4 px-lg-5">
-          <div className="row gx-4 gx-lg-5 justify-content-center">
-            <div className="col-md-10 col-lg-8 col-xl-7">
+      <div className="blog-single-modern">
+        <div className="container py-5">
+          <div className="row justify-content-center">
+            <div className="col-md-10 col-lg-8 col-xl-7 text-center">
               <p>Putovanje nije pronađeno</p>
             </div>
           </div>
@@ -85,25 +114,27 @@ const PutovanjeBlogSingle = () => {
   }
 
   return (
-    <div className="blog-single">
-      {/* Masthead sa slikom */}
-      <div
-        className="masthead"
+    <div className="blog-single-modern">
+      <section
+        className="travel-single-hero"
         style={{
-          backgroundImage: `url(${travel.image})`,
+          backgroundImage: `url(${travel.image || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80"})`,
         }}
       >
-        <div className="container position-relative px-4 px-lg-5">
-          <div className="row gx-4 gx-lg-5 justify-content-center">
-            <div className="col-md-10 col-lg-8 col-xl-7">
-              <div className="post-heading">
-                <h1>{travel.title}</h1>
-                <h2 className="subheading">{travel.continent}</h2>
+        <div className="travel-single-hero-overlay">
+          <div className="container">
+            <div className="travel-single-hero-content">
+              <h1>{travel.title}</h1>
+              <p className="travel-single-subtitle">{travel.continent}</p>
+              <div className="travel-single-meta">
+                <span>{travel.month}</span>
+                <span>{travel.duration}</span>
+                <span>€{travel.price.toLocaleString()}</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Artikal */}
       <article className="mb-4">
@@ -170,40 +201,22 @@ const PutovanjeBlogSingle = () => {
               )}
 
               {/* Dani putovanja */}
-              <div className="days-section">
-                {(travel.day1Title || travel.day1Description) && (
-                  <div className="day-card mb-4">
-                    <h3>
-                      <span className="day-badge">Dan 1</span> {travel.day1Title}
-                    </h3>
-                    <p style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                      {travel.day1Description}
-                    </p>
-                  </div>
-                )}
-
-                {(travel.day2Title || travel.day2Description) && (
-                  <div className="day-card mb-4">
-                    <h3>
-                      <span className="day-badge">Dan 2</span> {travel.day2Title}
-                    </h3>
-                    <p style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                      {travel.day2Description}
-                    </p>
-                  </div>
-                )}
-
-                {(travel.day3Title || travel.day3Description) && (
-                  <div className="day-card mb-4">
-                    <h3>
-                      <span className="day-badge">Dan 3</span> {travel.day3Title}
-                    </h3>
-                    <p style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                      {travel.day3Description}
-                    </p>
-                  </div>
-                )}
-              </div>
+              {travel.days && travel.days.length > 0 && (
+                <div className="days-section">
+                  {travel.days.map((day) => (
+                    <div className="day-card mb-4" key={day.number}>
+                      <h3>
+                        <span className="day-badge">Dan {day.number}</span> {day.title || "Program dana"}
+                      </h3>
+                      {day.description && (
+                        <p style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                          {day.description}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
 
             </div>
           </div>

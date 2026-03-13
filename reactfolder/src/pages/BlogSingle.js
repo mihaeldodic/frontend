@@ -25,41 +25,49 @@ const BlogSingle = () => {
     return <Loader />;
   }
 
+  const featuredImage =
+    post?._embedded?.["wp:featuredmedia"]?.[0]?.media_details?.sizes?.full
+      ?.source_url ||
+    post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80";
+
+  const subtitle = (post.excerpt?.rendered || "")
+    .replace(/<[^>]+>/g, "")
+    .trim();
+
   return (
-    <div className="blog-single">
-      <div
-        class="masthead"
-        style={{
-          backgroundImage:
-            "url(" +
-            post._embedded["wp:featuredmedia"][0].media_details.sizes.full
-              .source_url +
-            ")",
-        }}
+    <div className="blog-single-modern">
+      <section
+        className="blog-single-hero"
+        style={{ backgroundImage: `url(${featuredImage})` }}
       >
-        <div class="container position-relative px-4 px-lg-5">
-          <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
-              <div class="post-heading">
-                <h1>{post.title.rendered}</h1>
-                <h2 class="subheading">Naslov</h2>
+        <div className="blog-single-hero-overlay">
+          <div className="container">
+            <div className="blog-single-hero-content">
+              <h1>{post.title.rendered}</h1>
+              {subtitle && <p className="blog-single-subtitle">{subtitle}</p>}
+              <div className="blog-single-meta">
                 <Author post={post} />
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <article class="mb-4">
-        <div class="container px-4 px-lg-5">
-          <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
+      </section>
+
+      <section className="blog-single-content-wrap">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-10 col-lg-9 col-xl-8">
+              <article className="blog-single-content-card">
               <div
+                className="blog-single-content"
                 dangerouslySetInnerHTML={{ __html: post.content.rendered }}
-              ></div>
+              />
+              </article>
             </div>
           </div>
         </div>
-      </article>
+      </section>
     </div>
   );
 };

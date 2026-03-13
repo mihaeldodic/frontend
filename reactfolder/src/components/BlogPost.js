@@ -8,19 +8,29 @@ const BlogPost = ({ post }) => {
       ?.source_url;
 
   return (
-    <div key={post.id} className="col-md-4 mb-4 blog-post">
-      {image && (
-        <Link to={"/blog/" + post.slug}>
-          <img src={image} className="mb-3" alt={post.title.rendered} />
-        </Link>
-      )}
+    <div className="col-md-6 col-lg-4 mb-4">
+      <article className="blog-modern-card">
+        {image && (
+          <Link to={"/blog/" + post.slug} className="blog-modern-card-img-wrap">
+            <img src={image} className="blog-modern-card-img" alt={post.title.rendered} />
+          </Link>
+        )}
 
-      <Link to={"/blog/" + post.slug}>
-        <h2>{post.title.rendered}</h2>
-      </Link>
-      <div dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }} />
+        <div className="blog-modern-card-body">
+          <Link to={"/blog/" + post.slug} className="blog-modern-card-title-link">
+            <h2 className="blog-modern-card-title">{post.title.rendered}</h2>
+          </Link>
 
-      <Author post={post} author={false} />
+          <div
+            className="blog-modern-card-excerpt"
+            dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
+          />
+
+          <div className="blog-modern-card-meta">
+            <Author post={post} author={false} />
+          </div>
+        </div>
+      </article>
     </div>
   );
 };

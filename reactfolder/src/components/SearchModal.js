@@ -82,6 +82,11 @@ const SearchModal = ({ isOpen, onClose }) => {
         if (acf.image) {
           imageUrl = mediaMap[acf.image] || "";
         }
+
+        // Ako nema, pokušaj hero_image
+        if (!imageUrl && acf.hero_image) {
+          imageUrl = mediaMap[acf.hero_image] || "";
+        }
         
         // Ako nema, pokušaj hero_slika
         if (!imageUrl && acf.hero_slika) {

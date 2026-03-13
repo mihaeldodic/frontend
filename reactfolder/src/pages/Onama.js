@@ -15,6 +15,7 @@ const BASE_URL = process.env.REACT_APP_API_URL;
 
 const Onama = () => {
   const [content, setContent] = useState(null);
+  const [heroImage, setHeroImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -28,22 +29,54 @@ const Onama = () => {
     "fa-shield-alt": faShieldAlt,
   };
 
+  const resolveHeroImage = async (heroField) => {
+    if (!heroField) return "";
+
+    if (typeof heroField === "string") return heroField;
+
+    if (typeof heroField === "number") {
+      try {
+        const response = await fetch(`${BASE_URL}v2/media/${heroField}`);
+        if (!response.ok) return "";
+        const media = await response.json();
+        return media.source_url || "";
+      } catch {
+        return "";
+      }
+    }
+
+    if (typeof heroField === "object") {
+      return (
+        heroField.source_url ||
+        heroField.url ||
+        heroField.sizes?.full?.url ||
+        heroField.sizes?.large?.url ||
+        ""
+      );
+    }
+
+    return "";
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     setLoading(true);
     
     fetch(`${BASE_URL}v2/pages/202`)
       .then((response) => response.json())
-      .then((data) => {
+      .then(async (data) => {
         console.log("Puni podaci:", data);
         console.log("ACF podaci:", data.acf);
+        const heroImageUrl = await resolveHeroImage(data?.acf?.hero_image);
         setContent(data);
+        setHeroImage(heroImageUrl);
         setLoading(false);
         window.scrollTo(0, 0);
       })
       .catch((err) => {
         console.error("Greška:", err);
         setError(err.message);
+        setHeroImage("");
         setLoading(false);
       });
   }, []);
@@ -69,6 +102,12 @@ const Onama = () => {
   const vizija = acf.vizija || "";
   const vrijednosti = Array.isArray(acf.vrijednosti) ? acf.vrijednosti : [];
 
+  const heroStyle = heroImage
+    ? {
+        backgroundImage: `linear-gradient(135deg, rgba(14, 116, 144, 0.72) 0%, rgba(10, 85, 106, 0.72) 100%), url(${heroImage})`,
+      }
+    : undefined;
+
   const defaultVrijednosti = [
     { naslov: "Globalnost", opis: "Istraživanje svih kontinenata i kultura", ikona: "fa-globe" },
     { naslov: "Zajednica", opis: "Povezivanje putnika i stvaranje uspomena", ikona: "fa-users" },
@@ -81,7 +120,7 @@ const Onama = () => {
   return (
     <div className="onama">
       {/* Hero sekcija */}
-      <section className="onama-hero">
+      <section className="onama-hero" style={heroStyle}>
         <div className="onama-hero-overlay">
           <div className="container">
             <h1 className="onama-hero-title">{content?.title?.rendered || "O Nama"}</h1>
