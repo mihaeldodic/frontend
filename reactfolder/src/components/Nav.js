@@ -41,6 +41,12 @@ const Nav = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Zatvori meni kada se navigira
+  useEffect(() => {
+    setMenuOpen(false);
+    setExploreOpen(false);
+  }, [location.pathname]);
+
   if (location.pathname === "/signin") return null;
 
   const isActive = (path) => location.pathname === path;
@@ -51,6 +57,7 @@ const Nav = () => {
 
   const handleMenuClose = () => {
     setMenuOpen(false);
+    setExploreOpen(false);
   };
 
   const handleExploreHover = (isHovering) => {
@@ -80,6 +87,12 @@ const Nav = () => {
     setExploreOpen(!exploreOpen);
   };
 
+  const handleContinentClick = (continent) => {
+    setExploreOpen(false);
+    setMenuOpen(false);
+    navigate(`/putovanje/${continent.toLowerCase().replace(/\s+/g, "-")}`);
+  };
+
   const continents = [
     "Afrika",
     "Azija",
@@ -98,9 +111,12 @@ const Nav = () => {
       >
         <div className="container">
           {/* Logo */}
-         <Link className="navbar-brand" to="/">
-          <img src="./img/logo-4.png" alt="logo" />
-        </Link>
+          <Link className="navbar-brand" to="/" onClick={() => {
+            setMenuOpen(false);
+            setExploreOpen(false);
+          }}>
+            <img src="./img/logo-4.png" alt="logo" />
+          </Link>
 
           {/* Mobile toggle */}
           <button
@@ -155,10 +171,7 @@ const Nav = () => {
                       <Link
                         className="dropdown-item"
                         to={`/putovanje/${continent.toLowerCase().replace(/\s+/g, "-")}`}
-                        onClick={() => {
-                          setExploreOpen(false);
-                          handleMenuClose();
-                        }}
+                        onClick={() => handleContinentClick(continent)}
                       >
                         {continent}
                       </Link>
@@ -204,7 +217,10 @@ const Nav = () => {
                 <button
                   className="nav-icon-btn"
                   title="Pretraga"
-                  onClick={() => setSearchModalOpen(true)}
+                  onClick={() => {
+                    setSearchModalOpen(true);
+                    setMenuOpen(false);
+                  }}
                 >
                   <FontAwesomeIcon icon={faSearch} />
                 </button>

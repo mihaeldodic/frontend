@@ -142,14 +142,16 @@ const Footer = () => {
           </div>
 
           <div className="row justify-content-center align-items-center">
-            <div className="subscribe-2 col-10 col-lg-6 col-md-6 col-sm-8 d-flex justify-content-between">
-              <p className="p-subscribe mb-0">
-                Prijavite se na newsletter i primajte najnovije obavijesti
-              </p>
-              <CheckBox
-                accepted={accepted}
-                onChange={() => setAccepted(!accepted)}
-              />
+            <div className="col-12">
+              <div className="subscribe-2 d-flex justify-content-center align-items-center flex-wrap gap-3">
+                <p className="p-subscribe mb-0">
+                  Prijavite se na newsletter i primajte najnovije obavijesti
+                </p>
+                <CheckBox
+                  accepted={accepted}
+                  onChange={() => setAccepted(!accepted)}
+                />
+              </div>
             </div>
           </div>
         </div>

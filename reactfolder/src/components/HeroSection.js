@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./herosection.css";
 
+const BASE_URL = process.env.REACT_APP_API_URL;
+
 const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
   const [slides, setSlides] = useState([]);
   const [current, setCurrent] = useState(0);
@@ -10,14 +12,9 @@ const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [pause, setPause] = useState(false);
 
-  const PAGE_URL =
-    "https://front2.edukacija.online/backend/wp-json/wp/v2/pages/2434";
-
   const fetchImageUrl = async (id) => {
     try {
-      const res = await fetch(
-        `https://front2.edukacija.online/backend/wp-json/wp/v2/media/${id}`
-      );
+      const res = await fetch(`${BASE_URL}v2/media/${id}`);
 
       if (!res.ok) return fallback;
 
@@ -29,11 +26,11 @@ const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
   };
 
   useEffect(() => {
-    const fetchSlides = async () => {
-      try {
-        const res = await fetch(PAGE_URL);
-        const data = await res.json();
+    setLoading(true);
 
+    fetch(`${BASE_URL}v2/pages/2434`)
+      .then((res) => res.json())
+      .then((data) => {
         if (!data.acf) {
           setLoading(false);
           return;
@@ -48,22 +45,25 @@ const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
           { text: acf.hero_text_4, id: acf.hero_image_4 },
         ].filter((s) => s.text && s.id);
 
-        const slidesWithUrls = await Promise.all(
+        Promise.all(
           heroIds.map(async (slide) => ({
             text: slide.text,
             image: (await fetchImageUrl(slide.id)) || fallback,
           }))
-        );
-
-        setSlides(slidesWithUrls);
-      } catch (err) {
+        )
+          .then((slidesWithUrls) => {
+            setSlides(slidesWithUrls);
+            setLoading(false);
+          })
+          .catch((err) => {
+            console.error("Hero error:", err);
+            setLoading(false);
+          });
+      })
+      .catch((err) => {
         console.error("Hero error:", err);
-      } finally {
         setLoading(false);
-      }
-    };
-
-    fetchSlides();
+      });
   }, []);
 
   useEffect(() => {

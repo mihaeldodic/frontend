@@ -1,0 +1,561 @@
+.onama {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Hero sekcija */
+.onama-hero {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(135deg, rgba(14, 116, 144, 0.8) 0%, rgba(10, 85, 106, 0.8) 100%),
+    url("https://via.placeholder.com/1920x400") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 70px;
+  padding: 60px 20px;
+  box-sizing: border-box;
+}
+
+.onama-hero-overlay {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  width: 100%;
+}
+
+.onama-hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #ff6b6b;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.onama-hero-subtitle {
+  font-size: 1.3rem;
+  color: #f1f1f1;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+/* Sadržaj sekcija */
+.onama-content {
+  padding: 80px 20px;
+  background: #fff;
+}
+
+.onama-text {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #333;
+}
+
+.onama-text p {
+  margin-bottom: 25px;
+  text-align: justify;
+  color: #555;
+}
+
+.onama-text h2 {
+  color: rgba(14, 116, 144, 0.95);
+  margin-top: 50px;
+  margin-bottom: 25px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.onama-text h3 {
+  color: rgba(14, 116, 144, 0.95);
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.onama-text h4 {
+  color: rgba(14, 116, 144, 0.95);
+  margin-top: 35px;
+  margin-bottom: 18px;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.onama-text h5 {
+  color: rgba(14, 116, 144, 0.95);
+  margin-top: 30px;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.onama-text h6 {
+  color: rgba(14, 116, 144, 0.95);
+  margin-top: 25px;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.onama-text ul {
+  margin: 30px 0;
+  padding-left: 30px;
+  list-style: none;
+}
+
+.onama-text ul li {
+  margin-bottom: 15px;
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.onama-text ul li i {
+  color: #ff6b6b !important;
+  margin-right: 12px;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.onama-text ul li:hover i {
+  transform: translateX(5px) rotate(-15deg);
+}
+
+/* WordPress Block List - Avion ispred liste */
+.onama-text ul.wp-block-list li code {
+  display: none !important;
+}
+
+.onama-text ul.wp-block-list li {
+  position: relative;
+  padding-left: 0;
+  margin-bottom: 15px;
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  transition: all 0.3s ease;
+}
+
+.onama-text ul.wp-block-list li::before {
+  content: "✈";
+  display: inline-block;
+  color: #ff6b6b;
+  margin-right: 12px;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.onama-text ul.wp-block-list li:hover::before {
+  transform: translateX(5px) rotate(-15deg);
+}
+
+.onama-text ol {
+  margin: 30px 0;
+  padding-left: 30px;
+}
+
+.onama-text ol li {
+  margin-bottom: 15px;
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.onama-text strong {
+  color: rgba(14, 116, 144, 0.95);
+  font-weight: 700;
+}
+
+.onama-text em {
+  color: #ff6b6b;
+  font-style: italic;
+}
+
+.onama-text blockquote {
+  margin: 30px 0;
+  padding: 20px 30px;
+  border-left: 4px solid #ff6b6b;
+  background: #f9f9f9;
+  font-style: italic;
+  color: #666;
+  border-radius: 4px;
+}
+
+/* Detaljno o nama */
+.onama-details {
+  padding: 80px 20px;
+  background: #f9f9f9;
+}
+
+.onama-section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: rgba(14, 116, 144, 0.95);
+  margin-bottom: 30px;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.5px;
+}
+
+.onama-text-paragraph {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.onama-features {
+  list-style: none;
+  padding: 0;
+  margin: 30px 0;
+}
+
+.onama-features li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  font-size: 1rem;
+  color: #555;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.onama-icon {
+  color: #ff6b6b;
+  margin-right: 15px;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+/* Vrijednosti sekcija */
+.onama-values {
+  padding: 80px 20px;
+  background: #fff;
+}
+
+.onama-values .onama-section-title {
+  display: block;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.value-card {
+  background: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  height: 100%;
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.value-icon {
+  font-size: 3.5rem;
+  color: #ff6b6b;
+  margin-bottom: 25px;
+  transition: transform 0.3s ease;
+}
+
+.value-card:hover .value-icon {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.value-card h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: rgba(14, 116, 144, 0.95);
+  margin-bottom: 15px;
+  letter-spacing: 0.3px;
+}
+
+.value-card p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Loading i Error */
+.onama-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 70px;
+}
+
+.loading {
+  font-size: 1.5rem;
+  color: rgba(14, 116, 144, 0.95);
+  font-weight: 700;
+}
+
+.error {
+  font-size: 1.2rem;
+  color: #ff6b6b;
+  font-weight: 600;
+}
+
+/* Responsivno */
+@media (max-width: 991px) {
+  .onama-hero {
+    height: 300px;
+    margin-top: 60px;
+  }
+
+  .onama-hero-title {
+    font-size: 2.5rem;
+  }
+
+  .onama-hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .onama-section-title {
+    font-size: 2rem;
+  }
+
+  .onama-details {
+    padding: 60px 20px;
+  }
+
+  .onama-values {
+    padding: 60px 20px;
+  }
+
+  .onama-text h2 {
+    font-size: 1.9rem;
+  }
+
+  .onama-text h3 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .onama-hero {
+    height: 250px;
+    padding: 40px 20px;
+  }
+
+  .onama-hero-title {
+    font-size: 2rem;
+  }
+
+  .onama-hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .onama-section-title {
+    font-size: 1.8rem;
+  }
+
+  .onama-text-paragraph {
+    font-size: 1rem;
+  }
+
+  .onama-text {
+    font-size: 1rem;
+  }
+
+  .value-card {
+    padding: 30px 20px;
+  }
+
+  .value-icon {
+    font-size: 2.8rem;
+  }
+
+  .onama-text h2 {
+    font-size: 1.7rem;
+    margin-top: 40px;
+  }
+
+  .onama-text h3 {
+    font-size: 1.4rem;
+  }
+
+  .onama-text ul li i,
+  .onama-text ul.wp-block-list li::before {
+    font-size: 1rem;
+    margin-right: 10px;
+  }
+
+  /* Sakrijte naslove "Naša Misija" i "Naša Vizija" na tablet */
+  .onama-details .onama-section-title {
+    display: none;
+  }
+
+  .onama-details .col-lg-6 {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .onama-features {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .onama-hero {
+    height: 200px;
+    margin-top: 56px;
+    padding: 30px 15px;
+  }
+
+  .onama-hero-title {
+    font-size: 1.5rem;
+  }
+
+  .onama-hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .onama-content {
+    padding: 50px 15px;
+  }
+
+  .onama-text {
+    font-size: 1rem;
+  }
+
+  .onama-details {
+    padding: 40px 15px;
+  }
+
+  .onama-section-title {
+    font-size: 1.5rem;
+  }
+
+  .onama-values {
+    padding: 40px 15px;
+  }
+
+  .onama-values .onama-section-title {
+    display: block;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 40px;
+    font-size: 1.8rem;
+  }
+
+  .value-card {
+    padding: 25px 15px;
+    margin-bottom: 20px;
+  }
+
+  .value-icon {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+  }
+
+  .value-card h3 {
+    font-size: 1.3rem;
+  }
+
+  .value-card p {
+    font-size: 0.95rem;
+  }
+
+  .onama-text h2 {
+    font-size: 1.5rem;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+
+  .onama-text h3 {
+    font-size: 1.2rem;
+  }
+
+  .onama-text ul {
+    padding-left: 20px;
+  }
+
+  .onama-features li {
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+  }
+
+  .onama-text ul li {
+    margin-bottom: 12px;
+  }
+
+  .onama-text ul li i,
+  .onama-text ul.wp-block-list li::before {
+    font-size: 0.95rem;
+    margin-right: 8px;
+  }
+
+  /* Prikaži samo naslove na mobilnom - CENTRIRANO */
+  .onama-details .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .onama-details .col-lg-6 {
+    width: 100%;
+    margin-bottom: 40px;
+    max-width: 500px;
+  }
+
+  .onama-details .col-lg-6:first-child::before {
+    content: "Naša Misija";
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: rgba(14, 116, 144, 0.95);
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .onama-details .col-lg-6:last-child::before {
+    content: "Naša Vizija";
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: rgba(14, 116, 144, 0.95);
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .onama-details .col-lg-6 .onama-section-title {
+    display: none;
+  }
+
+  .onama-details .onama-text-paragraph {
+    text-align: left;
+  }
+
+  .onama-details .onama-features {
+    text-align: left;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  .onama-details .onama-features li {
+    justify-content: flex-start;
+  }
+
+  /* Prikazi Naše Vrijednosti naslov */
+  .onama-values .onama-section-title {
+    display: block;
+  }
+}

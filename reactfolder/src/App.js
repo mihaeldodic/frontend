@@ -19,6 +19,7 @@ import Kontakt from "./components/Kontakt";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SingUp";
 import AdminLayout from "./pages/admin/AdminLayout";
+import Onama from "./pages/Onama";
 
 import MyDetails from "./pages/admin/MyDetails";
 import MyPosts from "./pages/admin/MyPosts";
@@ -46,6 +47,7 @@ function App() {
           <Route path="/kontakt" element={<Kontakt />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/o-nama" element={<Onama />} />
 
             <Route path="/admin" element={<AdminLayout />}>
               <Route path="mydetails" element={<MyDetails />} />

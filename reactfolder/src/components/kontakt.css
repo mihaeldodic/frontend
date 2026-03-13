@@ -78,7 +78,7 @@ h1 {
 
 /* Left Column */
 .contact-left {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  background-color: #ff6b6b;
   color: white;
   display: flex;
   flex-direction: column;
