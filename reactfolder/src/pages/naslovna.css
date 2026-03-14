@@ -137,6 +137,22 @@
   letter-spacing: 0.8px;
 }
 
+.dest-card-icon-wrap {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: #ff6b6b;
+  font-size: 1.05rem;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
 .dest-card-body {
   padding: 20px 22px 22px;
 }
@@ -169,6 +185,27 @@
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+.dest-card-month {
+  font-size: 0.85rem;
+  color: #888;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dest-card-month svg,
+.dest-card-duration svg {
+  color: #0e7490;
+}
+
+.dest-card-dates {
+  margin-top: 10px;
+  font-size: 0.86rem;
+  color: #667;
+  line-height: 1.5;
+  font-weight: 600;
 }
 
 .dest-card--skeleton {
@@ -252,7 +289,6 @@
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-  text-decoration: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: 100%;
   background: #fff;
@@ -265,6 +301,7 @@
 }
 
 .blog-card-img-wrap {
+  display: block;
   height: 210px;
   overflow: hidden;
 }
@@ -281,10 +318,14 @@
 }
 
 .blog-card-body {
-  padding: 22px 24px 24px;
+  padding: 18px 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
+}
+
+.blog-card-title-link {
+  text-decoration: none;
 }
 
 .blog-card-datum {
@@ -296,10 +337,10 @@
 }
 
 .blog-card-title {
-  font-size: 1.1rem;
+  font-size: 1.14rem;
   font-weight: 800;
   color: rgba(14, 116, 144, 0.95);
-  line-height: 1.4;
+  line-height: 1.35;
   margin: 0;
 }
 
@@ -307,10 +348,11 @@
   font-size: 0.9rem;
   color: #666;
   line-height: 1.65;
-}
-
-.blog-card-excerpt p {
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .blog-card-link {
@@ -321,6 +363,7 @@
   align-items: center;
   gap: 6px;
   margin-top: 4px;
+  text-decoration: none;
   transition: color 0.2s ease;
 }
 

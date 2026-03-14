@@ -70,9 +70,9 @@ const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
     if (slides.length === 0) return;
 
     const currentText = slides[current].text;
-    const typingSpeed = 100;
-    const deletingSpeed = 100;
-    const pauseDuration = 4000;
+    const typingSpeed = 90;
+    const deletingSpeed = 90;
+    const pauseDuration = 1000;
 
     const handleTyping = () => {
       if (pause) return;
@@ -130,7 +130,7 @@ const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
           </div>
         </h1>
 
-        <Link to="/kontakt" className="hero-btn">
+        <Link to="/putovanje" className="hero-btn">
           Planiraj svoje putovanje
         </Link>
       </div>

@@ -11,7 +11,10 @@ import {
   faHeadset,
   faArrowRight,
   faCalendarAlt,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
+import { getTransportIconByMethod } from "../utils/transportIcons";
+import { buildTravelDetailsPath } from "../utils/travelRoutes";
 import "./naslovna.css";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -76,6 +79,45 @@ const resolveDestinationImage = async (dest) => {
     (await resolveAcfImageUrl(acf.hero_slika)) ||
     ""
   );
+};
+
+const toShortExcerpt = (html, maxLength = 130) => {
+  const plainText = (html || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!plainText) {
+    return "";
+  }
+
+  if (plainText.length <= maxLength) {
+    return plainText;
+  }
+
+  return `${plainText.slice(0, maxLength).trim()}...`;
+};
+
+const formatTravelDate = (value) => {
+  if (!value) return "";
+
+  const rawValue = String(value).trim();
+  const compactMatch = rawValue.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (compactMatch) {
+    return `${compactMatch[3]}.${compactMatch[2]}.${compactMatch[1]}.`;
+  }
+
+  const isoMatch = rawValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (isoMatch) {
+    return `${isoMatch[3]}.${isoMatch[2]}.${isoMatch[1]}.`;
+  }
+
+  const dottedMatch = rawValue.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/);
+  if (dottedMatch) {
+    return `${dottedMatch[1].padStart(2, "0")}.${dottedMatch[2].padStart(2, "0")}.${dottedMatch[3]}.`;
+  }
+
+  return rawValue;
 };
 
 const Naslovna = () => {
@@ -201,9 +243,21 @@ const Naslovna = () => {
               ? destinacije.map((dest) => {
                   const img = dest._resolvedImage || "";
                   const acf = dest.acf || {};
+                  const departureDate = formatTravelDate(
+                    acf.date || acf.datum_polaska || acf.polazak || ""
+                  );
+                  const returnDate = formatTravelDate(
+                    acf.date_2 || acf["date-2"] || acf.datum_povratka || acf.povratak || ""
+                  );
+                  const transportMethod =
+                    acf.nacin_putovanja ||
+                    acf["nacin-putovanja"] ||
+                    acf.prijevozno_sredstvo ||
+                    "";
+                  const travelDetailsPath = buildTravelDetailsPath(acf.continent, dest.slug);
                   return (
                     <div key={dest.id} className="col-md-4 mb-4">
-                      <Link to={`/putovanje/${dest.slug}`} className="dest-card">
+                      <Link to={travelDetailsPath} className="dest-card">
                         <div className="dest-card-img-wrap">
                           {img && (
                             <img
@@ -216,6 +270,9 @@ const Naslovna = () => {
                           {acf.continent && (
                             <span className="dest-card-tag">{acf.continent}</span>
                           )}
+                          <span className="dest-card-icon-wrap">
+                            <FontAwesomeIcon icon={getTransportIconByMethod(transportMethod)} />
+                          </span>
                         </div>
                         <div className="dest-card-body">
                           <h3 className="dest-card-title">
@@ -227,13 +284,25 @@ const Naslovna = () => {
                                 od {acf.price} €
                               </span>
                             )}
+                            {acf.month && (
+                              <span className="dest-card-month">
+                                <FontAwesomeIcon icon={faCalendarAlt} /> {acf.month}
+                              </span>
+                            )}
                             {acf.travel_duration && (
                               <span className="dest-card-duration">
-                                <FontAwesomeIcon icon={faCalendarAlt} />{" "}
+                                <FontAwesomeIcon icon={faClock} />{" "}
                                 {acf.travel_duration}
                               </span>
                             )}
                           </div>
+                          {(departureDate || returnDate) && (
+                            <div className="dest-card-dates">
+                              {departureDate || "-"}
+                              {departureDate && returnDate ? " - " : ""}
+                              {returnDate || ""}
+                            </div>
+                          )}
                         </div>
                       </Link>
                     </div>
@@ -291,6 +360,7 @@ const Naslovna = () => {
                     ?.sizes?.full?.source_url ||
                   post._embedded?.["wp:featuredmedia"]?.[0]?.source_url ||
                   "";
+                const excerpt = toShortExcerpt(post?.excerpt?.rendered, 130);
                 const datum = new Date(post.date).toLocaleDateString("hr-HR", {
                   day: "numeric",
                   month: "long",
@@ -298,8 +368,8 @@ const Naslovna = () => {
                 });
                 return (
                   <div key={post.id} className="col-md-4 mb-4">
-                    <Link to={`/blog/${post.slug}`} className="blog-card">
-                      <div className="blog-card-img-wrap">
+                    <article className="blog-card">
+                      <Link to={`/blog/${post.slug}`} className="blog-card-img-wrap">
                         {img && (
                           <img
                             src={img}
@@ -307,22 +377,24 @@ const Naslovna = () => {
                             className="blog-card-img"
                           />
                         )}
-                      </div>
+                      </Link>
                       <div className="blog-card-body">
                         <span className="blog-card-datum">{datum}</span>
-                        <h3
-                          className="blog-card-title"
-                          dangerouslySetInnerHTML={{ __html: post.title?.rendered }}
-                        />
-                        <div
-                          className="blog-card-excerpt"
-                          dangerouslySetInnerHTML={{ __html: post.excerpt?.rendered }}
-                        />
-                        <span className="blog-card-link">
+                        <Link
+                          to={`/blog/${post.slug}`}
+                          className="blog-card-title-link"
+                        >
+                          <h3
+                            className="blog-card-title"
+                            dangerouslySetInnerHTML={{ __html: post.title?.rendered }}
+                          />
+                        </Link>
+                        <p className="blog-card-excerpt">{excerpt}</p>
+                        <Link to={`/blog/${post.slug}`} className="blog-card-link">
                           Pročitaj više <FontAwesomeIcon icon={faArrowRight} />
-                        </span>
+                        </Link>
                       </div>
-                    </Link>
+                    </article>
                   </div>
                 );
               })}

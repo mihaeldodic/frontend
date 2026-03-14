@@ -4,7 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebookF,
   faInstagram,
+  faLinkedin,
   faTiktok,
+  faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
 import CheckBox from "../components/CheckBox";
@@ -171,7 +173,7 @@ const Footer = () => {
                   nezaboravne avanture i pažljivo osmišljene rute koje vode
                   izvan utabanih staza. Vaš put započinje ovdje.
                 </p>
-                <Link to="/" className="footer-link" onClick={handleLinkClick}>
+                <Link to="/o-nama" className="footer-link" onClick={handleLinkClick}>
                   Pročitajte više
                   <span className="ion-ios-arrow-round-forward"></span>
                 </Link>
@@ -241,12 +243,12 @@ const Footer = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/" className="py-1 footer-link-item" style={{ whiteSpace: 'nowrap' }} onClick={handleLinkClick}>
+                      <Link to="/zastita-podataka" className="py-1 footer-link-item" style={{ whiteSpace: 'nowrap' }} onClick={handleLinkClick}>
                         Zaštita privatnosti
                       </Link>
                     </li>
                     <li>
-                      <Link to="/" className="py-1 footer-link-item" onClick={handleLinkClick}>
+                      <Link to="/opci-uvjeti" className="py-1 footer-link-item" onClick={handleLinkClick}>
                         Opći uvjeti
                       </Link>
                     </li>
@@ -272,6 +274,24 @@ const Footer = () => {
                           className="me-2 social-icon"
                         />
                         Instagram
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="py-1 footer-link-item">
+                        <FontAwesomeIcon
+                          icon={faLinkedin}
+                          className="me-2 social-icon"
+                        />
+                        LinkedIn
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://www.x.com" target="_blank" rel="noopener noreferrer" className="py-1 footer-link-item">
+                        <FontAwesomeIcon
+                          icon={faXTwitter}
+                          className="me-2 social-icon"
+                        />
+                        X
                       </a>
                     </li>
                     <li>

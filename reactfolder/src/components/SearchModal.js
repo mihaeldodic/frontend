@@ -1,8 +1,86 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faSearch, faCalendarAlt, faClock } from "@fortawesome/free-solid-svg-icons";
+import { getTransportIconByMethod } from "../utils/transportIcons";
+import { buildTravelDetailsPath } from "../utils/travelRoutes";
 import "./search-modal.css";
+
+const normalizeSearchValue = (value) =>
+  (value || "")
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
+const normalizeDateValue = (value) => {
+  if (!value) return "";
+
+  const rawValue = String(value).trim();
+  const compactMatch = rawValue.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (compactMatch) {
+    return `${compactMatch[1]}-${compactMatch[2]}-${compactMatch[3]}`;
+  }
+
+  const isoMatch = rawValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (isoMatch) {
+    return `${isoMatch[1]}-${isoMatch[2]}-${isoMatch[3]}`;
+  }
+
+  const dottedMatch = rawValue.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/);
+  if (dottedMatch) {
+    return `${dottedMatch[3]}-${dottedMatch[2].padStart(2, "0")}-${dottedMatch[1].padStart(2, "0")}`;
+  }
+
+  return "";
+};
+
+const formatTravelDate = (value) => {
+  const normalizedDate = normalizeDateValue(value);
+  if (!normalizedDate) return "";
+
+  const match = normalizedDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return String(value || "").trim();
+
+  return `${match[3]}.${match[2]}.${match[1]}.`;
+};
+
+const isTravelWithinSelectedRange = (
+  selectedDateFrom,
+  selectedDateTo,
+  departureDate,
+  returnDate
+) => {
+  const normalizedSelectedDateFrom = normalizeDateValue(selectedDateFrom);
+  const normalizedSelectedDateTo = normalizeDateValue(selectedDateTo);
+  const normalizedDepartureDate = normalizeDateValue(departureDate);
+  const normalizedReturnDate = normalizeDateValue(returnDate);
+
+  if (!normalizedSelectedDateFrom && !normalizedSelectedDateTo) return true;
+  if (!normalizedDepartureDate && !normalizedReturnDate) return false;
+
+  const travelStart = normalizedDepartureDate || normalizedReturnDate;
+  const travelEnd = normalizedReturnDate || normalizedDepartureDate;
+
+  if (normalizedSelectedDateFrom && normalizedSelectedDateTo) {
+    return travelStart >= normalizedSelectedDateFrom && travelEnd <= normalizedSelectedDateTo;
+  }
+
+  if (normalizedSelectedDateFrom) {
+    return travelStart >= normalizedSelectedDateFrom;
+  }
+
+  if (normalizedSelectedDateTo) {
+    return travelEnd <= normalizedSelectedDateTo;
+  }
+
+  if (normalizedDepartureDate && normalizedReturnDate) {
+    return true;
+  }
+
+  return true;
+};
 
 const SearchModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -11,6 +89,9 @@ const SearchModal = ({ isOpen, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedContinent, setSelectedContinent] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedDateFrom, setSelectedDateFrom] = useState("");
+  const [selectedDateTo, setSelectedDateTo] = useState("");
+  const [selectedTransportMethod, setSelectedTransportMethod] = useState("Svi načini putovanja");
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [loading, setLoading] = useState(false);
 
@@ -38,6 +119,17 @@ const SearchModal = ({ isOpen, onClose }) => {
     "Listopad",
     "Studeni",
     "Prosinac"
+  ];
+
+  const transportMethods = [
+    "Svi načini putovanja",
+    ...Array.from(
+      new Set(
+        travels
+          .map((travel) => travel.transportMethod)
+          .filter(Boolean)
+      )
+    ),
   ];
 
   // Dohvati putovanja iz WordPressă
@@ -100,6 +192,9 @@ const SearchModal = ({ isOpen, onClose }) => {
           price: parseInt(acf.price) || 0,
           month: acf.month ? acf.month.trim() : "Nepoznato",
           duration: acf.travel_duration ? acf.travel_duration.trim() : "Nepoznato",
+          departureDate: acf.date || acf.datum_polaska || acf.polazak || "",
+          returnDate: acf.date_2 || acf["date-2"] || acf.datum_povratka || acf.povratak || "",
+          transportMethod: acf.nacin_putovanja || acf["nacin-putovanja"] || acf.prijevozno_sredstvo || "",
           image: imageUrl,
           description: acf.description || "",
           slug: post.slug
@@ -150,11 +245,11 @@ const SearchModal = ({ isOpen, onClose }) => {
 
     let filtered = [...travels];
 
-    // Pretraga po tekstu
+    // Pretraga po početku naziva
     if (searchTerm && searchTerm.trim() !== "") {
+      const normalizedSearchTerm = normalizeSearchValue(searchTerm);
       filtered = filtered.filter(travel =>
-        travel.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        travel.description.toLowerCase().includes(searchTerm.toLowerCase())
+        normalizeSearchValue(travel.title).startsWith(normalizedSearchTerm)
       );
     }
 
@@ -174,6 +269,28 @@ const SearchModal = ({ isOpen, onClose }) => {
       );
     }
 
+    if (selectedDateFrom || selectedDateTo) {
+      filtered = filtered.filter((travel) =>
+        isTravelWithinSelectedRange(
+          selectedDateFrom,
+          selectedDateTo,
+          travel.departureDate,
+          travel.returnDate
+        )
+      );
+    }
+
+    if (
+      selectedTransportMethod &&
+      selectedTransportMethod !== "Svi načini putovanja"
+    ) {
+      filtered = filtered.filter(
+        (travel) =>
+          normalizeSearchValue(travel.transportMethod) ===
+          normalizeSearchValue(selectedTransportMethod)
+      );
+    }
+
     // Filtriraj po cijeni
     filtered = filtered.filter(
       travel => travel.price >= priceRange[0] && travel.price <= priceRange[1]
@@ -181,14 +298,23 @@ const SearchModal = ({ isOpen, onClose }) => {
 
     console.log("Filtrirano:", filtered);
     setFilteredTravels(filtered);
-  }, [searchTerm, selectedContinent, selectedMonth, priceRange, travels]);
+  }, [
+    priceRange,
+    searchTerm,
+    selectedContinent,
+    selectedDateFrom,
+    selectedDateTo,
+    selectedMonth,
+    selectedTransportMethod,
+    travels,
+  ]);
 
   const handlePriceChange = (e) => {
     setPriceRange([priceRange[0], parseInt(e.target.value)]);
   };
 
   const handleTravelClick = (travel) => {
-    navigate(`/putovanje/${travel.slug}`);
+    navigate(buildTravelDetailsPath(travel.continent, travel.slug));
     onClose();
   };
 
@@ -197,6 +323,7 @@ const SearchModal = ({ isOpen, onClose }) => {
   return (
     <div className="search-modal-overlay" onClick={onClose}>
       <div className="search-modal-content" onClick={e => e.stopPropagation()}>
+        <div className="search-modal-scroll">
         {/* Header */}
         <div className="search-modal-header">
           <h2>Pretraži putovanja</h2>
@@ -220,7 +347,7 @@ const SearchModal = ({ isOpen, onClose }) => {
         {/* Filtri */}
         <div className="search-modal-filters">
           {/* Kontinent */}
-          <div className="filter-group">
+          <div className="filter-group filter-group--continent">
             <label>Kontinent</label>
             <select
               value={selectedContinent}
@@ -235,8 +362,36 @@ const SearchModal = ({ isOpen, onClose }) => {
             </select>
           </div>
 
+          <div className="filter-group filter-group--transport">
+            <label>Način putovanja</label>
+            <select
+              value={selectedTransportMethod}
+              onChange={e => setSelectedTransportMethod(e.target.value)}
+              className="filter-select"
+            >
+              {transportMethods.map(method => (
+                <option key={method} value={method}>
+                  {method}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Cijena */}
+          <div className="filter-group filter-group--price">
+            <label>Maksimalna cijena: €{priceRange[1]}</label>
+            <input
+              type="range"
+              min="0"
+              max="10000"
+              value={priceRange[1]}
+              onChange={handlePriceChange}
+              className="filter-range"
+            />
+          </div>
+
           {/* Mjesec */}
-          <div className="filter-group">
+          <div className="filter-group filter-group--month">
             <label>Mjesec</label>
             <select
               value={selectedMonth}
@@ -251,16 +406,23 @@ const SearchModal = ({ isOpen, onClose }) => {
             </select>
           </div>
 
-          {/* Cijena */}
-          <div className="filter-group">
-            <label>Maksimalna cijena: €{priceRange[1]}</label>
+          <div className="filter-group filter-group--date-from">
+            <label>Datum od</label>
             <input
-              type="range"
-              min="0"
-              max="10000"
-              value={priceRange[1]}
-              onChange={handlePriceChange}
-              className="filter-range"
+              type="date"
+              value={selectedDateFrom}
+              onChange={e => setSelectedDateFrom(e.target.value)}
+              className="filter-select"
+            />
+          </div>
+
+          <div className="filter-group filter-group--date-to">
+            <label>Datum do</label>
+            <input
+              type="date"
+              value={selectedDateTo}
+              onChange={e => setSelectedDateTo(e.target.value)}
+              className="filter-select"
             />
           </div>
         </div>
@@ -283,17 +445,33 @@ const SearchModal = ({ isOpen, onClose }) => {
                   {travel.image && (
                     <div className="travel-card-image">
                       <img src={travel.image} alt={travel.title} loading="lazy" />
+                      {travel.continent && travel.continent !== "Nepoznato" && (
+                        <span className="travel-card-tag">{travel.continent}</span>
+                      )}
+                      <span className="travel-card-icon-wrap">
+                        <FontAwesomeIcon icon={getTransportIconByMethod(travel.transportMethod)} />
+                      </span>
                     </div>
                   )}
                   <div className="travel-card-content">
                     <h3>{travel.title}</h3>
                     <div className="travel-info">
                       <div className="travel-left-info">
-                        <p className="travel-continent">{travel.continent}</p>
-                        <p className="travel-month">{travel.month}</p>
+                        <p className="travel-month">
+                          <FontAwesomeIcon icon={faCalendarAlt} /> {travel.month}
+                        </p>
                       </div>
-                      <p className="travel-duration">⏱️ {travel.duration}</p>
+                      <p className="travel-duration">
+                        <FontAwesomeIcon icon={faClock} /> {travel.duration}
+                      </p>
                     </div>
+                    {(travel.departureDate || travel.returnDate) && (
+                      <p className="travel-date-range">
+                        {formatTravelDate(travel.departureDate) || "-"}
+                        {travel.departureDate && travel.returnDate ? " - " : ""}
+                        {formatTravelDate(travel.returnDate) || ""}
+                      </p>
+                    )}
                     <p className="travel-price">€{travel.price.toLocaleString()}</p>
                   </div>
                 </div>
@@ -304,6 +482,7 @@ const SearchModal = ({ isOpen, onClose }) => {
               <p>Nema rezultata koji odgovaraju vašem pretraživanju.</p>
             </div>
           )}
+        </div>
         </div>
       </div>
     </div>

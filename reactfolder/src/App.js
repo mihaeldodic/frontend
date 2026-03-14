@@ -17,11 +17,14 @@ import Kategorije from "./components/Kategorije";
 import Putovanje from "./pages/Putovanje";
 import PutovanjeBlogSingle from "./pages/PutovanjeBlogSingle";
 import PutovanjeKontinent from "./pages/PutovanjeKontinent";
+import PutovanjeSva from "./pages/PutovanjeSva";
 import Kontakt from "./components/Kontakt";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SingUp";
 import AdminLayout from "./pages/admin/AdminLayout";
 import Onama from "./pages/Onama";
+import ZastitaPodataka from "./pages/ZastitaPodataka";
+import OpciUvjeti from "./pages/OpciUvjeti";
 
 import MyDetails from "./pages/admin/MyDetails";
 import MyPosts from "./pages/admin/MyPosts";
@@ -83,9 +86,13 @@ function App() {
           <Route path="/" element={<Naslovna />} />
           <Route path="/kategorije" element={<Kategorije />} />
           <Route path="/putovanje" element={<Putovanje />} />
+          <Route path="/putovanje/sva-putovanja" element={<PutovanjeSva />} />
           <Route path="/putovanje/kontinent/:continentSlug" element={<PutovanjeKontinent />} />
+          <Route path="/putovanje/kontinent/:continentSlug/:slug" element={<PutovanjeBlogSingle />} />
           <Route path="/putovanje/:slug" element={<PutovanjeBlogSingle />} />
           <Route path="/kontakt" element={<Kontakt />} />
+          <Route path="/zastita-podataka" element={<ZastitaPodataka />} />
+          <Route path="/opci-uvjeti" element={<OpciUvjeti />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/o-nama" element={<Onama />} />

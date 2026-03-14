@@ -1,0 +1,99 @@
+.zastita-page {
+  width: 100%;
+  background: #f8fbfc;
+}
+
+.zastita-section {
+  padding: 120px 20px 90px;
+}
+
+.zastita-container {
+  max-width: 960px;
+}
+
+.zastita-header {
+  text-align: center;
+  margin-bottom: 34px;
+}
+
+.zastita-tag {
+  display: inline-block;
+  background: rgba(14, 116, 144, 0.1);
+  color: rgba(14, 116, 144, 0.95);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.zastita-header h1 {
+  margin: 0 0 14px;
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: rgba(14, 116, 144, 0.95);
+}
+
+.zastita-header p {
+  margin: 0 auto;
+  max-width: 760px;
+  font-size: 1.03rem;
+  line-height: 1.75;
+  color: #5f6f78;
+}
+
+.zastita-card {
+  background: #fff;
+  border: 1px solid #e9f0f3;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  padding: 30px 28px;
+}
+
+.zastita-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: rgba(14, 116, 144, 0.95);
+}
+
+.zastita-card h2:not(:first-child) {
+  margin-top: 24px;
+}
+
+.zastita-card p {
+  margin: 0;
+  color: #57656d;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.zastita-note {
+  margin-top: 24px !important;
+  padding-top: 16px;
+  border-top: 1px dashed #dbe7ec;
+  color: #7a8a93 !important;
+  font-size: 0.92rem !important;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .zastita-section {
+    padding: 106px 14px 70px;
+  }
+
+  .zastita-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .zastita-header p {
+    font-size: 0.98rem;
+  }
+
+  .zastita-card {
+    padding: 22px 18px;
+    border-radius: 14px;
+  }
+}

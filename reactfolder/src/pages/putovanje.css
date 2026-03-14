@@ -278,6 +278,69 @@
 	color: rgba(255, 255, 255, 0.9);
 }
 
+.putovanje-all-hero {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	padding: 140px 20px 60px;
+	background:
+		linear-gradient(145deg, rgba(14, 116, 144, 0.82), rgba(10, 88, 110, 0.9)),
+		url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1600&q=80");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	color: #fff;
+}
+
+.putovanje-all-hero-content {
+	max-width: 760px;
+}
+
+.putovanje-all-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: rgba(255, 255, 255, 0.16);
+	border: 1px solid rgba(255, 255, 255, 0.28);
+	padding: 8px 16px;
+	border-radius: 999px;
+	font-weight: 700;
+	font-size: 0.82rem;
+	letter-spacing: 0.8px;
+	text-transform: uppercase;
+	margin-bottom: 20px;
+}
+
+.putovanje-all-hero h1 {
+	margin: 0;
+	font-size: 3rem;
+	font-weight: 800;
+	color: #ff6b6b;
+	text-transform: uppercase;
+	letter-spacing: 0.8px;
+}
+
+.putovanje-all-hero p {
+	margin: 14px 0 0;
+	max-width: 680px;
+	color: rgba(255, 255, 255, 0.9);
+	font-size: 1.08rem;
+	line-height: 1.8;
+}
+
+.putovanje-all-count {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	margin-top: 24px;
+	padding: 10px 16px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.14);
+	border: 1px solid rgba(255, 255, 255, 0.22);
+	color: #fff;
+	font-weight: 700;
+}
+
 .putovanje-kontinent-lista {
 	padding: 42px 20px 90px;
 	background: #f8fbfc;
@@ -290,6 +353,94 @@
 	padding: 24px;
 	margin-bottom: 20px;
 	color: #5a6972;
+}
+
+.putovanje-search-panel {
+	background: #fff;
+	border: 1px solid #edf2f4;
+	border-radius: 16px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+	padding: 24px;
+	margin-bottom: 28px;
+}
+
+.putovanje-search-bar {
+	margin-bottom: 20px;
+}
+
+.putovanje-search-input,
+.putovanje-filter-select {
+	width: 100%;
+	border: 2px solid #e0e0e0;
+	border-radius: 0.75rem;
+	padding: 0.85rem 1rem;
+	font-size: 1rem;
+	background: #fff;
+	transition: all 0.3s ease;
+	font-family: inherit;
+}
+
+.putovanje-search-input:focus,
+.putovanje-filter-select:focus {
+	outline: none;
+	border-color: #0e7490;
+	box-shadow: 0 0 0 3px rgba(14, 116, 144, 0.1);
+}
+
+.putovanje-search-filters {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 1.25rem;
+	align-items: start;
+}
+
+.putovanje-filter-group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.putovanje-filter-group label {
+	font-weight: 600;
+	color: #0e7490;
+	font-size: 0.92rem;
+}
+
+.putovanje-filter-range {
+	width: 100%;
+	height: 6px;
+	border-radius: 3px;
+	background: #e0e0e0;
+	outline: none;
+	-webkit-appearance: none;
+	appearance: none;
+	cursor: pointer;
+	margin-top: 8px;
+}
+
+.putovanje-filter-range::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #ff6b6b;
+	box-shadow: 0 2px 5px rgba(255, 107, 107, 0.3);
+	transition: all 0.3s ease;
+}
+
+.putovanje-filter-range::-webkit-slider-thumb:hover {
+	background: #ff5252;
+	transform: scale(1.15);
+}
+
+.putovanje-filter-range::-moz-range-thumb {
+	width: 20px;
+	height: 20px;
+	border: none;
+	border-radius: 50%;
+	background: #ff6b6b;
+	box-shadow: 0 2px 5px rgba(255, 107, 107, 0.3);
 }
 
 .put-card {
@@ -311,8 +462,39 @@
 
 .put-card-img-wrap {
 	height: 210px;
+	position: relative;
 	overflow: hidden;
 	background: #eaf2f5;
+}
+
+.put-card-icon-wrap {
+	position: absolute;
+	left: 16px;
+	bottom: 14px;
+	width: 46px;
+	height: 46px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.9);
+	color: #ff6b6b;
+	font-size: 1.05rem;
+	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.put-card-tag {
+	position: absolute;
+	top: 14px;
+	left: 14px;
+	background: #ff6b6b;
+	color: #fff;
+	font-size: 0.75rem;
+	font-weight: 700;
+	padding: 4px 12px;
+	border-radius: 50px;
+	text-transform: uppercase;
+	letter-spacing: 0.8px;
 }
 
 .put-card-img {
@@ -357,6 +539,18 @@
 	gap: 6px;
 }
 
+.put-card-meta svg {
+	color: #0e7490;
+}
+
+.put-card-dates {
+	margin-bottom: 12px;
+	font-size: 0.84rem;
+	line-height: 1.5;
+	color: #667;
+	font-weight: 600;
+}
+
 .put-card-bottom {
 	display: flex;
 	justify-content: space-between;
@@ -383,11 +577,23 @@
 	.putovanje-kontinent-hero h1 {
 		font-size: 2rem;
 	}
+
+	.putovanje-all-hero h1 {
+		font-size: 2.2rem;
+	}
 }
 
 @media (max-width: 768px) {
 	.putovanje-hero {
 		min-height: 100vh;
+	}
+
+	.putovanje-search-panel {
+		padding: 18px;
+	}
+
+	.putovanje-search-filters {
+		grid-template-columns: 1fr;
 	}
 
 	.putovanje-hero-overlay {

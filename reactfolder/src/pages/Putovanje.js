@@ -77,7 +77,7 @@ const kontinenti = [
 
 const Putovanje = () => {
   const navigate = useNavigate();
-  const [odabraniKontinent, setOdabraniKontinent] = useState("");
+  const [odabraniKontinent, setOdabraniKontinent] = useState("sva-putovanja");
   const [continentHeroImages, setContinentHeroImages] = useState({});
 
   useEffect(() => {
@@ -143,7 +143,11 @@ const Putovanje = () => {
   }, []);
 
   const handleIstraziKontinent = () => {
-    if (!odabraniKontinent) return;
+    if (odabraniKontinent === "sva-putovanja") {
+      navigate("/putovanje/sva-putovanja");
+      return;
+    }
+
     navigate(`/putovanje/kontinent/${odabraniKontinent}`);
   };
 
@@ -189,7 +193,7 @@ const Putovanje = () => {
                 value={odabraniKontinent}
                 onChange={(e) => setOdabraniKontinent(e.target.value)}
               >
-                <option value="">Svi kontinenti</option>
+                <option value="sva-putovanja">Svi kontinenti</option>
                 {kontinentiZaPrikaz.map((k) => (
                   <option key={k.slug} value={k.slug}>
                     {k.naziv}
@@ -200,7 +204,6 @@ const Putovanje = () => {
                 type="button"
                 className="putovanje-istrazi-btn"
                 onClick={handleIstraziKontinent}
-                disabled={!odabraniKontinent}
               >
                 Istrazi
               </button>

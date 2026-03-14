@@ -334,10 +334,21 @@
     padding: 0;
     background: transparent;
     z-index: 1050;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
   }
 
   .navbar-scrolled {
     background: rgba(14, 116, 144, 0.98) !important;
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     z-index: 1050;
   }
@@ -397,11 +408,17 @@
   /* Neprozirana background za mobile meni - Plava nijansa */
   .navbar-collapse {
     background: linear-gradient(180deg, rgba(14, 116, 144, 0.95) 0%, rgba(10, 85, 106, 0.98) 100%);
-    margin: 0 -1rem;
+    margin: 0;
     padding: 1rem;
     border-radius: 0 0 0.5rem 0.5rem;
     animation: slideDown 0.3s ease-out;
     box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
   }
 
   /* Proziran meni kada nije scrollan */
@@ -523,6 +540,15 @@
     height: 56px;
     padding: 0;
     z-index: 1050;
+    top: 0;
+  }
+
+  .navbar.navbar-menu-open {
+    height: 56px;
+  }
+
+  .navbar-collapse {
+    max-height: calc(100vh - 56px);
   }
 
   .navbar .container {

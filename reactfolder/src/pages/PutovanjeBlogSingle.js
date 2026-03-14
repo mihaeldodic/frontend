@@ -5,12 +5,82 @@ import Loader from "../components/Loader";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
-const buildDaysFromAcf = (acf = {}) => {
+const resolveMediaUrl = async (mediaField) => {
+  if (!mediaField) return "";
+
+  if (typeof mediaField === "string") {
+    if (mediaField.startsWith("http")) {
+      return mediaField;
+    }
+
+    if (/^\d+$/.test(mediaField)) {
+      try {
+        const response = await fetch(`${BASE_URL}v2/media/${mediaField}`);
+        if (!response.ok) return "";
+        const media = await response.json();
+        return media.source_url || "";
+      } catch {
+        return "";
+      }
+    }
+
+    return "";
+  }
+
+  if (typeof mediaField === "number") {
+    try {
+      const response = await fetch(`${BASE_URL}v2/media/${mediaField}`);
+      if (!response.ok) return "";
+      const media = await response.json();
+      return media.source_url || "";
+    } catch {
+      return "";
+    }
+  }
+
+  if (typeof mediaField === "object") {
+    return (
+      mediaField.source_url ||
+      mediaField.url ||
+      mediaField.sizes?.full?.url ||
+      mediaField.sizes?.large?.url ||
+      ""
+    );
+  }
+
+  return "";
+};
+
+const formatTravelDate = (value) => {
+  if (!value) return "";
+
+  const rawValue = String(value).trim();
+  const compactMatch = rawValue.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if (compactMatch) {
+    return `${compactMatch[3]}.${compactMatch[2]}.${compactMatch[1]}.`;
+  }
+
+  const isoMatch = rawValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+  if (isoMatch) {
+    return `${isoMatch[3]}.${isoMatch[2]}.${isoMatch[1]}.`;
+  }
+
+  const dottedMatch = rawValue.match(/^(\d{1,2})[./-](\d{1,2})[./-](\d{4})$/);
+  if (dottedMatch) {
+    return `${dottedMatch[1].padStart(2, "0")}.${dottedMatch[2].padStart(2, "0")}.${dottedMatch[3]}.`;
+  }
+
+  return rawValue;
+};
+
+const buildDaysFromAcf = async (acf = {}) => {
   const dayMap = {};
 
-  Object.entries(acf).forEach(([key, value]) => {
+  await Promise.all(
+    Object.entries(acf).map(async ([key, value]) => {
     const normalizedKey = String(key).toLowerCase().replace(/_+$/, "");
-    const match = normalizedKey.match(/^dan_(\d+)_(naslov|opis)$/i);
+    const match = normalizedKey.match(/^dan_(\d+)_(naslov|opis|datum|slika|image)$/i);
     if (!match) return;
 
     const dayNumber = Number(match[1]);
@@ -22,6 +92,8 @@ const buildDaysFromAcf = (acf = {}) => {
         number: dayNumber,
         title: "",
         description: "",
+        date: "",
+        image: "",
       };
     }
 
@@ -32,10 +104,19 @@ const buildDaysFromAcf = (acf = {}) => {
     if (fieldType === "opis") {
       dayMap[dayNumber].description = safeValue || "";
     }
-  });
+
+    if (fieldType === "datum") {
+      dayMap[dayNumber].date = safeValue || "";
+    }
+
+    if (fieldType === "slika" || fieldType === "image") {
+      dayMap[dayNumber].image = await resolveMediaUrl(safeValue);
+    }
+  })
+  );
 
   return Object.values(dayMap)
-    .filter((day) => day.title || day.description)
+    .filter((day) => day.title || day.description || day.date || day.image)
     .sort((a, b) => a.number - b.number);
 };
 
@@ -60,18 +141,8 @@ const PutovanjeBlogSingle = () => {
         const acf = post.acf || {};
 
         // Dohvati sliku
-        let imageUrl = "";
-        if (acf.image) {
-          try {
-            const mediaResponse = await fetch(
-              `${BASE_URL}v2/media/${acf.image}`
-            );
-            const media = await mediaResponse.json();
-            imageUrl = media.source_url || "";
-          } catch (error) {
-            console.error("Greška pri dohvaćanju slike:", error);
-          }
-        }
+        const imageUrl = await resolveMediaUrl(acf.image || acf.hero_image || acf.hero_slika);
+        const days = await buildDaysFromAcf(acf);
 
         setTravel({
           id: post.id,
@@ -83,9 +154,33 @@ const PutovanjeBlogSingle = () => {
           description: acf.description || "",
           image: imageUrl,
           country: acf.drzava || "",
+          departureDate:
+            formatTravelDate(
+              acf.date ||
+                acf.datum_polaska ||
+                acf.polazak ||
+                acf.datum_od ||
+                acf.start_date ||
+                ""
+            ),
+          returnDate:
+            formatTravelDate(
+              acf.date_2 ||
+                acf["date-2"] ||
+                acf.datum_povratka ||
+                acf.povratak ||
+                acf.datum_do ||
+                acf.end_date ||
+                ""
+            ),
+          transportMethod:
+            acf.nacin_putovanja ||
+            acf["nacin-putovanja"] ||
+            acf.prijevozno_sredstvo ||
+            "",
           includedServices: acf.ukljuceno || "",
           travelPlan: acf.plan_putovanja || "",
-          days: buildDaysFromAcf(acf)
+          days,
         });
       }
       setLoading(false);
@@ -147,26 +242,46 @@ const PutovanjeBlogSingle = () => {
                 <div className="row g-3">
                   <div className="col-md-6">
                     <div className="info-card">
-                      <h5>Mjesec</h5>
+                      <h5>DRŽAVA</h5>
+                      <p>{travel.country || "Nepoznato"}</p>
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="info-card">
+                      <h5>MJESEC</h5>
                       <p>{travel.month}</p>
                     </div>
                   </div>
                   <div className="col-md-6">
                     <div className="info-card">
-                      <h5>Trajanje</h5>
+                      <h5>TRAJANJE</h5>
                       <p>{travel.duration}</p>
                     </div>
                   </div>
-                  <div className="col-md-6">
-                    <div className="info-card">
-                      <h5>Cijena</h5>
-                      <p className="price">€{travel.price.toLocaleString()}</p>
+                  {(travel.departureDate || travel.returnDate) && (
+                    <div className="col-md-6">
+                      <div className="info-card">
+                        <h5>DATUM PUTOVANJA</h5>
+                        <p>
+                          {travel.departureDate || "-"}
+                          {travel.departureDate && travel.returnDate ? " - " : ""}
+                          {travel.returnDate || ""}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  )}
+                  {travel.transportMethod && (
+                    <div className="col-md-6">
+                      <div className="info-card">
+                        <h5>NAČIN PUTOVANJA</h5>
+                        <p>{travel.transportMethod}</p>
+                      </div>
+                    </div>
+                  )}
                   <div className="col-md-6">
                     <div className="info-card">
-                      <h5>Država</h5>
-                      <p>{travel.country || "Nepoznato"}</p>
+                      <h5>CIJENA</h5>
+                      <p className="price">€{travel.price.toLocaleString()}</p>
                     </div>
                   </div>
                 </div>
@@ -208,6 +323,14 @@ const PutovanjeBlogSingle = () => {
                       <h3>
                         <span className="day-badge">Dan {day.number}</span> {day.title || "Program dana"}
                       </h3>
+                      {day.date && <span className="day-date">{day.date}</span>}
+                      {day.image && (
+                        <img
+                          src={day.image}
+                          alt={day.title || `Dan ${day.number}`}
+                          className="day-card-image"
+                        />
+                      )}
                       {day.description && (
                         <p style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                           {day.description}

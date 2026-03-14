@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faCalendarDays,
   faClock,
+  faPlaneDeparture,
 } from "@fortawesome/free-solid-svg-icons";
 import Loader from "../components/Loader";
 import { getTransportIconByMethod } from "../utils/transportIcons";
@@ -12,36 +13,38 @@ import { buildTravelDetailsPath } from "../utils/travelRoutes";
 import "./putovanje.css";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
+const continents = [
+  "Svi kontinenti",
+  "Afrika",
+  "Azija",
+  "Australija",
+  "Europa",
+  "Južna amerika",
+  "Sjeverna amerika",
+];
 
-const slugToNaziv = {
-  europa: "Europa",
-  azija: "Azija",
-  afrika: "Afrika",
-  oceanija: "Oceanija",
-  australija: "Australija",
-  "juzna-amerika": "Juzna Amerika",
-  "južna-amerika": "Juzna Amerika",
-  "sjeverna-amerika": "Sjeverna Amerika",
-  "sjeverna-amerika": "Sjeverna Amerika",
-};
+const months = [
+  "Svi mjeseci",
+  "Siječanj",
+  "Veljača",
+  "Ožujak",
+  "Travanj",
+  "Svibanj",
+  "Lipanj",
+  "Srpanj",
+  "Kolovoz",
+  "Rujan",
+  "Listopad",
+  "Studeni",
+  "Prosinac",
+];
 
-const fallbackOpis = {
-  europa: "Povijest, kultura i gradovi koji ostavljaju bez daha.",
-  azija: "Egzotika, tradicija i avantura na svakom koraku.",
-  afrika: "Divlja priroda, safari i autentična iskustva.",
-  australija: "Netaknuta priroda, ocean i jedinstveni krajolici.",
-  oceanija: "Netaknuta priroda, ocean i jedinstveni krajolici.",
-  "juzna-amerika": "Ande, Amazona i boje Latinske Amerike.",
-  "sjeverna-amerika": "Nacionalni parkovi, metropole i road trip iskustva.",
-};
-
-const normalize = (value) =>
+const normalizeSearchValue = (value) =>
   (value || "")
     .toString()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
-    .replace(/\s+/g, "-")
     .trim();
 
 const normalizeDateValue = (value) => {
@@ -74,35 +77,6 @@ const formatTravelDate = (value) => {
   if (!match) return String(value || "").trim();
 
   return `${match[3]}.${match[2]}.${match[1]}.`;
-};
-
-const resolveHeroImage = async (heroField) => {
-  if (!heroField) return "";
-
-  if (typeof heroField === "string") return heroField;
-
-  if (typeof heroField === "number") {
-    try {
-      const response = await fetch(`${BASE_URL}v2/media/${heroField}`);
-      if (!response.ok) return "";
-      const media = await response.json();
-      return media.source_url || "";
-    } catch {
-      return "";
-    }
-  }
-
-  if (typeof heroField === "object") {
-    return (
-      heroField.source_url ||
-      heroField.url ||
-      heroField.sizes?.full?.url ||
-      heroField.sizes?.large?.url ||
-      ""
-    );
-  }
-
-  return "";
 };
 
 const resolvePostImage = async (post) => {
@@ -140,159 +114,185 @@ const resolvePostImage = async (post) => {
   return "";
 };
 
-const PutovanjeKontinent = () => {
-  const { continentSlug } = useParams();
+const PutovanjeSva = () => {
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
-  const [continentContent, setContinentContent] = useState({
-    title: "",
-    shortDescription: "",
-    heroImage: "",
-  });
-
-  const trazeniKontinent = useMemo(() => {
-    const mapped = slugToNaziv[continentSlug] || continentSlug;
-    return normalize(mapped);
-  }, [continentSlug]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedContinent, setSelectedContinent] = useState("Svi kontinenti");
+  const [selectedMonth, setSelectedMonth] = useState("Svi mjeseci");
+  const [priceRange, setPriceRange] = useState([0, 10000]);
 
   useEffect(() => {
     const fetchPutovanja = async () => {
       try {
         setLoading(true);
-        const nazivKontinenta = slugToNaziv[continentSlug] || continentSlug;
-        const nazivSearch = encodeURIComponent(nazivKontinenta);
-
-        const [putovanjaResponse, ...pageResponses] = await Promise.all([
-          fetch(`${BASE_URL}v2/nova-destinacija?_embed&per_page=100`),
-          fetch(`${BASE_URL}v2/pages?slug=${continentSlug}&_embed`),
-          fetch(`${BASE_URL}v2/pages?slug=putovanje-${continentSlug}&_embed`),
-          fetch(`${BASE_URL}v2/pages?slug=kontinent-${continentSlug}&_embed`),
-          fetch(`${BASE_URL}v2/pages?search=${nazivSearch}&_embed&per_page=20`),
-        ]);
-
-        const putovanjaData = await putovanjaResponse.json();
-        const normalizedPosts = Array.isArray(putovanjaData) ? putovanjaData : [];
+        const response = await fetch(`${BASE_URL}v2/nova-destinacija?_embed&per_page=100`);
+        const data = await response.json();
+        const normalizedPosts = Array.isArray(data) ? data : [];
 
         const postsWithImages = await Promise.all(
           normalizedPosts.map(async (post) => {
             const resolvedImage = await resolvePostImage(post);
-            return { ...post, _resolvedImage: resolvedImage };
+            return {
+              ...post,
+              _resolvedImage: resolvedImage,
+              _travelMeta: {
+                departureDate:
+                  post?.acf?.date ||
+                  post?.acf?.datum_polaska ||
+                  post?.acf?.polazak ||
+                  "",
+                returnDate:
+                  post?.acf?.date_2 ||
+                  post?.acf?.["date-2"] ||
+                  post?.acf?.datum_povratka ||
+                  post?.acf?.povratak ||
+                  "",
+                transportMethod:
+                  post?.acf?.nacin_putovanja ||
+                  post?.acf?.["nacin-putovanja"] ||
+                  post?.acf?.prijevozno_sredstvo ||
+                  "",
+              },
+            };
           })
         );
 
         setPosts(postsWithImages);
-
-        let pageData = null;
-        for (let i = 0; i < pageResponses.length; i += 1) {
-          const data = await pageResponses[i].json();
-          if (!Array.isArray(data) || data.length === 0) continue;
-
-          if (i === pageResponses.length - 1) {
-            const target = normalize(nazivKontinenta);
-            const matched = data.find((page) => {
-              const title = normalize(page?.title?.rendered || "");
-              return title.includes(target) || target.includes(title);
-            });
-            pageData = matched || data[0];
-          } else {
-            pageData = data[0];
-          }
-
-          if (pageData) break;
-        }
-
-        if (pageData) {
-          const acf = pageData.acf || {};
-          const heroImage = await resolveHeroImage(acf.hero_image || acf.hero_slika);
-          const shortDescription =
-            acf.kratki_opis ||
-            acf.hero_opis ||
-            acf.short_description ||
-            acf.opis ||
-            pageData.excerpt?.rendered?.replace(/<[^>]+>/g, "").trim() ||
-            fallbackOpis[continentSlug] ||
-            "Ponuda putovanja za odabrani kontinent.";
-
-          setContinentContent({
-            title: pageData.title?.rendered || slugToNaziv[continentSlug] || continentSlug,
-            shortDescription,
-            heroImage,
-          });
-        } else {
-          setContinentContent({
-            title: slugToNaziv[continentSlug] || continentSlug,
-            shortDescription:
-              fallbackOpis[continentSlug] || "Ponuda putovanja za odabrani kontinent.",
-            heroImage: "",
-          });
-        }
       } catch (error) {
-        console.error("Greska pri dohvacanju putovanja:", error);
+        console.error("Greska pri dohvacanju svih putovanja:", error);
         setPosts([]);
-        setContinentContent({
-          title: slugToNaziv[continentSlug] || continentSlug,
-          shortDescription:
-            fallbackOpis[continentSlug] || "Ponuda putovanja za odabrani kontinent.",
-          heroImage: "",
-        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchPutovanja();
-  }, [continentSlug]);
+  }, []);
 
+  const ukupnoPutovanja = useMemo(() => posts.length, [posts]);
   const filtriranaPutovanja = useMemo(() => {
-    return posts.filter((post) => {
-      const kontinent = normalize(post?.acf?.continent);
-      if (!kontinent) return false;
+    let filtered = [...posts];
 
-      if (trazeniKontinent === "oceanija" || trazeniKontinent === "australija") {
-        return kontinent === "oceanija" || kontinent === "australija";
-      }
+    if (searchTerm.trim()) {
+      const normalizedTerm = normalizeSearchValue(searchTerm);
+      filtered = filtered.filter((post) => {
+        const title = normalizeSearchValue(post.title?.rendered || "");
+        return title.startsWith(normalizedTerm);
+      });
+    }
 
-      if (trazeniKontinent === "sjeverna-amerika") {
-        return kontinent === "sjeverna-amerika";
-      }
+    if (selectedContinent !== "Svi kontinenti") {
+      filtered = filtered.filter((post) => {
+        const continent = (post?.acf?.continent || "").toLowerCase().trim();
+        return continent === selectedContinent.toLowerCase().trim();
+      });
+    }
 
-      if (trazeniKontinent === "juzna-amerika") {
-        return kontinent === "juzna-amerika";
-      }
+    if (selectedMonth !== "Svi mjeseci") {
+      filtered = filtered.filter((post) => {
+        const month = (post?.acf?.month || "").toLowerCase().trim();
+        return month === selectedMonth.toLowerCase().trim();
+      });
+    }
 
-      return kontinent === trazeniKontinent;
+    filtered = filtered.filter((post) => {
+      const price = Number(post?.acf?.price || 0);
+      return price >= priceRange[0] && price <= priceRange[1];
     });
-  }, [posts, trazeniKontinent]);
 
-  const naslovKontinenta = slugToNaziv[continentSlug] || continentSlug;
+    return filtered;
+  }, [posts, priceRange, searchTerm, selectedContinent, selectedMonth]);
 
-  const heroStyle = continentContent.heroImage
-    ? {
-        backgroundImage: `linear-gradient(145deg, rgba(14, 116, 144, 0.78), rgba(10, 88, 110, 0.78)), url(${continentContent.heroImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }
-    : undefined;
+  const handlePriceChange = (event) => {
+    setPriceRange([priceRange[0], parseInt(event.target.value, 10)]);
+  };
 
   return (
     <div className="putovanje-kontinent-stranica">
       {loading && <Loader />}
 
-      <section className="putovanje-kontinent-hero" style={heroStyle}>
+      <section className="putovanje-all-hero">
         <div className="container">
           <Link to="/putovanje" className="putovanje-back-link">
             <FontAwesomeIcon icon={faArrowLeft} /> Natrag na kontinente
           </Link>
-          <h1>{continentContent.title || naslovKontinenta}</h1>
-          <p>{continentContent.shortDescription || "Ponuda putovanja za odabrani kontinent."}</p>
+          <div className="putovanje-all-hero-content">
+            <span className="putovanje-all-tag">Ponuda putovanja</span>
+            <h1>Sva putovanja u ponudi</h1>
+            <p>
+              Pregledajte kompletnu ponudu naših putovanja i pronađite destinaciju
+              koja najbolje odgovara vašem sljedećem putovanju.
+            </p>
+            <div className="putovanje-all-count">
+              <FontAwesomeIcon icon={faPlaneDeparture} />
+              <span>{ukupnoPutovanja} dostupnih putovanja</span>
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="putovanje-kontinent-lista">
         <div className="container">
+          <div className="putovanje-search-panel">
+            <div className="putovanje-search-bar">
+              <input
+                type="text"
+                placeholder="Pretraži po nazivu ili opisu..."
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                className="putovanje-search-input"
+              />
+            </div>
+
+            <div className="putovanje-search-filters">
+              <div className="putovanje-filter-group">
+                <label>Kontinent</label>
+                <select
+                  value={selectedContinent}
+                  onChange={(event) => setSelectedContinent(event.target.value)}
+                  className="putovanje-filter-select"
+                >
+                  {continents.map((continent) => (
+                    <option key={continent} value={continent}>
+                      {continent}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="putovanje-filter-group">
+                <label>Mjesec</label>
+                <select
+                  value={selectedMonth}
+                  onChange={(event) => setSelectedMonth(event.target.value)}
+                  className="putovanje-filter-select"
+                >
+                  {months.map((month) => (
+                    <option key={month} value={month}>
+                      {month}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="putovanje-filter-group">
+                <label>Maksimalna cijena: €{priceRange[1]}</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="10000"
+                  value={priceRange[1]}
+                  onChange={handlePriceChange}
+                  className="putovanje-filter-range"
+                />
+              </div>
+            </div>
+          </div>
+
           {!loading && filtriranaPutovanja.length === 0 && (
             <div className="putovanje-empty-state">
-              Trenutno nema dostupnih putovanja za ovaj kontinent.
+              Nema rezultata koji odgovaraju odabranim filterima.
             </div>
           )}
 
@@ -307,11 +307,13 @@ const PutovanjeKontinent = () => {
                 acf.date_2 || acf["date-2"] || acf.datum_povratka || acf.povratak || ""
               );
               const transportMethod =
+                post?._travelMeta?.transportMethod ||
                 acf.nacin_putovanja ||
                 acf["nacin-putovanja"] ||
                 acf.prijevozno_sredstvo ||
                 "";
               const travelDetailsPath = buildTravelDetailsPath(acf.continent, post.slug);
+
               return (
                 <div key={post.id} className="col-md-6 col-lg-4">
                   <Link to={travelDetailsPath} className="put-card">
@@ -354,7 +356,9 @@ const PutovanjeKontinent = () => {
                       )}
 
                       <div className="put-card-bottom">
-                        <span className="put-card-price">€{Number(acf.price || 0).toLocaleString("hr-HR")}</span>
+                        <span className="put-card-price">
+                          €{Number(acf.price || 0).toLocaleString("hr-HR")}
+                        </span>
                         <span className="put-card-link">Detalji</span>
                       </div>
                     </div>
@@ -369,4 +373,4 @@ const PutovanjeKontinent = () => {
   );
 };
 
-export default PutovanjeKontinent;
+export default PutovanjeSva;

@@ -5,8 +5,10 @@ import { faLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import "./kontakt.css";
 import {
+  faFacebookF,
   faInstagram,
   faLinkedin,
+  faTiktok,
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 
@@ -35,7 +37,7 @@ const Kontakt = () => {
 
   return (
     <>
-      <div className="container" style={{ marginTop: "100px" }}>
+      <div className="container kontakt-page" style={{ marginTop: "50px" }}>
         <div className="row my-4">
           <h1 className="text-center mt-3">Kontakt</h1>
           <p className="text-center subtitle">
@@ -64,6 +66,12 @@ const Kontakt = () => {
             </div>
             
             <div className="socials">
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                <FontAwesomeIcon icon={faFacebookF} />
+              </a>
+              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="social-link">
+                <FontAwesomeIcon icon={faTiktok} />
+              </a>
               <a href="https://www.x.com" target="_blank" rel="noopener noreferrer" className="social-link">
                 <FontAwesomeIcon icon={faXTwitter} />
               </a>
