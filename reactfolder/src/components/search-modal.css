@@ -151,6 +151,10 @@
   color: #999;
 }
 
+.search-mobile-suggestions {
+  display: none;
+}
+
 /* Filtri */
 .search-modal-filters {
   display: grid;
@@ -158,7 +162,6 @@
   gap: 1.5rem;
   padding: 1.5rem;
   background: #f9f9f9;
-  border-bottom: 2px solid #f0f0f0;
   align-items: start;
 }
 
@@ -172,6 +175,7 @@
 
 .filter-group--price {
   grid-column: 3;
+  min-height: 86px;
 }
 
 .filter-group--month {
@@ -239,6 +243,7 @@ input[type="date"].filter-select::-webkit-datetime-edit-text {
   -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
+  margin-top: 1.1rem;
 }
 
 .filter-range::-webkit-slider-thumb {
@@ -277,6 +282,31 @@ input[type="date"].filter-select::-webkit-datetime-edit-text {
 .filter-range::-moz-range-track {
   background: transparent;
   border: none;
+}
+
+.search-modal-filter-actions {
+  padding: 0.9rem 1.5rem 1.25rem;
+  background: #f9f9f9;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search-modal-reset-btn {
+  border: none;
+  background: #ff6b6b;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 13px 22px;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 10px 24px rgba(255, 107, 107, 0.35);
+}
+
+.search-modal-reset-btn:hover {
+  background: #e85555;
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(255, 107, 107, 0.35);
 }
 
 /* Rezultati */
@@ -499,6 +529,29 @@ input[type="date"].filter-select::-webkit-datetime-edit-text {
 
   .search-modal-search-bar {
     padding: 1rem;
+  }
+
+  .search-mobile-suggestions {
+    display: block;
+    background: #f9f9f9;
+    padding: 0 1rem 1rem;
+    border-bottom: 2px solid #f0f0f0;
+  }
+
+  .search-mobile-suggestion-card {
+    width: 100%;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+
+  .search-mobile-suggestion-empty {
+    margin-top: 8px;
+    border: 1px dashed #dbe8ed;
+    border-radius: 12px;
+    background: #fff;
+    padding: 10px 12px;
+    color: #667;
+    font-size: 0.9rem;
   }
 
   .travels-grid {

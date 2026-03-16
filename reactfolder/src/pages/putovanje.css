@@ -389,9 +389,37 @@
 
 .putovanje-search-filters {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	grid-template-columns: repeat(3, minmax(220px, 1fr));
+	grid-template-areas:
+		"continent transport price"
+		"month datefrom dateto";
 	gap: 1.25rem;
 	align-items: start;
+}
+
+.putovanje-filter-group--continent {
+	grid-area: continent;
+}
+
+.putovanje-filter-group--transport {
+	grid-area: transport;
+}
+
+.putovanje-filter-group--price {
+	grid-area: price;
+	min-height: 86px;
+}
+
+.putovanje-filter-group--month {
+	grid-area: month;
+}
+
+.putovanje-filter-group--date-from {
+	grid-area: datefrom;
+}
+
+.putovanje-filter-group--date-to {
+	grid-area: dateto;
 }
 
 .putovanje-filter-group {
@@ -415,7 +443,7 @@
 	-webkit-appearance: none;
 	appearance: none;
 	cursor: pointer;
-	margin-top: 8px;
+	margin-top: 1.2rem;
 }
 
 .putovanje-filter-range::-webkit-slider-thumb {
@@ -441,6 +469,29 @@
 	border-radius: 50%;
 	background: #ff6b6b;
 	box-shadow: 0 2px 5px rgba(255, 107, 107, 0.3);
+}
+
+.putovanje-search-actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 1rem;
+}
+
+.putovanje-reset-btn {
+	border: none;
+	background: #ff6b6b;
+	color: #fff;
+	font-weight: 700;
+	border-radius: 999px;
+	padding: 13px 22px;
+	transition: background 0.25s ease, box-shadow 0.25s ease;
+	box-shadow: 0 10px 24px rgba(255, 107, 107, 0.35);
+}
+
+.putovanje-reset-btn:hover {
+	background: #e85555;
+	color: #fff;
+	box-shadow: 0 10px 24px rgba(255, 107, 107, 0.35);
 }
 
 .put-card {
@@ -593,7 +644,28 @@
 	}
 
 	.putovanje-search-filters {
+		grid-template-areas:
+			"continent"
+			"transport"
+			"price"
+			"month"
+			"datefrom"
+			"dateto";
 		grid-template-columns: 1fr;
+		gap: 0.9rem;
+	}
+
+	.putovanje-filter-range {
+		width: 100%;
+		max-width: none;
+	}
+
+	.putovanje-search-actions {
+		justify-content: stretch;
+	}
+
+	.putovanje-reset-btn {
+		width: 100%;
 	}
 
 	.putovanje-hero-overlay {
@@ -616,14 +688,23 @@
 		width: 100%;
 	}
 
-	.put-card-meta {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 6px;
-	}
 }
 
 @media (max-width: 576px) {
+	.putovanje-search-panel {
+		padding: 14px;
+	}
+
+	.putovanje-filter-group label {
+		font-size: 0.86rem;
+	}
+
+	.putovanje-search-input,
+	.putovanje-filter-select {
+		padding: 0.75rem 0.85rem;
+		font-size: 0.95rem;
+	}
+
 	.putovanje-kontinenti {
 		padding: 72px 14px 78px;
 	}

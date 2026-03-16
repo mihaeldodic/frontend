@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
+import "./checkbox.css";
 import "./kontakt.css";
 import {
   faFacebookF,
@@ -15,9 +17,14 @@ import {
 const Kontakt = () => {
   const form = useRef();
   const [isSent, setIsSent] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const sendEmail = (e) => {
     e.preventDefault();
+
+    if (!termsAccepted) {
+      return;
+    }
 
     emailjs
       .sendForm("service_97u9bj7", "template_dc4l4ga", form.current, {
@@ -27,6 +34,10 @@ const Kontakt = () => {
         () => {
           console.log("SUCCESS!");
           setIsSent(true);
+          setTermsAccepted(false);
+          if (form.current) {
+            form.current.reset();
+          }
           setTimeout(() => setIsSent(false), 3000);
         },
         (error) => {
@@ -123,10 +134,41 @@ const Kontakt = () => {
                   />
                 </div>
 
+                <div className="form-group contact-terms-row">
+                  <input
+                    className="checkbox-input-1"
+                    type="checkbox"
+                    id="kontakt-terms"
+                    checked={termsAccepted}
+                    onChange={(event) => setTermsAccepted(event.target.checked)}
+                    required
+                    style={{ marginTop: 0 }}
+                  />
+                  <label htmlFor="kontakt-terms" className="contact-terms-label">
+                    Prihvaćam {" "}
+                    <Link
+                      to="/opci-uvjeti"
+                      onClick={(event) => event.stopPropagation()}
+                      className="contact-terms-link"
+                    >
+                      uvjete korištenja
+                    </Link>{" "}
+                    i {" "}
+                    <Link
+                      to="/zastita-podataka"
+                      onClick={(event) => event.stopPropagation()}
+                      className="contact-terms-link"
+                    >
+                      politiku privatnosti
+                    </Link>{" "}
+                    *
+                  </label>
+                </div>
+
                 <button
                   type="submit"
                   className="contact-button mt-4"
-                  disabled={isSent}
+                  disabled={isSent || !termsAccepted}
                 >
                   {isSent ? "✓ Poruka poslana" : "Pošalji poruku"}
                 </button>

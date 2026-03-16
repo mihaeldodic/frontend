@@ -79,6 +79,38 @@ const formatTravelDate = (value) => {
   return `${match[3]}.${match[2]}.${match[1]}.`;
 };
 
+const isTravelWithinSelectedRange = (
+  selectedDateFrom,
+  selectedDateTo,
+  departureDate,
+  returnDate
+) => {
+  const normalizedSelectedDateFrom = normalizeDateValue(selectedDateFrom);
+  const normalizedSelectedDateTo = normalizeDateValue(selectedDateTo);
+  const normalizedDepartureDate = normalizeDateValue(departureDate);
+  const normalizedReturnDate = normalizeDateValue(returnDate);
+
+  if (!normalizedSelectedDateFrom && !normalizedSelectedDateTo) return true;
+  if (!normalizedDepartureDate && !normalizedReturnDate) return false;
+
+  const travelStart = normalizedDepartureDate || normalizedReturnDate;
+  const travelEnd = normalizedReturnDate || normalizedDepartureDate;
+
+  if (normalizedSelectedDateFrom && normalizedSelectedDateTo) {
+    return travelStart >= normalizedSelectedDateFrom && travelEnd <= normalizedSelectedDateTo;
+  }
+
+  if (normalizedSelectedDateFrom) {
+    return travelStart >= normalizedSelectedDateFrom;
+  }
+
+  if (normalizedSelectedDateTo) {
+    return travelEnd <= normalizedSelectedDateTo;
+  }
+
+  return true;
+};
+
 const resolvePostImage = async (post) => {
   const embeddedImage = post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url;
   if (embeddedImage) return embeddedImage;
@@ -120,6 +152,9 @@ const PutovanjeSva = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedContinent, setSelectedContinent] = useState("Svi kontinenti");
   const [selectedMonth, setSelectedMonth] = useState("Svi mjeseci");
+  const [selectedDateFrom, setSelectedDateFrom] = useState("");
+  const [selectedDateTo, setSelectedDateTo] = useState("");
+  const [selectedTransportMethod, setSelectedTransportMethod] = useState("Svi načini putovanja");
   const [priceRange, setPriceRange] = useState([0, 10000]);
 
   useEffect(() => {
@@ -171,6 +206,20 @@ const PutovanjeSva = () => {
   }, []);
 
   const ukupnoPutovanja = useMemo(() => posts.length, [posts]);
+  const transportMethods = useMemo(
+    () => [
+      "Svi načini putovanja",
+      ...Array.from(
+        new Set(
+          posts
+            .map((post) => post?._travelMeta?.transportMethod)
+            .filter(Boolean)
+        )
+      ),
+    ],
+    [posts]
+  );
+
   const filtriranaPutovanja = useMemo(() => {
     let filtered = [...posts];
 
@@ -196,16 +245,54 @@ const PutovanjeSva = () => {
       });
     }
 
+    if (selectedDateFrom || selectedDateTo) {
+      filtered = filtered.filter((post) =>
+        isTravelWithinSelectedRange(
+          selectedDateFrom,
+          selectedDateTo,
+          post?._travelMeta?.departureDate,
+          post?._travelMeta?.returnDate
+        )
+      );
+    }
+
+    if (selectedTransportMethod !== "Svi načini putovanja") {
+      filtered = filtered.filter(
+        (post) =>
+          normalizeSearchValue(post?._travelMeta?.transportMethod) ===
+          normalizeSearchValue(selectedTransportMethod)
+      );
+    }
+
     filtered = filtered.filter((post) => {
       const price = Number(post?.acf?.price || 0);
       return price >= priceRange[0] && price <= priceRange[1];
     });
 
     return filtered;
-  }, [posts, priceRange, searchTerm, selectedContinent, selectedMonth]);
+  }, [
+    posts,
+    priceRange,
+    searchTerm,
+    selectedContinent,
+    selectedDateFrom,
+    selectedDateTo,
+    selectedMonth,
+    selectedTransportMethod,
+  ]);
 
   const handlePriceChange = (event) => {
     setPriceRange([priceRange[0], parseInt(event.target.value, 10)]);
+  };
+
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setSelectedContinent("Svi kontinenti");
+    setSelectedMonth("Svi mjeseci");
+    setSelectedDateFrom("");
+    setSelectedDateTo("");
+    setSelectedTransportMethod("Svi načini putovanja");
+    setPriceRange([0, 10000]);
   };
 
   return (
@@ -246,7 +333,7 @@ const PutovanjeSva = () => {
             </div>
 
             <div className="putovanje-search-filters">
-              <div className="putovanje-filter-group">
+              <div className="putovanje-filter-group putovanje-filter-group--continent">
                 <label>Kontinent</label>
                 <select
                   value={selectedContinent}
@@ -261,7 +348,7 @@ const PutovanjeSva = () => {
                 </select>
               </div>
 
-              <div className="putovanje-filter-group">
+              <div className="putovanje-filter-group putovanje-filter-group--month">
                 <label>Mjesec</label>
                 <select
                   value={selectedMonth}
@@ -276,7 +363,7 @@ const PutovanjeSva = () => {
                 </select>
               </div>
 
-              <div className="putovanje-filter-group">
+              <div className="putovanje-filter-group putovanje-filter-group--price">
                 <label>Maksimalna cijena: €{priceRange[1]}</label>
                 <input
                   type="range"
@@ -287,6 +374,51 @@ const PutovanjeSva = () => {
                   className="putovanje-filter-range"
                 />
               </div>
+
+              <div className="putovanje-filter-group putovanje-filter-group--transport">
+                <label>Način putovanja</label>
+                <select
+                  value={selectedTransportMethod}
+                  onChange={(event) => setSelectedTransportMethod(event.target.value)}
+                  className="putovanje-filter-select"
+                >
+                  {transportMethods.map((method) => (
+                    <option key={method} value={method}>
+                      {method}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="putovanje-filter-group putovanje-filter-group--date-from">
+                <label>Datum od</label>
+                <input
+                  type="date"
+                  value={selectedDateFrom}
+                  onChange={(event) => setSelectedDateFrom(event.target.value)}
+                  className="putovanje-filter-select"
+                />
+              </div>
+
+              <div className="putovanje-filter-group putovanje-filter-group--date-to">
+                <label>Datum do</label>
+                <input
+                  type="date"
+                  value={selectedDateTo}
+                  onChange={(event) => setSelectedDateTo(event.target.value)}
+                  className="putovanje-filter-select"
+                />
+              </div>
+            </div>
+
+            <div className="putovanje-search-actions">
+              <button
+                type="button"
+                className="putovanje-reset-btn"
+                onClick={handleResetFilters}
+              >
+                Resetiraj filtere
+              </button>
             </div>
           </div>
 

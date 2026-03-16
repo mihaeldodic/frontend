@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUpLong } from '@fortawesome/free-solid-svg-icons';
 import './scrolltotop.css';
 
 const ScrollToTop = () => {
@@ -32,7 +34,7 @@ const ScrollToTop = () => {
       onClick={scrollToTop}
       aria-label="Scroll to top"
     >
-      TOP
+      <FontAwesomeIcon icon={faArrowUpLong} aria-hidden="true" />
     </button>
   );
 };

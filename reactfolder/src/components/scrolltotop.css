@@ -20,10 +20,20 @@
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
+.scroll-to-top svg {
+  font-size: 20px;
+  transform: translateY(1px);
+  transition: transform 0.25s ease;
+}
+
 .scroll-to-top:hover {
   background-color: #ff5252;
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+}
+
+.scroll-to-top:hover svg {
+  transform: translateY(-2px);
 }
 
 .scroll-to-top:active {
@@ -46,8 +56,22 @@
   }
 }
 
+@keyframes arrowFloat {
+  0%,
+  100% {
+    transform: translateY(1px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
 .scroll-to-top.show {
   animation: fadeIn 0.3s ease-out;
+}
+
+.scroll-to-top.show svg {
+  animation: arrowFloat 1.6s ease-in-out infinite;
 }
 
 /* Mobile ekrani */
@@ -59,6 +83,10 @@
     right: 25px;
     font-size: 13px;
   }
+
+  .scroll-to-top svg {
+    font-size: 18px;
+  }
 }
 
 /* Mali mobilni ekrani */
@@ -69,6 +97,10 @@
     bottom: 20px;
     right: 20px;
     font-size: 12px;
+  }
+
+  .scroll-to-top svg {
+    font-size: 16px;
   }
 
   .scroll-to-top:hover {
@@ -84,5 +116,9 @@
     bottom: 15px;
     right: 15px;
     font-size: 11px;
+  }
+
+  .scroll-to-top svg {
+    font-size: 15px;
   }
 }

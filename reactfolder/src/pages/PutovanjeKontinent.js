@@ -12,6 +12,25 @@ import { buildTravelDetailsPath } from "../utils/travelRoutes";
 import "./putovanje.css";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
+const CONTINENT_PAGE_IDS = {
+  afrika: 198,
+  azija: 193,
+  europa: 196,
+  "juzna-amerika": 2729,
+  "južna-amerika": 2729,
+  "sjeverna-amerika": 2731,
+  australija: 2733,
+};
+
+const CONTINENT_HERO_FALLBACK = {
+  europa: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1600&q=80",
+  azija: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=1600&q=80",
+  afrika: "https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=1600&q=80",
+  "sjeverna-amerika": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=1600&q=80",
+  "juzna-amerika": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1600&q=80",
+  australija: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=1600&q=80",
+  oceanija: "https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?w=1600&q=80",
+};
 
 const slugToNaziv = {
   europa: "Europa",
@@ -161,14 +180,29 @@ const PutovanjeKontinent = () => {
         setLoading(true);
         const nazivKontinenta = slugToNaziv[continentSlug] || continentSlug;
         const nazivSearch = encodeURIComponent(nazivKontinenta);
+        const normalizedContinentSlug = normalize(continentSlug);
+        const continentPageId =
+          CONTINENT_PAGE_IDS[normalizedContinentSlug] || CONTINENT_PAGE_IDS[continentSlug];
 
-        const [putovanjaResponse, ...pageResponses] = await Promise.all([
+        const [putovanjaResponse, continentHeroPageResponse, ...pageResponses] = await Promise.all([
           fetch(`${BASE_URL}v2/nova-destinacija?_embed&per_page=100`),
+          continentPageId
+            ? fetch(`${BASE_URL}v2/pages/${continentPageId}`)
+            : Promise.resolve(null),
           fetch(`${BASE_URL}v2/pages?slug=${continentSlug}&_embed`),
           fetch(`${BASE_URL}v2/pages?slug=putovanje-${continentSlug}&_embed`),
           fetch(`${BASE_URL}v2/pages?slug=kontinent-${continentSlug}&_embed`),
           fetch(`${BASE_URL}v2/pages?search=${nazivSearch}&_embed&per_page=20`),
         ]);
+
+        let continentCardHeroImage = "";
+        if (continentHeroPageResponse && continentHeroPageResponse.ok) {
+          const continentHeroPageData = await continentHeroPageResponse.json();
+          continentCardHeroImage =
+            (await resolveHeroImage(
+              continentHeroPageData?.acf?.hero_image || continentHeroPageData?.acf?.hero_slika
+            )) || "";
+        }
 
         const putovanjaData = await putovanjaResponse.json();
         const normalizedPosts = Array.isArray(putovanjaData) ? putovanjaData : [];
@@ -216,24 +250,32 @@ const PutovanjeKontinent = () => {
           setContinentContent({
             title: pageData.title?.rendered || slugToNaziv[continentSlug] || continentSlug,
             shortDescription,
-            heroImage,
+            heroImage:
+              continentCardHeroImage ||
+              heroImage ||
+              CONTINENT_HERO_FALLBACK[normalizedContinentSlug] ||
+              "",
           });
         } else {
           setContinentContent({
             title: slugToNaziv[continentSlug] || continentSlug,
             shortDescription:
               fallbackOpis[continentSlug] || "Ponuda putovanja za odabrani kontinent.",
-            heroImage: "",
+            heroImage:
+              continentCardHeroImage ||
+              CONTINENT_HERO_FALLBACK[normalizedContinentSlug] ||
+              "",
           });
         }
       } catch (error) {
         console.error("Greska pri dohvacanju putovanja:", error);
+        const normalizedContinentSlug = normalize(continentSlug);
         setPosts([]);
         setContinentContent({
           title: slugToNaziv[continentSlug] || continentSlug,
           shortDescription:
             fallbackOpis[continentSlug] || "Ponuda putovanja za odabrani kontinent.",
-          heroImage: "",
+          heroImage: CONTINENT_HERO_FALLBACK[normalizedContinentSlug] || "",
         });
       } finally {
         setLoading(false);

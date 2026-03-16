@@ -157,7 +157,6 @@ const Nav = () => {
               {/* Istraži - Dropdown */}
               <li
                 className="nav-item dropdown"
-                onMouseEnter={() => handleExploreHover(true)}
                 onMouseLeave={() => handleExploreHover(false)}
               >
                 <div className="explore-wrapper">
@@ -165,6 +164,7 @@ const Nav = () => {
                     className={`nav-link dropdown-toggle ${exploreOpen ? "active" : ""}`}
                     to="/putovanje"
                     onClick={handleExploreClick}
+                    onMouseEnter={() => handleExploreHover(true)}
                     role="button"
                     aria-expanded={exploreOpen}
                   >
@@ -181,7 +181,11 @@ const Nav = () => {
                     />
                   </button>
                 </div>
-                <ul className={`dropdown-menu ${exploreOpen ? "show" : ""}`}>
+                <ul
+                  className={`dropdown-menu ${exploreOpen ? "show" : ""}`}
+                  onMouseEnter={() => handleExploreHover(true)}
+                  onMouseLeave={() => handleExploreHover(false)}
+                >
                   {continents.map((continent) => (
                     <li key={continent}>
                       <Link

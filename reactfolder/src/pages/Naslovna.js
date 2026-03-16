@@ -20,6 +20,23 @@ import "./naslovna.css";
 const BASE_URL = process.env.REACT_APP_API_URL;
 const BLOG_AUTHOR_ID = Number(process.env.REACT_APP_BLOG_AUTHOR_ID || 9);
 const FALLBACK_AUTHOR_MATCH = "mihael";
+const CONTINENT_OFFER_SECTIONS = [
+  { slug: "europa", label: "Europa" },
+  { slug: "azija", label: "Azija" },
+  { slug: "afrika", label: "Afrika" },
+  { slug: "sjeverna-amerika", label: "Sjeverna Amerika" },
+  { slug: "juzna-amerika", label: "Južna Amerika" },
+  { slug: "australija", label: "Australija" },
+];
+
+const normalizeContinentSlug = (value) =>
+  (value || "")
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .trim();
 
 const resolveAcfImageUrl = async (acfImage) => {
   if (!acfImage) return "";
@@ -123,6 +140,7 @@ const formatTravelDate = (value) => {
 const Naslovna = () => {
   const [page, setPage] = useState(null);
   const [destinacije, setDestinacije] = useState([]);
+  const [continentOffers, setContinentOffers] = useState({});
   const [blogPosts, setBlogPosts] = useState([]);
   const [myAuthorId, setMyAuthorId] = useState(BLOG_AUTHOR_ID || null);
   const [authorReady, setAuthorReady] = useState(Boolean(BLOG_AUTHOR_ID));
@@ -161,7 +179,7 @@ const Naslovna = () => {
       .then((data) => setPage(data))
       .catch(() => {});
 
-    fetch(`${BASE_URL}v2/nova-destinacija?_embed&per_page=3`)
+    fetch(`${BASE_URL}v2/nova-destinacija?_embed&per_page=100`)
       .then((r) => r.json())
       .then(async (data) => {
         const list = Array.isArray(data) ? data : [];
@@ -171,7 +189,31 @@ const Naslovna = () => {
             _resolvedImage: await resolveDestinationImage(dest),
           }))
         );
-        setDestinacije(withResolvedImages);
+
+        const sortedByDate = [...withResolvedImages].sort(
+          (a, b) => new Date(b?.date || 0) - new Date(a?.date || 0)
+        );
+        setDestinacije(sortedByDate.slice(0, 3));
+
+        const groupedOffers = CONTINENT_OFFER_SECTIONS.reduce((acc, continent) => {
+          acc[continent.slug] = [];
+          return acc;
+        }, {});
+
+        sortedByDate.forEach((dest) => {
+          const acfContinent = normalizeContinentSlug(dest?.acf?.continent);
+          let key = acfContinent;
+
+          if (key === "oceanija") key = "australija";
+          if (key === "juzna-amerika") key = "juzna-amerika";
+          if (key === "sjeverna-amerika") key = "sjeverna-amerika";
+
+          if (groupedOffers[key] && groupedOffers[key].length < 3) {
+            groupedOffers[key].push(dest);
+          }
+        });
+
+        setContinentOffers(groupedOffers);
       })
       .catch(() => {});
 
@@ -316,7 +358,7 @@ const Naslovna = () => {
           </div>
 
           <div className="naslovna-section-cta">
-            <Link to="/putovanje" className="naslovna-btn-outline">
+            <Link to="/putovanje/sva-putovanja" className="naslovna-btn-outline">
               Pogledaj sve destinacije{" "}
               <FontAwesomeIcon icon={faArrowRight} className="ms-2" />
             </Link>
@@ -419,7 +461,7 @@ const Naslovna = () => {
               Kontaktirajte nas i zajedno ćemo planirati savršeno putovanje po
               vašoj mjeri.
             </p>
-            <Link to="/kontakt" className="naslovna-btn-cta">
+            <Link to="/putovanje/sva-putovanja" className="naslovna-btn-cta">
               Planiraj putovanje
             </Link>
           </div>
@@ -427,6 +469,110 @@ const Naslovna = () => {
       </section>
 
       {/* ─── ZAŠTO MI ─── */}
+      <section className="naslovna-kontinent-ponuda">
+        <div className="container">
+          <div className="naslovna-section-header">
+            <span className="naslovna-section-tag">Ponuda po kontinentima</span>
+            <h2 className="naslovna-section-title">Najnovija putovanja</h2>
+            <p className="naslovna-section-sub">
+              Za svaki kontinent izdvojili smo 3 najnovije objave putovanja.
+            </p>
+          </div>
+
+          {CONTINENT_OFFER_SECTIONS.map((continent) => {
+            const offers = continentOffers[continent.slug] || [];
+
+            return (
+              <div key={continent.slug} className="kontinent-ponuda-blok">
+                <h3 className="kontinent-ponuda-naslov">{continent.label}</h3>
+
+                {offers.length > 0 ? (
+                  <div className="row">
+                    {offers.map((dest) => {
+                      const img = dest._resolvedImage || "";
+                      const acf = dest.acf || {};
+                      const departureDate = formatTravelDate(
+                        acf.date || acf.datum_polaska || acf.polazak || ""
+                      );
+                      const returnDate = formatTravelDate(
+                        acf.date_2 || acf["date-2"] || acf.datum_povratka || acf.povratak || ""
+                      );
+                      const transportMethod =
+                        acf.nacin_putovanja ||
+                        acf["nacin-putovanja"] ||
+                        acf.prijevozno_sredstvo ||
+                        "";
+                      const travelDetailsPath = buildTravelDetailsPath(acf.continent, dest.slug);
+
+                      return (
+                        <div key={dest.id} className="col-md-4 mb-4">
+                          <Link to={travelDetailsPath} className="dest-card">
+                            <div className="dest-card-img-wrap">
+                              {img && (
+                                <img
+                                  src={img}
+                                  alt={dest.title?.rendered}
+                                  className="dest-card-img"
+                                />
+                              )}
+                              <div className="dest-card-overlay" />
+                              {acf.continent && (
+                                <span className="dest-card-tag">{acf.continent}</span>
+                              )}
+                              <span className="dest-card-icon-wrap">
+                                <FontAwesomeIcon icon={getTransportIconByMethod(transportMethod)} />
+                              </span>
+                            </div>
+                            <div className="dest-card-body">
+                              <h3 className="dest-card-title">{dest.title?.rendered}</h3>
+                              <div className="dest-card-meta">
+                                {acf.price && (
+                                  <span className="dest-card-price">od {acf.price} €</span>
+                                )}
+                                {acf.month && (
+                                  <span className="dest-card-month">
+                                    <FontAwesomeIcon icon={faCalendarAlt} /> {acf.month}
+                                  </span>
+                                )}
+                                {acf.travel_duration && (
+                                  <span className="dest-card-duration">
+                                    <FontAwesomeIcon icon={faClock} /> {acf.travel_duration}
+                                  </span>
+                                )}
+                              </div>
+                              {(departureDate || returnDate) && (
+                                <div className="dest-card-dates">
+                                  {departureDate || "-"}
+                                  {departureDate && returnDate ? " - " : ""}
+                                  {returnDate || ""}
+                                </div>
+                              )}
+                            </div>
+                          </Link>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="kontinent-ponuda-prazno">
+                    Trenutno nema dostupnih putovanja za kontinent {continent.label}.
+                  </div>
+                )}
+
+                <div className="kontinent-ponuda-cta-wrap">
+                  <Link
+                    to={`/putovanje/kontinent/${continent.slug}`}
+                    className="naslovna-btn-cta"
+                  >
+                    Sva putovanja {continent.label}
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       <section className="naslovna-prednosti">
         <div className="container">
           <div className="naslovna-section-header">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faSearch, faCalendarAlt, faClock } from "@fortawesome/free-solid-svg-icons";
@@ -155,35 +155,30 @@ const SearchModal = ({ isOpen, onClose }) => {
       const posts = await response.json();
       console.log("API odgovor:", posts);
 
-      // Prvo dohvati sve slike
-      const mediaResponse = await fetch(
-        `${apiUrl}v2/media?per_page=100`
-      );
-      const mediaItems = await mediaResponse.json();
-      const mediaMap = {};
-      
-      mediaItems.forEach(media => {
-        mediaMap[media.id] = media.source_url;
-      });
+      const resolveImage = async (field) => {
+        if (!field) return "";
+        if (typeof field === "object") {
+          return field.source_url || field.url || "";
+        }
+        if (typeof field === "string" && field.startsWith("http")) return field;
+        const numId = parseInt(field);
+        if (!numId) return "";
+        try {
+          const res = await fetch(`${apiUrl}v2/media/${numId}`);
+          if (!res.ok) return "";
+          const data = await res.json();
+          return data.source_url || "";
+        } catch { return ""; }
+      };
 
-      const travelsData = posts.map((post) => {
+      const travelsData = await Promise.all(posts.map(async (post) => {
         const acf = post.acf || {};
-        
-        // Dohvati sliku - image je ID
-        let imageUrl = "";
-        if (acf.image) {
-          imageUrl = mediaMap[acf.image] || "";
-        }
 
-        // Ako nema, pokušaj hero_image
-        if (!imageUrl && acf.hero_image) {
-          imageUrl = mediaMap[acf.hero_image] || "";
-        }
-        
-        // Ako nema, pokušaj hero_slika
-        if (!imageUrl && acf.hero_slika) {
-          imageUrl = mediaMap[acf.hero_slika] || "";
-        }
+        const imageUrl =
+          (await resolveImage(acf.image)) ||
+          (await resolveImage(acf.hero_image)) ||
+          (await resolveImage(acf.hero_slika)) ||
+          "";
 
         return {
           id: post.id,
@@ -199,7 +194,7 @@ const SearchModal = ({ isOpen, onClose }) => {
           description: acf.description || "",
           slug: post.slug
         };
-      });
+      }));
 
       console.log("Obrađena putovanja:", travelsData);
       setTravels(travelsData);
@@ -313,6 +308,24 @@ const SearchModal = ({ isOpen, onClose }) => {
     setPriceRange([priceRange[0], parseInt(e.target.value)]);
   };
 
+  const mobileInstantResults = useMemo(() => {
+    if (!searchTerm.trim()) return [];
+    const normalizedTerm = normalizeSearchValue(searchTerm);
+    return travels
+      .filter((travel) => normalizeSearchValue(travel.title).startsWith(normalizedTerm))
+      .slice(0, 5);
+  }, [searchTerm, travels]);
+
+  const handleResetFilters = () => {
+    setSearchTerm("");
+    setSelectedContinent("");
+    setSelectedMonth("");
+    setSelectedDateFrom("");
+    setSelectedDateTo("");
+    setSelectedTransportMethod("Svi načini putovanja");
+    setPriceRange([0, 10000]);
+  };
+
   const handleTravelClick = (travel) => {
     navigate(buildTravelDetailsPath(travel.continent, travel.slug));
     onClose();
@@ -343,6 +356,58 @@ const SearchModal = ({ isOpen, onClose }) => {
             className="search-input"
           />
         </div>
+
+        {!!searchTerm.trim() && (
+          <div className="search-mobile-suggestions" role="listbox" aria-label="Brzi rezultati pretrage">
+            {mobileInstantResults.length > 0 ? (
+              mobileInstantResults.map((travel) => (
+                <div
+                  key={travel.id}
+                  className="travel-card search-mobile-suggestion-card"
+                  onClick={() => handleTravelClick(travel)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {travel.image && (
+                    <div className="travel-card-image">
+                      <img src={travel.image} alt={travel.title} loading="lazy" />
+                      {travel.continent && travel.continent !== "Nepoznato" && (
+                        <span className="travel-card-tag">{travel.continent}</span>
+                      )}
+                      <span className="travel-card-icon-wrap">
+                        <FontAwesomeIcon icon={getTransportIconByMethod(travel.transportMethod)} />
+                      </span>
+                    </div>
+                  )}
+                  <div className="travel-card-content">
+                    <h3>{travel.title}</h3>
+                    <div className="travel-info">
+                      <div className="travel-left-info">
+                        <p className="travel-month">
+                          <FontAwesomeIcon icon={faCalendarAlt} /> {travel.month}
+                        </p>
+                      </div>
+                      <p className="travel-duration">
+                        <FontAwesomeIcon icon={faClock} /> {travel.duration}
+                      </p>
+                    </div>
+                    {(travel.departureDate || travel.returnDate) && (
+                      <p className="travel-date-range">
+                        {formatTravelDate(travel.departureDate) || "-"}
+                        {travel.departureDate && travel.returnDate ? " - " : ""}
+                        {formatTravelDate(travel.returnDate) || ""}
+                      </p>
+                    )}
+                    <p className="travel-price">€{travel.price.toLocaleString()}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="search-mobile-suggestion-empty">
+                Nema rezultata za ovaj upit.
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Filtri */}
         <div className="search-modal-filters">
@@ -425,6 +490,16 @@ const SearchModal = ({ isOpen, onClose }) => {
               className="filter-select"
             />
           </div>
+        </div>
+
+        <div className="search-modal-filter-actions">
+          <button
+            type="button"
+            className="search-modal-reset-btn"
+            onClick={handleResetFilters}
+          >
+            Resetiraj filtere
+          </button>
         </div>
 
         {/* Rezultati */}

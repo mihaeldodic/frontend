@@ -222,8 +222,46 @@
 }
 
 /* ─── PREDNOSTI ─── */
+.naslovna-kontinent-ponuda {
+  padding: 90px 20px 55px;
+  background: #f9f9f9;
+}
+
+.kontinent-ponuda-blok {
+  margin-bottom: 34px;
+}
+
+.kontinent-ponuda-blok:last-child {
+  margin-bottom: 0;
+}
+
+.kontinent-ponuda-naslov {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: rgba(14, 116, 144, 0.95);
+  margin-bottom: 18px;
+  letter-spacing: 0.2px;
+}
+
+.kontinent-ponuda-prazno {
+  background: #fff;
+  border: 1px solid #edf2f4;
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: #667;
+  font-size: 0.95rem;
+}
+
+.kontinent-ponuda-cta-wrap {
+  margin-top: 6px;
+  background: rgba(14, 116, 144, 0.95);
+  border-radius: 12px;
+  padding: 18px;
+  text-align: center;
+}
+
 .naslovna-prednosti {
-  padding: 90px 20px;
+  padding: 65px 20px 90px;
   background: #f9f9f9;
 }
 
@@ -446,6 +484,7 @@
   .naslovna-stats { padding: 40px 20px; }
   .stat-broj { font-size: 2rem; }
   .naslovna-destinacije,
+  .naslovna-kontinent-ponuda,
   .naslovna-prednosti,
   .naslovna-blog { padding: 60px 20px; }
   .naslovna-section-title { font-size: 1.8rem; }

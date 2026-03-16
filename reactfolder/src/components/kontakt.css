@@ -1,5 +1,5 @@
 /* Container */
-.container {
+.kontakt-page {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
@@ -9,63 +9,63 @@
   margin-bottom: 48px;
 }
 
-.row {
+.kontakt-page .row {
   display: flex;
   flex-wrap: wrap;
   margin: -1rem;
 }
 
-.my-4 {
+.kontakt-page .my-4 {
   margin-top: 1.5rem !important;
   margin-bottom: 1.5rem !important;
 }
 
-.mt-3 {
+.kontakt-page .mt-3 {
   margin-top: 1rem !important;
 }
 
-.mt-4 {
+.kontakt-page .mt-4 {
   margin-top: 1.5rem !important;
 }
 
-.mt-3 {
+.kontakt-page .mt-3 {
   margin-top: 1rem !important;
 }
 
-.text-center {
+.kontakt-page .text-center {
   text-align: center;
 }
 
-.d-flex {
+.kontakt-page .d-flex {
   display: flex;
 }
 
-.flex-column {
+.kontakt-page .flex-column {
   flex-direction: column;
 }
 
-.gap-3 {
+.kontakt-page .gap-3 {
   gap: 0.75rem;
 }
 
-.align-items-start {
+.kontakt-page .align-items-start {
   align-items: flex-start;
 }
 
-.col-md-4,
-.col-md-8 {
+.kontakt-page .col-md-4,
+.kontakt-page .col-md-8 {
   padding: 1rem;
 }
 
 @media (max-width: 768px) {
-  .col-md-4,
-  .col-md-8 {
+  .kontakt-page .col-md-4,
+  .kontakt-page .col-md-8 {
     flex: 0 0 100%;
   }
 }
 
 /* Heading */
-h1 {
+.kontakt-page h1 {
   width: 100%;
   font-size: 2.5rem;
   color: #0e7490;
@@ -73,7 +73,7 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
-.subtitle {
+.kontakt-page .subtitle {
   width: 100%;
   color: #666;
   font-size: 1.1rem;
@@ -185,6 +185,13 @@ h1 {
   gap: 0.5rem;
 }
 
+.contact-terms-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-top: 0.5rem;
+}
+
 .contact-inputs label {
   font-weight: 600;
   color: #0e7490;
@@ -219,26 +226,54 @@ textarea.inputform {
   min-height: 100px;
 }
 
+.contact-terms-label,
+.contact-inputs .contact-terms-label {
+  margin: 0;
+  font-weight: 400;
+  color: #444;
+  font-size: 0.98em;
+  line-height: 1.5;
+  text-transform: none;
+}
+
+.contact-terms-link {
+  font-weight: 400;
+  color: #444;
+  font-size: 0.98em;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.contact-terms-link:hover {
+  color: #ff6b6b;
+}
+
+.contact-terms-link:focus-visible {
+  outline: 2px solid rgba(14, 116, 144, 0.35);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* Button */
 .contact-button {
-  padding: 0.85rem 2rem;
-  border-radius: 0.5rem;
+  padding: 15px 40px;
+  border-radius: 50px;
   background-color: #ff6b6b;
   color: white;
   border: none;
-  font-weight: 600;
+  font-weight: 800;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   align-self: flex-end;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .contact-button:hover:not(:disabled) {
-  background-color: #ff5252;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+  background-color: #e85555;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
 }
 
 .contact-button:active:not(:disabled) {
@@ -246,7 +281,7 @@ textarea.inputform {
 }
 
 .contact-button:disabled {
-  background-color: #999;
+  background-color: rgba(230, 107, 107, 0.729);
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -282,26 +317,26 @@ textarea.inputform {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .row {
+  .kontakt-page .row {
     margin: 0;
   }
 
-  .container {
+  .kontakt-page {
     padding: 1.5rem;
   }
 
-  .col-md-4,
-  .col-md-8 {
+  .kontakt-page .col-md-4,
+  .kontakt-page .col-md-8 {
     padding: 0;
     flex: 0 0 100%;
     max-width: 100%;
   }
 
-  h1 {
+  .kontakt-page h1 {
     font-size: 2rem;
   }
 
-  .subtitle {
+  .kontakt-page .subtitle {
     font-size: 1rem;
     margin-bottom: 1.5rem;
   }
@@ -315,6 +350,12 @@ textarea.inputform {
   .contact-right {
     width: 100%;
     max-width: 100%;
+  }
+
+  .contact-button {
+    width: 100%;
+    padding: 12px 28px;
+    font-size: 0.9rem;
   }
 
   .contact-right {
@@ -340,15 +381,15 @@ textarea.inputform {
 }
 
 @media (max-width: 480px) {
-  .container {
+  .kontakt-page {
     padding: 1rem;
   }
 
-  h1 {
+  .kontakt-page h1 {
     font-size: 1.5rem;
   }
 
-  .subtitle {
+  .kontakt-page .subtitle {
     font-size: 0.9rem;
   }
 

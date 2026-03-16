@@ -111,17 +111,6 @@
   position: relative;
 }
 
-/* Proširena hover zona - CSS trik */
-.navbar .nav-item.dropdown::before {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  height: 140px;
-  pointer-events: auto;
-}
-
 /* Dropdown meni */
 .navbar .dropdown-menu {
   background: rgba(14, 116, 144, 0.98);
@@ -309,18 +298,6 @@
 
 /* Desktop - Hover dropdown */
 @media (min-width: 992px) {
-  .navbar .dropdown:hover .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    top: calc(100% + 15px);
-  }
-
-  .navbar .dropdown:hover .dropdown-toggle {
-    color: #ff6b6b !important;
-    transform: scale(1.1);
-  }
-
   /* Sakri strelicu na desktopima */
   .explore-toggle-mobile {
     display: none !important;
