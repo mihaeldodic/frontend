@@ -620,6 +620,10 @@
 	font-size: 0.9rem;
 }
 
+.order-form .form-group {
+	margin-bottom: 18px;
+}
+
 @media (max-width: 991px) {
 	.putovanje-hero-title {
 		font-size: 3rem;
@@ -728,4 +732,5 @@
 	.putovanje-kontinent-lista {
 		padding: 28px 14px 72px;
 	}
+
 }
