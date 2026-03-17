@@ -17,6 +17,8 @@ import { getTransportIconByMethod } from "../utils/transportIcons";
 import { buildTravelDetailsPath } from "../utils/travelRoutes";
 import "./naslovna.css";
 
+import Yoast from "../components/Yoast";
+
 const BASE_URL = process.env.REACT_APP_API_URL;
 const BLOG_AUTHOR_ID = Number(process.env.REACT_APP_BLOG_AUTHOR_ID || 9);
 const FALLBACK_AUTHOR_MATCH = "mihael";
@@ -139,6 +141,7 @@ const formatTravelDate = (value) => {
 
 const Naslovna = () => {
   const [page, setPage] = useState(null);
+  const [yoastHeadJson, setYoastHeadJson] = useState(null);
   const [destinacije, setDestinacije] = useState([]);
   const [continentOffers, setContinentOffers] = useState({});
   const [blogPosts, setBlogPosts] = useState([]);
@@ -176,7 +179,10 @@ const Naslovna = () => {
   useEffect(() => {
     fetch(`${BASE_URL}v2/pages/727?_embed`)
       .then((r) => r.json())
-      .then((data) => setPage(data))
+      .then((data) => {
+         setPage(data);
+         setYoastHeadJson(data?.yoast_head_json);
+      })
       .catch(() => {});
 
     fetch(`${BASE_URL}v2/nova-destinacija?_embed&per_page=100`)
@@ -262,6 +268,7 @@ const Naslovna = () => {
 
   return (
     <div className="naslovna">
+      <Yoast yoastHeadJson={yoastHeadJson} />
       {/* ─── HERO ─── */}
       <HeroSection
         stranica={page}
@@ -475,7 +482,7 @@ const Naslovna = () => {
             <span className="naslovna-section-tag">Ponuda po kontinentima</span>
             <h2 className="naslovna-section-title">Najnovija putovanja</h2>
             <p className="naslovna-section-sub">
-              Za svaki kontinent izdvojili smo 3 najnovije objave putovanja.
+              Za svaki kontinent pažljivo smo izdvojili tri najatraktivnija i najnovija putovanja, osmišljena kako bi vam pružila jedinstvena iskustva i najbolje od svjetskih destinacija.
             </p>
           </div>
 
