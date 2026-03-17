@@ -1,3 +1,19 @@
+.day-card-image,
+.excursion-card-image,
+.blog-single-content img {
+  width: 100% !important;
+  height: 320px !important;
+  object-fit: cover !important;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .day-card-image,
+  .excursion-card-image,
+  .blog-single-content img {
+    height: 180px !important;
+  }
+}
 /* Travel Info Cards */
 .travel-info-cards {
   background: #f9f9f9;

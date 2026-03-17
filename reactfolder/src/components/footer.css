@@ -25,6 +25,10 @@
   padding-left: 30px;
 }
 
+.checkbox-input-1 {
+  margin-top: 4px;
+}
+
 .checkbox-1 {
   padding-right: 30px;
 }
@@ -113,6 +117,8 @@
     height: 100% !important;
     font-weight: 600 !important;
     font-size: 14px !important;
+    position: relative;
+    overflow: hidden;
 }
 
 .subscribe-btn:active {
@@ -126,6 +132,12 @@
 
 .subscribe-btn:disabled {
   background-color: rgba(230, 107, 107, 0.729) !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+.subscribe-btn:disabled:hover {
+  background-color: #c94c4c !important;
   cursor: not-allowed !important;
 }
 
@@ -343,7 +355,7 @@
 
   .checkbox-input-1 {
     padding-right: 0px;
-    margin-top: 16px;
+    margin-top: 14px;
   }
 
   .p-subscribe {
@@ -399,7 +411,7 @@
 
   .checkbox-input-1 {
     padding-right: 0px;
-    margin-top: 16px;
+    margin-top: 14px;
   }
 
   .subscribe-2 {
@@ -425,7 +437,21 @@
   }
 }
 
+@media (max-width: 656px) {
+
+  .row-footer {
+    margin-top: 100px !important;
+  }
+  .checkbox-input-1 {
+  margin-top: 12px;
+  }
+}
+
 @media (max-width: 575px) {
+
+  .row-footer {
+    margin-top: 100px !important;
+  }
 
    .footer-01 .col-md-8 .row {
     flex-direction: column;

@@ -295,6 +295,13 @@ const PutovanjeSva = () => {
     setPriceRange([0, 10000]);
   };
 
+  const handleDateInputClick = (event) => {
+    const input = event.currentTarget;
+    if (typeof input.showPicker === "function") {
+      input.showPicker();
+    }
+  };
+
   return (
     <div className="putovanje-kontinent-stranica">
       {loading && <Loader />}
@@ -396,6 +403,7 @@ const PutovanjeSva = () => {
                   type="date"
                   value={selectedDateFrom}
                   onChange={(event) => setSelectedDateFrom(event.target.value)}
+                  onClick={handleDateInputClick}
                   className="putovanje-filter-select"
                 />
               </div>
@@ -406,6 +414,7 @@ const PutovanjeSva = () => {
                   type="date"
                   value={selectedDateTo}
                   onChange={(event) => setSelectedDateTo(event.target.value)}
+                  onClick={handleDateInputClick}
                   className="putovanje-filter-select"
                 />
               </div>

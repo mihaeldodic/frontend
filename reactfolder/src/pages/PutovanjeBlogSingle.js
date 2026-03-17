@@ -178,6 +178,14 @@ const buildExcursionsFromAcf = async (acf = {}) => {
 };
 
 const PutovanjeBlogSingle = () => {
+    const [mobileWidth, setMobileWidth] = useState(false);
+
+    useEffect(() => {
+      const checkWidth = () => setMobileWidth(window.innerWidth <= 768);
+      checkWidth();
+      window.addEventListener('resize', checkWidth);
+      return () => window.removeEventListener('resize', checkWidth);
+    }, []);
   const { slug } = useParams();
   const [travel, setTravel] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -574,17 +582,64 @@ const PutovanjeBlogSingle = () => {
                   </div>
                   <div className="form-group">
                     <label htmlFor="numPersons">Broj putnika *</label>
-                    <input
-                      type="number"
-                      className="inputform"
-                      id="numPersons"
-                      name="numPersons"
-                      min="1"
-                      value={numPersons}
-                      onChange={handleNumPersons}
-                      required
-                      placeholder="Unesite broj putnika"
-                    />
+                    <div style={{ display: 'flex', alignItems: 'center', width: '100%', borderRadius: '30px', overflow: 'hidden', boxShadow: '0 5px 20px rgba(0,0,0,0.05)', border: '2px solid #e0e0e0', background: '#fff', height: 48 }}>
+                      <button
+                        type="button"
+                        style={{
+                          flex: '0 0 48px',
+                          height: '100%',
+                          background: '#ff6b6b',
+                          color: '#fff',
+                          border: 'none',
+                          fontSize: '1.5rem',
+                          fontWeight: 700,
+                          cursor: numPersons > 1 ? 'pointer' : 'not-allowed',
+                          transition: 'background 0.2s',
+                          outline: 'none',
+                        }}
+                        onClick={() => setNumPersons(Math.max(1, numPersons - 1))}
+                        aria-label="Smanji broj putnika"
+                        disabled={numPersons <= 1}
+                      >–</button>
+                      <input
+                        type="number"
+                        className="inputform"
+                        id="numPersons"
+                        name="numPersons"
+                        min="1"
+                        value={numPersons}
+                        onChange={handleNumPersons}
+                        required
+                        style={{
+                          flex: '1 1 0',
+                          height: '100%',
+                          border: 'none',
+                          textAlign: 'center',
+                          fontWeight: 600,
+                          fontSize: '1.1rem',
+                          background: 'transparent',
+                          outline: 'none',
+                        }}
+                        placeholder="Unesite broj putnika"
+                      />
+                      <button
+                        type="button"
+                        style={{
+                          flex: '0 0 48px',
+                          height: '100%',
+                          background: '#0e7490',
+                          color: '#fff',
+                          border: 'none',
+                          fontSize: '1.5rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          transition: 'background 0.2s',
+                          outline: 'none',
+                        }}
+                        onClick={() => setNumPersons(numPersons + 1)}
+                        aria-label="Povećaj broj putnika"
+                      >+</button>
+                    </div>
                   </div>
                   <div className="form-group">
                     <label htmlFor="message">Poruka</label>
@@ -676,7 +731,7 @@ const PutovanjeBlogSingle = () => {
                     className="offer-submit-btn"
                     disabled={sending || !termsAccepted}
                   >
-                    {sending ? "Šaljem..." : "Pošalji ponudu"}
+                    {sending ? "Šaljem..." : "Zatraži ponudu"}
                   </button>
                 </form>
               </div>

@@ -331,6 +331,13 @@ const SearchModal = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const handleDateInputClick = (event) => {
+    const input = event.currentTarget;
+    if (typeof input.showPicker === "function") {
+      input.showPicker();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -477,6 +484,7 @@ const SearchModal = ({ isOpen, onClose }) => {
               type="date"
               value={selectedDateFrom}
               onChange={e => setSelectedDateFrom(e.target.value)}
+              onClick={handleDateInputClick}
               className="filter-select"
             />
           </div>
@@ -487,6 +495,7 @@ const SearchModal = ({ isOpen, onClose }) => {
               type="date"
               value={selectedDateTo}
               onChange={e => setSelectedDateTo(e.target.value)}
+              onClick={handleDateInputClick}
               className="filter-select"
             />
           </div>
