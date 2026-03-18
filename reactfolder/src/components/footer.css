@@ -1,5 +1,3 @@
-/* Subscribe Section */
-
 .row-subscribe {
     height: auto; 
     background: none;
@@ -145,7 +143,6 @@
     background-color: #ff5252 !important;
 }
 
-/* Subscribe Input Status */
 .subscribe.subscribe-success {
   border: 2px solid #4CAF50 !important;
   box-shadow: 0 8px 24px rgba(76, 175, 80, 0.2);
@@ -179,7 +176,6 @@
   }
 }
 
-/* Footer Section */
 .footer-01 {
     background-color: rgba(14, 116, 144, 0.95);
     color: #f1f1f1;
@@ -204,8 +200,6 @@
 .footer-01 a:hover {
   color: #ff6b6b;
 }
-
-/* Footer Lijevi dio: Brend i opis */
 
 .footer-brand .logo {
     font-size: 30px;
@@ -251,8 +245,6 @@
 .footer-link:hover span {
   transform: translateX(5px);
 }
-
-/* Footer Desni dio: Navigacijski linkovi */
 
 .footer-01 h2 {
   font-size: 20px;
@@ -311,7 +303,6 @@
   transform: scale(1.15);
 }
 
-/* TOP Button */
 .footer-01 .btn-danger {
   position: fixed;
   bottom: 30px;
@@ -346,7 +337,6 @@
   display: flex;
 }
 
-/* Large screens - before 1360px */
 @media (max-width: 1360px) {
   .checkbox-1 {
     padding-right: 0px;
@@ -542,7 +532,6 @@
   transform: scale(1.05);
 }
 
-/* Scroll to Top Button */
 .scroll-to-top {
   position: fixed;
   bottom: 30px;

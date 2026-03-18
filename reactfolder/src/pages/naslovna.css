@@ -3,7 +3,6 @@
   overflow-x: hidden;
 }
 
-/* ─── STATS ─── */
 .naslovna-stats {
   background: rgba(14, 116, 144, 0.95);
   padding: 50px 20px;
@@ -38,7 +37,6 @@
   letter-spacing: 0.4px;
 }
 
-/* ─── SECTION HEADER ─── */
 .naslovna-section-header {
   text-align: center;
   margin-bottom: 50px;
@@ -78,7 +76,6 @@
   margin-top: 40px;
 }
 
-/* ─── DESTINACIJE ─── */
 .naslovna-destinacije {
   padding: 90px 20px;
   background: #fff;
@@ -221,7 +218,6 @@
   100% { background-position: -200% 0; }
 }
 
-/* ─── PREDNOSTI ─── */
 .naslovna-kontinent-ponuda {
   padding: 90px 20px 55px;
   background: #f9f9f9;
@@ -320,7 +316,6 @@
   margin: 0;
 }
 
-/* ─── BLOG ─── */
 .naslovna-blog {
   padding: 90px 20px;
   background: #fff;
@@ -388,10 +383,11 @@
 
 .blog-card-excerpt {
   font-size: 0.9rem;
-  color: #666;
+  color: #686868;
   line-height: 1.65;
   margin: 0;
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -413,7 +409,6 @@
   color: #ff6b6b;
 }
 
-/* ─── CTA BANNER ─── */
 .naslovna-cta {
   padding: 100px 20px;
   background: linear-gradient(135deg, rgba(14, 116, 144, 0.95) 0%, rgba(10, 85, 106, 0.95) 100%);
@@ -439,7 +434,6 @@
   margin-bottom: 36px;
 }
 
-/* ─── GUMBI ─── */
 .naslovna-btn-outline {
   display: inline-flex;
   align-items: center;
@@ -478,7 +472,6 @@
   box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
 }
 
-/* ─── RESPONSIVE ─── */
 @media (max-width: 991px) {
   .naslovna-section-title { font-size: 2rem; }
   .naslovna-cta-title { font-size: 2.2rem; }

@@ -16,7 +16,6 @@ const SignUp = () => {
     email: "",
   });
 
-  // Ako je korisnik već prijavljen → redirect na home
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -54,7 +53,6 @@ const SignUp = () => {
         return;
       }
 
-      // redirect nakon uspješne prijave
       navigate("/signin", { replace: true });
 
     } catch (error) {

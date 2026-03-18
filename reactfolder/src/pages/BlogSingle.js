@@ -12,7 +12,6 @@ const BlogSingle = () => {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
 
-  // Funkcija za dekodiranje HTML entiteta
   const decodeHtml = (html) => {
     const txt = document.createElement("textarea");
     txt.innerHTML = html;
@@ -42,7 +41,6 @@ const BlogSingle = () => {
     post._blogHeroImage ||
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80";
 
-  // Dekodiramo HTML i zamjenjujemo &#8230; s ...
   const subtitle = decodeHtml(
     (post._blogIntro || post.excerpt?.rendered || "").replace(/<[^>]+>/g, "").trim()
   ).replace(/…|&#8230;/g, "...");

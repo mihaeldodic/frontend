@@ -18,8 +18,8 @@ const Footer = () => {
   const [accepted, setAccepted] = useState(false);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [inputStatus, setInputStatus] = useState(""); // "success" ili "error"
-  const [displayText, setDisplayText] = useState(""); // Tekst u inputu
+  const [inputStatus, setInputStatus] = useState("");
+  const [displayText, setDisplayText] = useState("");
 
   const handleLinkClick = () => {
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -28,7 +28,6 @@ const Footer = () => {
   const handleSubscribe = (e) => {
     e.preventDefault();
 
-    // Validacija
     if (!email.trim()) {
       setInputStatus("error");
       setDisplayText("Email je obavezan");
@@ -49,7 +48,6 @@ const Footer = () => {
       return;
     }
 
-    // Email validacija
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setInputStatus("error");

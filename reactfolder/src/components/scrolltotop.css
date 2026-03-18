@@ -1,4 +1,3 @@
-/* Scroll to Top Button */
 .scroll-to-top {
   position: fixed;
   bottom: 30px;
@@ -44,7 +43,6 @@
   display: flex;
 }
 
-/* Animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -74,7 +72,6 @@
   animation: arrowFloat 1.6s ease-in-out infinite;
 }
 
-/* Mobile ekrani */
 @media (max-width: 991px) {
   .scroll-to-top {
     width: 45px;
@@ -89,7 +86,6 @@
   }
 }
 
-/* Mali mobilni ekrani */
 @media (max-width: 575px) {
   .scroll-to-top {
     width: 40px;
@@ -108,7 +104,6 @@
   }
 }
 
-/* Jako mali ekrani */
 @media (max-width: 360px) {
   .scroll-to-top {
     width: 38px;

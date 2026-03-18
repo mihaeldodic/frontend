@@ -28,8 +28,6 @@ const Nav = () => {
   const [hoverTimeout, setHoverTimeout] = useState(null);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
 
-  // Stranice koje smiju krenuti s prozirnom navigacijom.
-  // Za sekcije poput /putovanje podrzane su i podstranice, npr. /putovanje/kontinent/europa.
   const transparentPages = ["/", "/o-nama", "/blog", "/putovanje"];
 
   const isTransparent = transparentPages.some((path) => {
@@ -57,7 +55,6 @@ const Nav = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Zatvori meni kada se navigira
   useEffect(() => {
     setMenuOpen(false);
     setExploreOpen(false);

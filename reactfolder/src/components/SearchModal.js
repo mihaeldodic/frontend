@@ -132,7 +132,6 @@ const SearchModal = ({ isOpen, onClose }) => {
     ),
   ];
 
-  // Dohvati putovanja iz WordPressă
   useEffect(() => {
     if (isOpen) {
       fetchTravels();
@@ -234,13 +233,11 @@ const SearchModal = ({ isOpen, onClose }) => {
     }
   ];
 
-  // Filtriraj putovanja
   useEffect(() => {
     if (!travels || travels.length === 0) return;
 
     let filtered = [...travels];
 
-    // Pretraga po početku naziva
     if (searchTerm && searchTerm.trim() !== "") {
       const normalizedSearchTerm = normalizeSearchValue(searchTerm);
       filtered = filtered.filter(travel =>
@@ -248,7 +245,6 @@ const SearchModal = ({ isOpen, onClose }) => {
       );
     }
 
-    // Filtriraj po kontinentu
     if (selectedContinent && selectedContinent !== "Svi kontinenti") {
       console.log("Filtriram po kontinentu:", selectedContinent);
       filtered = filtered.filter(travel => {
@@ -257,7 +253,6 @@ const SearchModal = ({ isOpen, onClose }) => {
       });
     }
 
-    // Filtriraj po mjesecu
     if (selectedMonth && selectedMonth !== "Svi mjeseci") {
       filtered = filtered.filter(travel => 
         travel.month.toLowerCase().trim() === selectedMonth.toLowerCase().trim()
@@ -286,7 +281,6 @@ const SearchModal = ({ isOpen, onClose }) => {
       );
     }
 
-    // Filtriraj po cijeni
     filtered = filtered.filter(
       travel => travel.price >= priceRange[0] && travel.price <= priceRange[1]
     );

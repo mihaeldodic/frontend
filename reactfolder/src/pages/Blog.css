@@ -14,7 +14,6 @@
     height: 220px !important;
   }
 }
-/* Travel Info Cards */
 .travel-info-cards {
   background: #f9f9f9;
   padding: 2rem;
@@ -50,7 +49,6 @@
   font-size: 1.3rem;
 }
 
-/* Sekcije */
 .section h2 {
   color: #0e7490;
   font-weight: 700;
@@ -111,7 +109,6 @@
   border-top: 1px solid #e7eef1;
 }
 
-/* Dani */
 .days-section {
   margin-top: 2rem;
 }
@@ -175,7 +172,6 @@
   display: block;
 }
 
-/* Fakultativni izleti */
 .excursions-section {
   margin-top: 2rem;
 }
@@ -266,7 +262,6 @@
   display: block;
 }
 
-/* Ponuda - shop pregled stavki */
 .offer-summary-card {
   margin-top: 1.25rem;
   border: 1px solid #e6eef1;
@@ -473,7 +468,6 @@
   }
 }
 
-/* Blog Listing - Modern style */
 .blog-modern-hero {
   position: relative;
   width: 100%;
@@ -661,11 +655,12 @@
 }
 
 .blog-modern-card-excerpt {
-  color: #666;
+  color: #686868;
   font-size: 0.9rem;
   line-height: 1.65;
   margin: 0;
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -745,7 +740,6 @@
   }
 }
 
-/* Blog Single - Modern style */
 .blog-single-modern {
   width: 100%;
   overflow-x: hidden;
