@@ -11,7 +11,7 @@
   .day-card-image,
   .excursion-card-image,
   .blog-single-content img {
-    height: 180px !important;
+    height: 220px !important;
   }
 }
 /* Travel Info Cards */
@@ -62,6 +62,53 @@
   color: #555;
   line-height: 1.8;
   font-size: 1rem;
+}
+
+.blog-single-intro {
+  font-size: 1.08rem;
+  line-height: 1.9;
+  color: #46545b;
+  margin-bottom: 2rem;
+}
+
+.blog-single-section + .blog-single-section {
+  margin-top: 2.5rem;
+}
+
+.blog-single-section h2 {
+  color: #0e7490;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.blog-single-section p {
+  color: #555;
+  line-height: 1.9;
+  margin: 0;
+}
+
+.blog-single-section-image {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 1rem;
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+.blog-single-content-top-image {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 1rem;
+  display: block;
+  margin-bottom: 1.75rem;
+}
+
+.blog-single-section--conclusion {
+  margin-top: 2.75rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e7eef1;
 }
 
 /* Dani */
@@ -351,6 +398,14 @@
 @media (max-width: 768px) {
   .travel-info-cards {
     padding: 1.5rem;
+  }
+
+  .blog-single-section-image {
+    height: 220px;
+  }
+
+  .blog-single-content-top-image {
+    height: 220px;
   }
 
   .info-card {

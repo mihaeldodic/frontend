@@ -10,12 +10,11 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
 import CheckBox from "../components/CheckBox";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import emailjs from "@emailjs/browser";
+import { sendAdminAndUserEmails } from "../utils/emailjs";
 
 const Footer = () => {
-  const form = useRef();
   const [accepted, setAccepted] = useState(false);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -69,18 +68,14 @@ const Footer = () => {
     const templateParams = {
       user_name: "Newsletter Subscriber",
       user_email: email,
-      message: `Novi pretplatnik na newsletter: ${email}\nDatum: ${new Date().toLocaleString()}`
+      message: `Nova prijava na newsletter: ${email}\nDatum: ${new Date().toLocaleString()}`,
+      destination_name: "Newsletter prijava",
+      passengers: "-",
+      total_price: "-",
+      order_details: "Korisnik se prijavio na newsletter.",
     };
 
-    emailjs
-      .send(
-        "service_97u9bj7",
-        "template_dc4l4ga",
-        templateParams,
-        {
-          publicKey: "hYTEnnh516nSj-76R",
-        }
-      )
+    sendAdminAndUserEmails(templateParams)
       .then(
         () => {
           console.log("SUCCESS!");

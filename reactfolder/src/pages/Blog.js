@@ -5,11 +5,16 @@ import ReactPaginate from "react-paginate";
 import "./Blog.css";
 import ScrollToTop from "../components/ScrollToTop";
 import BlogPost from "../components/BlogPost";
+import { mapBlogPostForCard } from "../utils/blogAcf";
+import Yoast from "../components/Yoast";
 //import posts from "../components/zadaci/data/blog.json";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 const BLOG_AUTHOR_ID = Number(process.env.REACT_APP_BLOG_AUTHOR_ID || 9);
 const FALLBACK_AUTHOR_MATCH = "mihael";
+const FALLBACK_BLOG_HERO_IMAGE =
+  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80";
+const BLOG_FALLBACK_TITLE = "Blog | Explorers Way";
 
 const Blog = () => {
   const [posts, setPosts] = useState([]);
@@ -19,6 +24,34 @@ const Blog = () => {
   const [pageCount, setPageCount] = useState(0);
   const [myAuthorId, setMyAuthorId] = useState(BLOG_AUTHOR_ID || null);
   const [authorReady, setAuthorReady] = useState(Boolean(BLOG_AUTHOR_ID));
+  const [yoastHeadJson, setYoastHeadJson] = useState(null);
+  const heroImage = posts[0]?._blogCardImage || FALLBACK_BLOG_HERO_IMAGE;
+
+  useEffect(() => {
+    fetch(`${BASE_URL}v2/pages?slug=blog&_embed`)
+      .then((response) => response.json())
+      .then((data) => {
+        const blogPage = Array.isArray(data) ? data[0] : null;
+        const nextYoastHeadJson = blogPage?.yoast_head_json || null;
+
+        if (!nextYoastHeadJson) {
+          setYoastHeadJson(null);
+          return;
+        }
+
+        const normalizedTitle = String(nextYoastHeadJson.title || "").trim();
+        const hasTrailingSeparator = /[-|:]\s*$/.test(normalizedTitle);
+
+        setYoastHeadJson({
+          ...nextYoastHeadJson,
+          title:
+            !normalizedTitle || hasTrailingSeparator
+              ? BLOG_FALLBACK_TITLE
+              : normalizedTitle,
+        });
+      })
+      .catch(() => setYoastHeadJson(null));
+  }, []);
 
   useEffect(() => {
     if (BLOG_AUTHOR_ID) {
@@ -73,17 +106,24 @@ const Blog = () => {
         setPageCount(Number(totalPages));
         return response.json();
       })
-      .then((data) => {
-        setPosts(data);
+      .then(async (data) => {
+        const normalizedPosts = await Promise.all(
+          (Array.isArray(data) ? data : []).map((post) => mapBlogPostForCard(post))
+        );
+        setPosts(normalizedPosts);
       })
       .finally(() => setLoading(false));
   }, [currentPage, myAuthorId, authorReady]);
 
   return (
     <>
+      <Yoast yoastHeadJson={yoastHeadJson} />
       {loading && <Loader />}
       <div className="blog-post">
-        <section className="blog-modern-hero">
+        <section
+          className="blog-modern-hero"
+          style={{ backgroundImage: `url(${heroImage})` }}
+        >
           <div className="blog-modern-hero-overlay">
             <div className="container">
               <div className="blog-modern-hero-content">

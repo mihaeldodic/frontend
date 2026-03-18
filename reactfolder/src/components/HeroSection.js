@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import SearchModal from "./SearchModal";
 import "./herosection.css";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -11,6 +14,7 @@ const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [pause, setPause] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const fetchImageUrl = async (id) => {
     try {
@@ -38,12 +42,24 @@ const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
 
         const acf = data.acf;
 
-        const heroIds = [
-          { text: acf.hero_text_1, id: acf.hero_image_1 },
-          { text: acf.hero_text_2, id: acf.hero_image_2 },
-          { text: acf.hero_text_3, id: acf.hero_image_3 },
-          { text: acf.hero_text_4, id: acf.hero_image_4 },
-        ].filter((s) => s.text && s.id);
+        const heroIds = Object.keys(acf)
+          .map((key) => {
+            const match = key.match(/^hero_text_(\d+)$/);
+
+            if (!match) {
+              return null;
+            }
+
+            const index = match[1];
+
+            return {
+              order: Number(index),
+              text: acf[`hero_text_${index}`],
+              id: acf[`hero_image_${index}`],
+            };
+          })
+          .filter((slide) => slide?.text && slide?.id)
+          .sort((a, b) => a.order - b.order);
 
         Promise.all(
           heroIds.map(async (slide) => ({
@@ -130,10 +146,23 @@ const HeroSection = ({ fallback = "/img/slider-default.jpg" }) => {
           </div>
         </h1>
 
-        <Link to="/putovanje" className="hero-btn">
-          Planiraj svoje putovanje
-        </Link>
+        <div className="hero-actions">
+          <Link to="/putovanje" className="hero-btn">
+            Planiraj svoje putovanje
+          </Link>
+
+          <button
+            type="button"
+            className="hero-btn hero-search-btn"
+            onClick={() => setIsSearchOpen(true)}
+            aria-label="Pretraži putovanja"
+          >
+            <FontAwesomeIcon icon={faSearch} />
+          </button>
+        </div>
       </div>
+
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );
 };

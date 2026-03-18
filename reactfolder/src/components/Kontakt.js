@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import emailjs from "@emailjs/browser";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
@@ -13,6 +12,7 @@ import {
   faTiktok,
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
+import { sendAdminAndUserEmails } from "../utils/emailjs";
 
 const Kontakt = () => {
   const form = useRef();
@@ -26,10 +26,20 @@ const Kontakt = () => {
       return;
     }
 
-    emailjs
-      .sendForm("service_97u9bj7", "template_dc4l4ga", form.current, {
-        publicKey: "hYTEnnh516nSj-76R",
-      })
+    const formData = new FormData(form.current);
+    const userName = formData.get("user_name") || "";
+    const userEmail = formData.get("user_email") || "";
+    const userMessage = formData.get("message") || "";
+
+    sendAdminAndUserEmails({
+      user_name: userName,
+      user_email: userEmail,
+      message: userMessage,
+      destination_name: "Kontakt obrazac",
+      passengers: "-",
+      total_price: "-",
+      order_details: "Upit poslan putem kontakt obrasca.",
+    })
       .then(
         () => {
           console.log("SUCCESS!");

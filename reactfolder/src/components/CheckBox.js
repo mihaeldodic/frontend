@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./checkbox.css"
 
 function CheckBox({ accepted, onChange }) {
@@ -12,13 +13,9 @@ function CheckBox({ accepted, onChange }) {
       />
       <label className="checkbox-1 form-check-label" htmlFor="privacyCheck">
         Prihvaćam{" "}
-        <a 
-          href="/zastita-privatnosti" 
-          target="_blank" 
-          rel="noopener noreferrer"
-        >
+        <Link to="/zastita-podataka">
           zaštitu privatnosti
-        </a>
+        </Link>
       </label>
     </div>
   );

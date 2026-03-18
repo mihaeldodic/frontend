@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import HeroSection from "../components/HeroSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -139,6 +139,45 @@ const formatTravelDate = (value) => {
   return rawValue;
 };
 
+const STATS = [
+  { icon: faMapMarkerAlt, broj: "50+", naziv: "Destinacija" },
+  { icon: faUsers, broj: "1000+", naziv: "Zadovoljnih putnika" },
+  { icon: faGlobe, broj: "6", naziv: "Kontinenata" },
+  { icon: faStar, broj: "5★", naziv: "Prosječna ocjena" },
+];
+
+const PREDNOSTI = [
+  {
+    icon: faShieldAlt,
+    naslov: "Sigurnost na prvom mjestu",
+    opis: "Svako putovanje planiramo s maksimalnom pažnjom na sigurnost i udobnost putnika.",
+  },
+  {
+    icon: faGlobe,
+    naslov: "Lokalni vodiči",
+    opis: "Surađujemo samo s provjerenim lokalnim vodičima koji poznaju svaki kutak destinacije.",
+  },
+  {
+    icon: faHeadset,
+    naslov: "Podrška 24/7",
+    opis: "Naš tim dostupan je svakog dana, u svakom trenutku, kako bi vaš put bio savršen.",
+  },
+];
+
+const parseStatValue = (value) => {
+  const match = String(value).match(/^(\d+)(.*)$/);
+
+  if (!match) {
+    return { target: 0, suffix: "", original: String(value) };
+  }
+
+  return {
+    target: Number(match[1]),
+    suffix: match[2] || "",
+    original: String(value),
+  };
+};
+
 const Naslovna = () => {
   const [page, setPage] = useState(null);
   const [yoastHeadJson, setYoastHeadJson] = useState(null);
@@ -147,6 +186,11 @@ const Naslovna = () => {
   const [blogPosts, setBlogPosts] = useState([]);
   const [myAuthorId, setMyAuthorId] = useState(BLOG_AUTHOR_ID || null);
   const [authorReady, setAuthorReady] = useState(Boolean(BLOG_AUTHOR_ID));
+  const [hasAnimatedStats, setHasAnimatedStats] = useState(false);
+  const [animatedStats, setAnimatedStats] = useState(() =>
+    STATS.map(() => "0")
+  );
+  const statsSectionRef = useRef(null);
 
   useEffect(() => {
     if (BLOG_AUTHOR_ID) {
@@ -241,30 +285,66 @@ const Naslovna = () => {
       .catch(() => setBlogPosts([]));
   }, [myAuthorId, authorReady]);
 
-  const stats = [
-    { icon: faMapMarkerAlt, broj: "50+", naziv: "Destinacija" },
-    { icon: faUsers, broj: "1000+", naziv: "Zadovoljnih putnika" },
-    { icon: faGlobe, broj: "6", naziv: "Kontinenata" },
-    { icon: faStar, broj: "5★", naziv: "Prosječna ocjena" },
-  ];
+  useEffect(() => {
+    if (hasAnimatedStats || !statsSectionRef.current) {
+      return;
+    }
 
-  const prednosti = [
-    {
-      icon: faShieldAlt,
-      naslov: "Sigurnost na prvom mjestu",
-      opis: "Svako putovanje planiramo s maksimalnom pažnjom na sigurnost i udobnost putnika.",
-    },
-    {
-      icon: faGlobe,
-      naslov: "Lokalni vodiči",
-      opis: "Surađujemo samo s provjerenim lokalnim vodičima koji poznaju svaki kutak destinacije.",
-    },
-    {
-      icon: faHeadset,
-      naslov: "Podrška 24/7",
-      opis: "Naš tim dostupan je svakog dana, u svakom trenutku, kako bi vaš put bio savršen.",
-    },
-  ];
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasAnimatedStats(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.35,
+      }
+    );
+
+    observer.observe(statsSectionRef.current);
+
+    return () => observer.disconnect();
+  }, [hasAnimatedStats]);
+
+  useEffect(() => {
+    if (!hasAnimatedStats) {
+      return;
+    }
+
+    const duration = 1600;
+    let animationFrameId;
+    let startTime;
+
+    const animate = (timestamp) => {
+      if (!startTime) {
+        startTime = timestamp;
+      }
+
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+
+      setAnimatedStats(
+        STATS.map((stat) => {
+          const { target, suffix, original } = parseStatValue(stat.broj);
+
+          if (!target) {
+            return original;
+          }
+
+          const currentValue = Math.floor(target * progress);
+          return `${currentValue}${suffix}`;
+        })
+      );
+
+      if (progress < 1) {
+        animationFrameId = window.requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrameId = window.requestAnimationFrame(animate);
+
+    return () => window.cancelAnimationFrame(animationFrameId);
+  }, [hasAnimatedStats]);
 
   return (
     <div className="naslovna">
@@ -374,14 +454,14 @@ const Naslovna = () => {
       </section>
 
       {/* ─── STATS ─── */}
-      <section className="naslovna-stats">
+      <section className="naslovna-stats" ref={statsSectionRef}>
         <div className="container">
           <div className="row">
-            {stats.map((s, i) => (
+            {STATS.map((s, i) => (
               <div key={i} className="col-6 col-md-3">
                 <div className="stat-card">
                   <FontAwesomeIcon icon={s.icon} className="stat-icon" />
-                  <span className="stat-broj">{s.broj}</span>
+                  <span className="stat-broj">{animatedStats[i] || s.broj}</span>
                   <span className="stat-naziv">{s.naziv}</span>
                 </div>
               </div>
@@ -588,7 +668,7 @@ const Naslovna = () => {
           </div>
 
           <div className="row">
-            {prednosti.map((p, i) => (
+            {PREDNOSTI.map((p, i) => (
               <div key={i} className="col-md-4 mb-4">
                 <div className="prednost-card">
                   <div className="prednost-icon-wrap">

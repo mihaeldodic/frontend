@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 import "./pages/Gutenberg.css";
 import "./App.css";
@@ -70,9 +71,42 @@ function ScrollToTopOnRouteChange() {
   return null;
 }
 
+function RouteMeta() {
+  const { pathname } = useLocation();
+
+  const getPageTitle = () => {
+    if (pathname === "/") return "Naslovna | Explorers Way";
+    if (pathname === "/blog") return "Blog | Explorers Way";
+    if (pathname.startsWith("/blog/")) return "Blog članak | Explorers Way";
+    if (pathname === "/putovanje") return "Putovanja | Explorers Way";
+    if (pathname === "/putovanje/sva-putovanja") return "Sva putovanja | Explorers Way";
+    if (pathname.startsWith("/putovanje/kontinent/")) return "Putovanja po kontinentu | Explorers Way";
+    if (pathname.startsWith("/putovanje/")) return "Detalji putovanja | Explorers Way";
+    if (pathname === "/kontakt") return "Kontakt | Explorers Way";
+    if (pathname === "/o-nama") return "O nama | Explorers Way";
+    if (pathname === "/zastita-podataka") return "Zaštita podataka | Explorers Way";
+    if (pathname === "/opci-uvjeti") return "Opći uvjeti | Explorers Way";
+    if (pathname === "/signin") return "Prijava | Explorers Way";
+    if (pathname === "/signup") return "Registracija | Explorers Way";
+    if (pathname === "/shop") return "Shop | Explorers Way";
+    if (pathname === "/cart") return "Košarica | Explorers Way";
+    if (pathname === "/checkout") return "Naplatna stranica | Explorers Way";
+    if (pathname.startsWith("/admin")) return "Admin | Explorers Way";
+
+    return "Explorers Way";
+  };
+
+  return (
+    <Helmet>
+      <title>{getPageTitle()}</title>
+    </Helmet>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter basename="mdodic">
+      <RouteMeta />
       <ScrollToTopOnLoad />
       <ScrollToTopOnRouteChange />
       <Nav />

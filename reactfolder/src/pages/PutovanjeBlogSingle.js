@@ -1,9 +1,10 @@
 import "./Blog.css";
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import emailjs from "@emailjs/browser";
+import { sendAdminAndUserEmails } from "../utils/emailjs";
 
 import Loader from "../components/Loader";
+import Yoast from "../components/Yoast";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -257,22 +258,15 @@ const PutovanjeBlogSingle = () => {
     ].join("\n");
 
     try {
-      await emailjs.send(
-        "service_97u9bj7",
-        "template_dc4l4ga",
-        {
-          user_name: form.name,
-          user_email: form.email,
-          message: offerMessage,
-          order_details: selectedListText,
-          total_price: totalPrice,
-          destination_name: travel?.title || "",
-          passengers: numPersons,
-        },
-        {
-          publicKey: "hYTEnnh516nSj-76R",
-        }
-      );
+      await sendAdminAndUserEmails({
+        user_name: form.name,
+        user_email: form.email,
+        message: offerMessage,
+        order_details: selectedListText,
+        total_price: totalPrice,
+        destination_name: travel?.title || "",
+        passengers: numPersons,
+      });
 
       setSent(true);
       setForm({ name: "", email: "", message: "" });
@@ -311,6 +305,7 @@ const PutovanjeBlogSingle = () => {
         setTravel({
           id: post.id,
           title: post.title.rendered,
+          yoastHeadJson: post.yoast_head_json || null,
           continent: acf.continent || "Nepoznato",
           price: acf.price || 0,
           month: acf.month || "Nepoznato",
@@ -374,33 +369,35 @@ const PutovanjeBlogSingle = () => {
   }
 
   return (
-    <div className="blog-single-modern">
-      <section
-        className="travel-single-hero"
-        style={{
-          backgroundImage: `url(${travel.image || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80"})`,
-        }}
-      >
-        <div className="travel-single-hero-overlay">
-          <div className="container">
-            <div className="travel-single-hero-content">
-              <h1>{travel.title}</h1>
-              <p className="travel-single-subtitle">{travel.continent}</p>
-              <div className="travel-single-meta">
-                <span>{travel.month}</span>
-                <span>{travel.duration}</span>
-                <span>€{travel.price.toLocaleString()}</span>
-              </div>
+    <>
+      <Yoast yoastHeadJson={travel.yoastHeadJson} />
+      <div className="blog-single-modern">
+        <section
+          className="travel-single-hero"
+          style={{
+            backgroundImage: `url(${travel.image || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80"})`,
+          }}
+        >
+          <div className="travel-single-hero-overlay">
+            <div className="container">
+              <div className="travel-single-hero-content">
+                <h1>{travel.title}</h1>
+                <p className="travel-single-subtitle">{travel.continent}</p>
+                <div className="travel-single-meta">
+                  <span>{travel.month}</span>
+                  <span>{travel.duration}</span>
+                  <span>€{travel.price.toLocaleString()}</span>
+                </div>
             </div>
           </div>
         </div>
-      </section>
+        </section>
 
-      {/* Artikal */}
-      <article className="mb-4">
-        <div className="container px-4 px-lg-5">
-          <div className="row gx-4 gx-lg-5 justify-content-center">
-            <div className="col-md-10 col-lg-8 col-xl-7">
+        {/* Artikal */}
+        <article className="mb-4">
+          <div className="container px-4 px-lg-5">
+            <div className="row gx-4 gx-lg-5 justify-content-center">
+              <div className="col-md-10 col-lg-8 col-xl-7">
               
               {/* Info kartice */}
               <div className="travel-info-cards mb-5">
@@ -736,11 +733,12 @@ const PutovanjeBlogSingle = () => {
                 </form>
               </div>
 
+              </div>
             </div>
           </div>
-        </div>
-      </article>
-    </div>
+        </article>
+      </div>
+    </>
   );
 };
 
